@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'crop_recommend.crop_recommend.urls'
+ROOT_URLCONF = 'crop_recommend.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'crop_recommend.crop_recommend.wsgi.application'
+WSGI_APPLICATION = 'crop_recommend.wsgi.application'
 
 
 # Database
