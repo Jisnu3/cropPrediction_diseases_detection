@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 80px);">
+  <div class="col-lg-10">
+    
+    <div class="card shadow-lg border-0 overflow-hidden" style="animation: fadeIn 0.6s ease-in-out;">
+      
+      <div class="row g-0">
+        
+        <!-- LEFT IMAGE -->
+        <div class="col-md-6 position-relative d-none d-md-block" 
+             style="background:url('{% static 'images/360_F_113406376_wYAgGQTd2BYkN5ox3WJklrve0S0M7Cbt.jpg' %}') center/cover no-repeat;">
+          
+          <div class="position-absolute start-0 top-0 w-100 h-100" 
+               style="background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.5))"></div>
+
+          <div class="position-absolute bottom-0 p-4 text-white">
+            <h4 class="fw-bold mb-2">Smart Agriculture Using ML</h4>
+            <p class="mb-3 text-white-50">
+              Predict crops, save history, export CSV, disease detection - all in one place
+            </p>
+            <ul class="small list-unstyled mb-0">
+              <li class="mb-1"><i class="fa-solid fa-circle-check me-2"></i>Secure & private</li>
+              <li class="mb-1"><i class="fa-solid fa-circle-check me-2"></i>Fast ML predictions</li>
+              <li class="mb-1"><i class="fa-solid fa-circle-check me-2"></i>Modern Responsive UI</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- RIGHT FORM -->
+        <div class="col-md-6 bg-white">
+          <div class="p-5">
+
+            <h3 class="mb-3">
+              <i class="fa-solid fa-user-plus"></i> User Login
+            </h3>
+
+            <form method="post">
+              {% csrf_token %}
+
+              <div class="mb-3">
+                <label class="form-label">Email id</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-regular fa-envelope"></i></span>
+                  <input type="email" name="email" class="form-control" placeholder="e.g., test@example.com" required>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">
+                  Password <span class="text-muted small">(min 6 chars)</span>
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
+                  <input type="password" id="pwd1" name="password" class="form-control" placeholder="*********" required>
+                  <button class="btn btn-outline-secondary" type="button" id="togglePwd1">
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <button class="btn btn-success w-100 mt-2">Login</button>
+
+              <p class="text-end mt-2">
+                <a href="{% url 'forgot_password' %}" class="small">Forgot Password?</a>
+              </p>
+
+              <div class="text-center mt-3">
+                <span class="text-muted small">New here</span>
+                <a href="{% url 'signup' %}" class="small text-decoration-none ms-1">
+                  <i class="fa-solid fa-right-to-bracket"></i> Create an account
+                </a>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PASSWORD TOGGLE SCRIPT -->
+<script>
+document.getElementById('togglePwd1').addEventListener('click', function () {
+  const field = document.getElementById('pwd1');
+  const icon = this.querySelector('i');
+
+  field.type = field.type === 'password' ? 'text' : 'password';
+  icon.classList.toggle('fa-eye');
+  icon.classList.toggle('fa-eye-slash');
+});
+</script>
+
+<!-- OPTIONAL ANIMATION -->
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+{% endblock %}

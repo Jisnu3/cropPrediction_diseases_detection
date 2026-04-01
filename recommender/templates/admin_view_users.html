@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Manage Users
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="text-center mb-4">
+      <h3 class="mb-3">
+        <i class="fa-solid fa-users"></i> Registered Users
+    </h3>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-sm table-striped table-hover text-center align-middle">
+        <thead class="table-success">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+            {% for i in users %}
+              <tr>
+                <td >{{ forloop.counter }}</td>
+
+                
+                <td class="small">{{ i.get_full_name }}</td>
+                <td class="small">{{ i.username }}</td>
+                <td class="small">{{ i.userprofile.phone }}</td>
+
+                <td>
+                  <a href="{% url 'admin_user_delete' i.id %}"
+                  class="btn btn-outline-danger btn-sm"
+                  onclick="return confirm('Delete this user? This cannot be undone!')">
+                  <i class="fa-solid fa-trash"></i></a>
+                </td>
+              </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

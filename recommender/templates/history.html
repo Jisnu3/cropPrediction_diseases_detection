@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Prediction History
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="text-center mb-4">
+      <h3><i class="fa-solid fa-clock-rotate-left"></i> Prediction History</h3>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-sm table-striped table-hover text-center align-middle">
+        <thead class="table-success">
+          <tr>
+            <th>Date</th>
+            <th>Crop</th>
+            <th>N</th>
+            <th>P</th>
+            <th>K</th>
+            <th>T</th>
+            <th>H</th>
+            <th>pH</th>
+            <th>R</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% if predictions %}
+            {% for p in predictions %}
+              <tr>
+                <td class="small">{{ p.created_at|date:'d M Y' }}</td>
+
+                <td>
+                  <span class="badge bg-success small">{{ p.predicted_crop|title }}</span>
+                </td>
+
+                <td class="small">{{ p.N }}</td>
+                <td class="small">{{ p.P }}</td>
+                <td class="small">{{ p.K }}</td>
+                <td class="small">{{ p.temperature }}</td>
+                <td class="small">{{ p.humidity }}</td>
+                <td class="small">{{ p.ph }}</td>
+                <td class="small">{{ p.rainfall }}</td>
+
+                <td>
+                  <a href="{% url 'user_delete_prediction' p.id %}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this record? This cannot be undone!')"><i class="fa-solid fa-trash"></i></a>
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="10" class="text-muted">No prediction history found.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

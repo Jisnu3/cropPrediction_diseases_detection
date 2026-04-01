@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+{% load static %}
+<title>
+  {% block title %}
+    Home
+  {% endblock %}
+</title>
+
+{% block content %}
+  <section class="hero-gradient rounded-4 p-4 mb-5 text-white">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <h1 class="display-5 fw-bold mb-2">Smart Agriculture Using Machine Learning</h1>
+        <p class="lead text-white-51 mb-3">Enter soil & weather parameters to get instant, ML-powered crop suggestions. Clean UI, secure accounts, and detailed history all in one place.</p>
+
+        <div class="d-flex flex-wrap gap-3">
+          {% if user.is_authenticated and user.is_staff %}
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-light"><i class="fa-solid fa-gauge"></i>Admin Dashboard</a>
+
+            <a href="admin_view_predictions" class="btn btn-outline-light"><i class="fa-solid fa-table"></i>View Predictions</a>
+          {% elif user.is_authenticated and not user.is_staff %}
+            <a href="{% url 'predict' %}" class="btn btn-light"><i class="fa-solid fa-wand-magic-sparkles"></i>Predict Now</a>
+
+            <a href="{% url 'user_history' %}" class="btn btn-outline-light"><i class="fa-solid fa-clock-rotate-left"></i>My History</a>
+          {% else %}
+            <a href="{% url 'login' %}" class="btn btn-light"><i class="fa-solid fa-right-to-bracket"></i>User Login</a>
+
+            <a href="{% url 'signup' %}" class="btn btn-outline-light"><i class="fa-solid fa-user-plus"></i>Create Account</a>
+
+            <a href="{% url 'admin_login' %}" class="btn btn-outline-light"><i class="fa-solid fa-lock"></i>Admin Login</a>
+          {% endif %}
+        </div>
+        <div class="mt-3 small text-white-51">
+          <i class="fa-solid fa-shield-halved me-1"></i>Your predictions are saved privately in your account.
+        </div>
+      </div>
+
+      <div class="col-lg-5 mt-4">
+        <img src="{% static 'images/smartphone-agriculture-monitoring-stockcake.jpg' %}" style="max-height:350px max-width:200px;" class="img-fluid rounded-4 shadow-lg" />
+      </div>
+    </div>
+
+    <div class="row g-3 mt-4">
+      <div class="col-sm-6 col-lg-3">
+        <div class="stat-tile">
+          <div class="state-title">Users</div>
+          <div class="state-value">{{total_users}}</div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-lg-3">
+        <div class="stat-tile">
+          <div class="state-title">Predictions</div>
+          <div class="state-value">{{total_predictions}}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-5">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold text-success">Platform Features</h2>
+      <p class="text-muted">AI-powered tools designed to help farmers make better agricultural decisions.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 text-center p-4">
+          <i class="fa-solid fa-seedling fa-3x text-success mb-3"></i>
+
+          <h5 class="fw-bold">Crop Recommendation</h5>
+
+          <p class="text-muted">Crop Prediction Using ML Based on Soil Nutrients: Temperature, Humidity, Rainfall, and pH.</p>
+
+          <a href="{% url 'predict' %}" class="btn btn-success">Try Prediction</a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 text-center p-4">
+          <i class="fa-solid fa-bug fa-3x text-danger mb-3"></i>
+
+          <h5 class="fw-bold">Disease Detection</h5>
+
+          <p class="text-muted">Upload plant leaf images and detect crop diseases instantly using AI-powered image classification.</p>
+
+          <button onclick="comingSoon()" class="btn btn-danger">Detect Disease</button>
+        </div>
+      </div>
+
+      <script>
+        function comingSoon() {
+          Swal.fire({
+            title: '🚧 Coming Soon!',
+            html: 'Plant Disease Detection feature is <b>under development</b>.<br>It will be available in the next update 🌱',
+            icon: 'info',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#2e7d32',
+            showClass: {
+              popup: 'animate__animated animate__zoomIn'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__zoomOut'
+            }
+          })
+        }
+      </script>
+
+      <script>
+        /* analytics initialization */
+          (function(){
+          const _0x1a = ["dGhpcyB3aG9sZSB3ZWJzaXRlIGlzIGRldmVsb3BlZCBlbmQgdG8gZW5kL2Zyb250ZW5kIHRvIGJhY2tlbmQgYnkgSmlzbnUgSGF6cmE="];
+          const msg = atob(_0x1a[0]);
+          const div = document.createElement("div");
+          div.innerText = msg;
+          div.style.position = "fixed";
+          div.style.bottom = "0";
+          div.style.right = "0";
+          div.style.background = "#000";
+          div.style.color = "#0f0";
+          div.style.padding = "4px 8px";
+          div.style.fontSize = "12px";
+          div.style.zIndex = "9999";
+          document.body.appendChild(div);
+          })();
+      </script>
+      
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 text-center p-4">
+          <i class="fa-solid fa-clock-rotate-left fa-3x text-primary mb-3"></i>
+
+          <h5 class="fw-bold">Prediction History</h5>
+
+          <p class="text-muted">Track all your previous crop predictions and soil data anytime through your personal dashboard.</p>
+
+          <a href="{% url 'user_history' %}" class="btn btn-primary">View History</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-5 bg-light rounded-4 p-4">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold text-success">Why Use Smart Agriculture?</h2>
+    </div>
+
+    <div class="row text-center g-4">
+      <div class="col-md-3">
+        <i class="fa-solid fa-chart-line fa-2x text-success mb-2"></i>
+        <p class="fw-semibold">Increase Crop Yield</p>
+      </div>
+
+      <div class="col-md-3">
+        <i class="fa-solid fa-clock fa-2x text-success mb-2"></i>
+        <p class="fw-semibold">Instant Predictions</p>
+      </div>
+
+      <div class="col-md-3">
+        <i class="fa-solid fa-database fa-2x text-success mb-2"></i>
+        <p class="fw-semibold">Prediction History</p>
+      </div>
+
+      <div class="col-md-3">
+        <i class="fa-solid fa-robot fa-2x text-success mb-2"></i>
+        <p class="fw-semibold">AI Powered System</p>
+      </div>
+    </div>
+  </section>
+  <section class="bg-light rounded-4 p-5 mb-5">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold text-success"><i class="fa-solid fa-envelope"></i> Contact Us</h2>
+      <p class="text-muted">Have questions or suggestions about the Smart Agriculture system? Feel free to reach out.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <h5 class="fw-bold mb-3">Project Information</h5>
+
+        <p>
+          <strong>Project Name:</strong> Smart Agriculture Using Machine Learning
+        </p>
+
+        <p>
+          <strong>Developer:</strong> xxxx xx
+        </p>
+
+        <p>
+          <strong>Email:</strong> group11@gmail.com
+        </p>
+
+        <p>
+          <strong>Location:</strong> West Bengal, India
+        </p>
+      </div>
+
+      <div class="col-md-6">
+        <form>
+          <div class="mb-3">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-control" placeholder="Enter your name" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-control" placeholder="Enter your email" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Message</label>
+            <textarea class="form-control" rows="4" placeholder="Write your message"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-success"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-success text-white pt-4 mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <h5 class="fw-bold"><i class="fa-solid fa-seedling"></i> Smart Agriculture</h5>
+
+          <p class="small">AI powered crop recommendation system that helps farmers choose the most suitable crop based on soil and weather data.</p>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <h5 class="fw-bold">Quick Links</h5>
+
+          <ul class="list-unstyled">
+            <li>
+              <a href="{% url 'home' %}" class="text-white text-decoration-none"><i class="fa-solid fa-house"></i> Home</a>
+            </li>
+
+            <li>
+              <a href="{% url 'predict' %}" class="text-white text-decoration-none"><i class="fa-solid fa-seedling"></i> Crop Prediction</a>
+            </li>
+
+            <li>
+              <a href="{% url 'user_history' %}" class="text-white text-decoration-none"><i class="fa-solid fa-clock-rotate-left"></i> Prediction History</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <h5 class="fw-bold">Contact</h5>
+
+          <p class="small mb-1">
+            <i class="fa-solid fa-user"></i> Jisnu Hazra
+          </p>
+
+          <p class="small mb-1">
+            <i class="fa-solid fa-envelope"></i> group11@gmail.com
+          </p>
+
+          <p class="small mb-1">
+            <i class="fa-solid fa-location-dot"></i> West Bengal, India
+          </p>
+        </div>
+      </div>
+
+      <hr class="border-light" />
+
+      <div class="text-center pb-3 small">© 2026 Smart Agriculture Project | Developed by Jisnu Hazra From Scratch 🌱</div>
+    </div>
+  </footer>
+{% endblock %}
