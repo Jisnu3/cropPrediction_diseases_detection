@@ -339,10 +339,16 @@ import base64
 
 BASE_DIR = Path(__file__).resolve().parent
 # LOAD MODEL
-model = tf.keras.models.load_model(BASE_DIR/
-    "MachineLearning"/"trained_model.keras",
-    compile=False
-)
+model = None
+
+def get_model():
+    global model
+    if model is None:
+        model = tf.keras.models.load_model(
+            BASE_DIR/"MachineLearning"/"trained_model.keras",
+            compile=False
+        )
+    return model
 
 class_names = [
 
@@ -518,7 +524,7 @@ def disease_detection_view(request):
                 img_array = np.expand_dims(img_array, axis=0)
 
                 # predict
-                prediction = model.predict(img_array)[0]
+                prediction = get_model().predict(img_array)[0]
 
                 result_index = int(np.argmax(prediction))
                 result = class_names[result_index]
