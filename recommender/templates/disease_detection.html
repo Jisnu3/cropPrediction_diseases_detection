@@ -1,0 +1,452 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Disease Detection{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-3">
+
+    <div class="row g-4">
+
+        <!-- LEFT SIDE -->
+        <div class="col-lg-6">
+            
+            <div class="card shadow-sm border-0 custom-card">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                        <h2 class="page-title">
+
+                            <i class="fa-solid fa-leaf"></i>
+                            Disease Detection
+
+                        </h2>
+
+                        <div class="text-muted small">
+
+                            <i class="fa-solid fa-circle-info"></i>
+                            Upload clear leaf image
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <!-- FORM -->
+                    <form method="POST"
+                          enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <!-- UPLOAD BOX -->
+                        <div class="upload-box"
+                             id="uploadBox">
+
+                            <!-- Upload Content -->
+                            <div id="uploadContent"
+                                 class="text-center {% if image_data %}d-none{% endif %}">
+
+                                <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+
+                                <h4 class="fw-bold mt-3">
+                                    Upload Leaf Image
+                                </h4>
+
+                                <p class="text-muted mb-1">
+
+                                    Click or Drag & Drop
+
+                                </p>
+
+                                <small class="text-muted">
+
+                                    JPG, PNG, WEBP
+
+                                </small>
+
+                            </div>
+
+                            <!-- IMAGE PREVIEW -->
+                            {% if image_data %}
+
+                                <img
+                                    src="data:image/jpeg;base64,{{ image_data }}"
+                                    class="preview-img"
+                                    id="previewImage"
+                                >
+
+                            {% else %}
+
+                                <img
+                                    id="previewImage"
+                                    class="preview-img d-none"
+                                >
+
+                            {% endif %}
+
+                        </div>
+
+                        <!-- INPUT -->
+                        <input
+                            type="file"
+                            name="image"
+                            id="imageInput"
+                            accept="image/*"
+                            class="d-none"
+                            required
+                        >
+
+                        <!-- BUTTONS -->
+                        <div class="d-flex gap-2 flex-wrap mt-4">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success px-4 py-2"
+                            >
+
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                Detect Disease
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-danger px-4 py-2"
+                                id="btnReset"
+                            >
+
+                                <i class="fa-solid fa-rotate"></i>
+                                Reset
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="col-lg-6">
+
+            <!-- RESULT CARD -->
+            <div class="card shadow-sm border-0 custom-card">
+
+                <div class="card-body p-4">
+
+                    <h2 class="page-title mb-4">
+
+                        <i class="fa-solid fa-microscope"></i>
+                        Analysis Result
+
+                    </h2>
+
+                    {% if result %}
+
+                        <!-- UNKNOWN IMAGE -->
+                        {% if result == "Unknown Image" %}
+
+                            <div class="result-card result-danger">
+
+                                <div class="d-flex gap-3">
+
+                                    <div class="result-icon bg-danger-custom">
+
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <small class="text-danger fw-semibold">
+
+                                            Invalid Image
+
+                                        </small>
+
+                                        <h4 class="fw-bold text-danger">
+
+                                            Unknown Image
+
+                                        </h4>
+
+                                        <p class="mb-0 text-muted">
+
+                                            Please upload a clear plant leaf image.
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% else %}
+
+                            <!-- DISEASE -->
+                            <div class="result-card mb-3">
+
+                                <div class="d-flex gap-3">
+
+                                    <div class="result-icon bg-success-custom">
+
+                                        <i class="fa-solid fa-shield-heart"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <small class="text-muted">
+
+                                            Detected
+
+                                        </small>
+
+                                        <h4 class="fw-bold mb-0">
+
+                                            {{ display_result }}
+
+                                        </h4>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- CONFIDENCE -->
+                            <div class="result-card mb-3">
+
+                                <div class="d-flex gap-3">
+
+                                    <div class="result-icon bg-primary-custom">
+
+                                        <i class="fa-solid fa-chart-column"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <small class="text-muted">
+
+                                            Confidence Level
+
+                                        </small>
+
+                                        <h4 class="fw-bold text-primary mb-0">
+
+                                            {{ confidence }}%
+
+                                        </h4>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- ADVICE -->
+                            <div class="result-card">
+
+                                <div class="d-flex gap-3">
+
+                                    <div class="result-icon bg-warning-custom">
+
+                                        <i class="fa-solid fa-lightbulb"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <small class="text-muted">
+
+                                            Expert Advice
+
+                                        </small>
+
+                                        <p class="fw-semibold mb-0">
+
+                                            {{ advice }}
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+                    {% else %}
+
+                        <!-- DEFAULT -->
+                        <div class="alert alert-light border rounded-4 p-4">
+
+                            <i class="fa-solid fa-image text-success"></i>
+
+                            Upload a plant leaf image to begin disease detection.
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <!-- TIPS -->
+            <div class="card shadow-sm border-0 custom-card mt-4">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-3">
+
+                        <i class="fa-solid fa-lightbulb text-warning"></i>
+                        Tips
+
+                    </h4>
+
+                    <ul class="tips-list text-muted mb-0">
+
+                        <li>Upload clear leaf images.</li>
+
+                        <li>Use natural lighting.</li>
+
+                        <li>Avoid blurry photos.</li>
+
+                        <li>Capture only the leaf area.</li>
+
+                        <li>Keep image background simple.</li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+(function(){
+
+    const uploadBox =
+        document.getElementById('uploadBox');
+
+    const imageInput =
+        document.getElementById('imageInput');
+
+    const previewImage =
+        document.getElementById('previewImage');
+
+    const uploadContent =
+        document.getElementById('uploadContent');
+
+    const btnReset =
+        document.getElementById('btnReset');
+
+    // OPEN FILE
+    uploadBox.addEventListener('click', () => {
+
+        imageInput.click();
+
+    });
+
+    // IMAGE PREVIEW
+    imageInput.addEventListener('change', function(){
+
+        const file = this.files[0];
+
+        if(file){
+
+            const reader = new FileReader();
+
+            reader.onload = function(e){
+
+                previewImage.src = e.target.result;
+
+                previewImage.classList.remove('d-none');
+
+                uploadContent.classList.add('d-none');
+
+            }
+
+            reader.readAsDataURL(file);
+
+        }
+
+    });
+
+    // DRAG OVER
+    uploadBox.addEventListener('dragover', function(e){
+
+        e.preventDefault();
+
+        uploadBox.classList.add('drag-active');
+
+    });
+
+    // DRAG LEAVE
+    uploadBox.addEventListener('dragleave', function(){
+
+        uploadBox.classList.remove('drag-active');
+
+    });
+
+    // DROP
+    uploadBox.addEventListener('drop', function(e){
+
+        e.preventDefault();
+
+        uploadBox.classList.remove('drag-active');
+
+        const file = e.dataTransfer.files[0];
+
+        imageInput.files = e.dataTransfer.files;
+
+        if(file){
+
+            const reader = new FileReader();
+
+            reader.onload = function(event){
+
+                previewImage.src = event.target.result;
+
+                previewImage.classList.remove('d-none');
+
+                uploadContent.classList.add('d-none');
+
+            }
+
+            reader.readAsDataURL(file);
+
+        }
+
+    });
+
+    // RESET
+    btnReset.addEventListener('click', function(){
+
+        window.location.href = window.location.pathname;
+
+    });
+
+})();
+
+</script>
+
+{% endblock %}

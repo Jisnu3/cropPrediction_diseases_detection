@@ -1,0 +1,135 @@
+.hero-gradient{
+    background:linear-gradient(135deg, #2e7d32, #66bb6a);
+}
+
+.stat-tile{
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 1rem;
+    padding: .8rem 1rem;
+    color: #fff;
+}
+
+.state-title{
+    font-size: .95rem;
+    opacity:.9;
+}
+
+.state-value{
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+
+/* Disease Detection */
+
+.custom-card{
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.page-title{
+    font-weight:700;
+    color:#198754;
+}
+
+/* Upload Box */
+.upload-box{
+    border:2px dashed #198754;
+    border-radius:20px;
+    min-height:350px;
+    background:#f8fffb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    transition:all 0.3s ease;
+    overflow:hidden;
+    position:relative;
+}
+
+.upload-box:hover{
+    background:#f1fff7;
+    transform:translateY(-2px);
+}
+
+.drag-active{
+    border-color:#0d6efd;
+    background:#eef5ff;
+}
+
+.upload-icon{
+    font-size:65px;
+    color:#198754;
+}
+
+.preview-img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    padding:15px;
+}
+
+/* Result Cards */
+.result-card{
+    background:#ffffff;
+    border:1px solid #e9ecef;
+    border-radius:18px;
+    padding:18px;
+}
+
+.result-danger{
+    border:1px solid #dc3545;
+    background:#fff5f5;
+}
+
+.result-icon{
+    width:55px;
+    height:55px;
+    border-radius:15px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    color:white;
+    flex-shrink:0;
+}
+
+.bg-success-custom{
+    background:#198754;
+}
+
+.bg-primary-custom{
+    background:#0d6efd;
+}
+
+.bg-warning-custom{
+    background:#ffc107;
+    color:black;
+}
+
+.bg-danger-custom{
+    background:#dc3545;
+}
+
+/* Tips */
+.tips-list li{
+    margin-bottom:10px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px){
+
+    .upload-box{
+        min-height:250px;
+    }
+
+    .upload-icon{
+        font-size:50px;
+    }
+
+    .page-title{
+        font-size:1.8rem;
+    }
+}
