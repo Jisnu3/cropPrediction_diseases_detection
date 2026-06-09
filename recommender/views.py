@@ -348,21 +348,18 @@ def get_model():
     global MODEL
 
     if MODEL is None:
+
         print("Loading model...")
-        MODEL = None
+        print("MODEL PATH:", MODEL_PATH)
 
-        def get_model():
-            global MODEL
+        MODEL = tf.keras.models.load_model(
+            MODEL_PATH,
+            compile=False
+        )
 
-            if MODEL is None:
-                print("Loading TensorFlow model...")
-                MODEL = tf.keras.models.load_model(
-                    MODEL_PATH,
-                    compile=False
-                )
-                print("Model loaded successfully")
+        print("Model loaded successfully")
 
-            return MODEL
+    return MODEL
 
 class_names = [
 
@@ -538,7 +535,12 @@ def disease_detection_view(request):
                 img_array = np.expand_dims(img_array, axis=0)
 
                 # predict
-                prediction = get_model().predict(img_array)[0]
+                model = get_model()
+
+                if model is None:
+                    raise Exception("Model failed to load")
+
+                prediction = model.predict(img_array, verbose=0)[0]
 
                 result_index = int(np.argmax(prediction))
                 result = class_names[result_index]
