@@ -1,3 +1,5 @@
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import img_to_array
 from django.shortcuts import render, redirect
 from .models import *
 from django.contrib import messages
@@ -331,30 +333,33 @@ def admin_change_password_view(request):
     return render(request,"change_password.html",locals())
 
 
-from pathlib import Path
+import tensorflow as tf
 import numpy as np
 from PIL import Image
 import base64
+from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 MODEL_PATH = BASE_DIR / "MachineLearning" / "trained_model.keras"
 
-model = None
+MODEL = None
+
+try:
+    print("Loading TensorFlow model...")
+    print("MODEL PATH:", MODEL_PATH)
+
+    MODEL = tf.keras.models.load_model(
+        MODEL_PATH,
+        compile=False
+    )
+
+    print("Model loaded successfully")
+
+except Exception as e:
+    print("Model load error:", e)
 
 def get_model():
-    global model
-
-    if model is None:
-        import tensorflow as tf
-        print("Loading model...")
-        print("MODEL PATH:", MODEL_PATH)
-        print("MODEL EXISTS:", MODEL_PATH.exists())
-        model = tf.keras.models.load_model(
-            MODEL_PATH,
-            compile=False
-        )
-
-    return model
+    return MODEL
 
 class_names = [
 
@@ -525,8 +530,6 @@ def disease_detection_view(request):
                 img = img.resize((128, 128))
 
                 # IMPORTANT: NO NORMALIZATION (matches training)
-                from tensorflow.keras.preprocessing.image import img_to_array
-
                 img_array = img_to_array(img)
                 img_array = img_array.astype("float32")
                 img_array = np.expand_dims(img_array, axis=0)
