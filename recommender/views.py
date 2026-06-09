@@ -335,21 +335,23 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 import base64
-import tensorflow as tf
 
 BASE_DIR = Path(__file__).resolve().parent
-
 MODEL_PATH = BASE_DIR / "MachineLearning" / "trained_model.keras"
 
-print("MODEL PATH:", MODEL_PATH)
-print("MODEL EXISTS:", MODEL_PATH.exists())
-
-model = tf.keras.models.load_model(
-    MODEL_PATH,
-    compile=False
-)
+model = None
 
 def get_model():
+    global model
+
+    if model is None:
+        import tensorflow as tf
+        print("Loading model...")
+        model = tf.keras.models.load_model(
+            MODEL_PATH,
+            compile=False
+        )
+
     return model
 
 class_names = [
@@ -499,7 +501,7 @@ advice_dict = {
 def disease_detection_view(request):
 
     result = None
-    display_result = None,
+    display_result = None
     confidence = None
     advice = None
     image_data = None
@@ -521,7 +523,9 @@ def disease_detection_view(request):
                 img = img.resize((128, 128))
 
                 # IMPORTANT: NO NORMALIZATION (matches training)
-                img_array = tf.keras.preprocessing.image.img_to_array(img)
+                from tensorflow.keras.preprocessing.image import img_to_array
+
+                img_array = img_to_array(img)
                 img_array = img_array.astype("float32")
                 img_array = np.expand_dims(img_array, axis=0)
 
