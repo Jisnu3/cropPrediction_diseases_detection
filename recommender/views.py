@@ -344,21 +344,16 @@ MODEL_PATH = BASE_DIR / "MachineLearning" / "trained_model.keras"
 
 MODEL = None
 
-try:
-    print("Loading TensorFlow model...")
-    print("MODEL PATH:", MODEL_PATH)
-
-    MODEL = tf.keras.models.load_model(
-        MODEL_PATH,
-        compile=False
-    )
-
-    print("Model loaded successfully")
-
-except Exception as e:
-    print("Model load error:", e)
-
 def get_model():
+    global MODEL
+
+    if MODEL is None:
+        print("Loading model...")
+        MODEL = tf.keras.models.load_model(
+            MODEL_PATH,
+            compile=False
+        )
+
     return MODEL
 
 class_names = [
