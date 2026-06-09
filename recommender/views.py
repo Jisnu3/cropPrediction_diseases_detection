@@ -347,6 +347,8 @@ def get_model():
     if model is None:
         import tensorflow as tf
         print("Loading model...")
+        print("MODEL PATH:", MODEL_PATH)
+        print("MODEL EXISTS:", MODEL_PATH.exists())
         model = tf.keras.models.load_model(
             MODEL_PATH,
             compile=False
@@ -567,7 +569,12 @@ def disease_detection_view(request):
                     )
 
             except Exception as e:
-                print("ERROR:", e)
+                import traceback
+
+                print("=" * 80)
+                traceback.print_exc()
+                print("=" * 80)
+
                 messages.error(request, str(e))
 
     return render(
