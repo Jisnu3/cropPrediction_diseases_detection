@@ -334,16 +334,18 @@ def admin_change_password_view(request):
 from pathlib import Path
 import numpy as np
 from PIL import Image
-import base64 
-
-BASE_DIR = Path(__file__).resolve().parent
-# LOAD MODEL
+import base64
 import tensorflow as tf
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
+
+MODEL_PATH = BASE_DIR / "MachineLearning" / "trained_model.keras"
+
+print("MODEL PATH:", MODEL_PATH)
+print("MODEL EXISTS:", MODEL_PATH.exists())
 
 model = tf.keras.models.load_model(
-    BASE_DIR / "MachineLearning" / "trained_model.keras",
+    MODEL_PATH,
     compile=False
 )
 
