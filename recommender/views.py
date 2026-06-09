@@ -338,19 +338,16 @@ import base64
 
 BASE_DIR = Path(__file__).resolve().parent
 # LOAD MODEL
-model = None
+import tensorflow as tf
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+model = tf.keras.models.load_model(
+    BASE_DIR / "MachineLearning" / "trained_model.keras",
+    compile=False
+)
 
 def get_model():
-    global model
-
-    if model is None:
-        import tensorflow as tf
-
-        model = tf.keras.models.load_model(
-            BASE_DIR / "MachineLearning" / "trained_model.keras",
-            compile=False
-        )
-
     return model
 
 class_names = [
@@ -522,7 +519,6 @@ def disease_detection_view(request):
                 img = img.resize((128, 128))
 
                 # IMPORTANT: NO NORMALIZATION (matches training)
-                import tensorflow as tf
                 img_array = tf.keras.preprocessing.image.img_to_array(img)
                 img_array = img_array.astype("float32")
                 img_array = np.expand_dims(img_array, axis=0)
