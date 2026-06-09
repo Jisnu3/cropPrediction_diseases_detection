@@ -242,11 +242,11 @@
 
                                         </small>
 
-                                        <h4 class="fw-bold text-primary mb-0">
-
-                                            {{ confidence }}%
-
-                                        </h4>
+                                        {% if confidence %}
+<h4 class="fw-bold text-primary mb-0">
+    {{ confidence }}%
+</h4>
+{% endif %}
 
                                     </div>
 
