@@ -349,12 +349,20 @@ def get_model():
 
     if MODEL is None:
         print("Loading model...")
-        MODEL = tf.keras.models.load_model(
-            MODEL_PATH,
-            compile=False
-        )
+        MODEL = None
 
-    return MODEL
+        def get_model():
+            global MODEL
+
+            if MODEL is None:
+                print("Loading TensorFlow model...")
+                MODEL = tf.keras.models.load_model(
+                    MODEL_PATH,
+                    compile=False
+                )
+                print("Model loaded successfully")
+
+            return MODEL
 
 class_names = [
 
