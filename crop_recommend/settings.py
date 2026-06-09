@@ -26,9 +26,10 @@ SECRET_KEY = 'django-insecure-%-5zbo6@=nd(+(g8_=yy^k!q^)-c97-7(xv0nwh@2$58&28av$
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    'crop-project-ig7m.onrender.com'
+    "cropprediction-diseases-detection.onrender.com",
+    ".onrender.com",
+    "localhost",
+    "127.0.0.1",
 ]
 
 
