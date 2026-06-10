@@ -74,8 +74,12 @@
 
           <p class="text-muted">Crop Prediction Using ML Based on Soil Nutrients: Temperature, Humidity, Rainfall, and pH.</p>
 
-          <a href="{% url 'predict' %}" class="btn btn-success rounded-4">Try Prediction</a>
-        </div>
+<div class="text-center">
+    <a href="{% url 'predict' %}"
+       class="btn btn-success px-4 py-2">
+       Try Prediction
+    </a>
+</div>        </div>
       </div>
 
       <div class="col-md-4">
@@ -86,7 +90,12 @@
 
           <p class="text-muted">Upload plant leaf images and detect crop diseases instantly using AI-powered image classification.</p>
 
-          <a href="{% url 'disease_detection' %}" class="btn btn-danger rounded-4">Detect Disease</a>
+          <div class="text-center">
+    <a href="{% url 'disease_detection' %}"
+       class="btn btn-danger px-4 py-2">
+       Detect Disease
+    </a>
+</div>
         </div>
       </div>
 
@@ -116,7 +125,13 @@
 
           <p class="text-muted">Track all your previous crop predictions and soil data anytime through your personal dashboard.</p>
 
-          <a href="{% url 'user_history' %}" class="btn btn-primary rounded-4">View History</a>
+     
+        <div class="text-center">
+    <a href="{% url 'user_history' %}"
+       class="btn btn-primary px-4 py-2">
+       View History
+    </a>
+</div>
         </div>
       </div>
     </div>

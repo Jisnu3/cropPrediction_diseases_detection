@@ -15,7 +15,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=3"> 
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=4">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="manifest" href="{% static 'manifest.json' %}">
@@ -35,99 +35,167 @@
 
   
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
-      <div class="container">
-        <a class="navbar-brand fw-bold" href="{% url 'home' %}"><i class="fa-solid fa-wheat-awn"></i> Smart Agriculture</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+    <div class="container">
 
-        <button class="navbar-toggler"
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+            <i class="fa-solid fa-wheat-awn"></i> Smart Agriculture
+        </a>
+
+        <!-- Mobile Hamburger -->
+        <button class="navbar-toggler d-lg-none"
                 type="button"
                 data-bs-toggle="offcanvas"
-                data-bs-target="#abc">
+                data-bs-target="#mobileMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="abc">
 
-          <div class="offcanvas-header">
-              <h5 class="offcanvas-title">Menu</h5>
-              <button type="button"
-                      class="btn-close"
-                      data-bs-dismiss="offcanvas"></button>
-          </div>
-
-          <div class="offcanvas-body">      
+        <!-- Desktop Menu -->
+        <div class="collapse navbar-collapse d-none d-lg-block">
             <ul class="navbar-nav ms-auto">
-            {% if user.is_authenticated and not user.is_staff %}
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'home' %}"><i class="fa-solid fa-home"></i> Home</a>
-              </li>
 
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown"><i class="fa-solid fa-layer-group"></i> Features</a>
+                {% if user.is_authenticated and not user.is_staff %}
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        <i class="fa-solid fa-home"></i> Home
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-layer-group"></i> Features
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item"
+                               href="{% url 'predict' %}">
+                                <i class="fa-solid fa-seedling"></i>
+                                Crop Prediction
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item"
+                               href="{% url 'disease_detection' %}">
+                                <i class="fa-solid fa-leaf"></i>
+                                Disease Detection
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{% url 'user_history' %}">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        History
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{% url 'profile' %}">
+                        <i class="fa-solid fa-user"></i>
+                        Profile
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{% url 'logout' %}">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Logout
+                    </a>
+                </li>
+
+                {% endif %}
+
+            </ul>
+        </div>
+
+    </div>
+</nav>
+<div class="offcanvas offcanvas-end d-lg-none"
+     tabindex="-1"
+     id="mobileMenu">
+
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Menu</h5>
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="offcanvas">
+        </button>
+    </div>
+
+    <div class="offcanvas-body">
+
+        <ul class="navbar-nav">
+
+            {% if user.is_authenticated and not user.is_staff %}
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}">
+                    <i class="fa-solid fa-home"></i> Home
+                </a>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle"
+                   href="#"
+                   data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-layer-group"></i> Features
+                </a>
 
                 <ul class="dropdown-menu">
-                  <li>
-                    <a class="dropdown-item" href="{% url 'predict' %}"><i class="fa-solid fa-seedling"></i> Crop Prediction</a>
-                  </li>
+                    <li>
+                        <a class="dropdown-item"
+                           href="{% url 'predict' %}">
+                            Crop Prediction
+                        </a>
+                    </li>
 
-                  <li>
-                    <a class="dropdown-item" href="{% url 'disease_detection' %}"><i class="fa-solid fa-leaf"></i> Disease Detection</a>
-                  </li>
+                    <li>
+                        <a class="dropdown-item"
+                           href="{% url 'disease_detection' %}">
+                            Disease Detection
+                        </a>
+                    </li>
                 </ul>
-              </li>
+            </li>
 
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'user_history' %}"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
-              </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                   href="{% url 'user_history' %}">
+                    History
+                </a>
+            </li>
 
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> Profile</a>
-              </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                   href="{% url 'profile' %}">
+                    Profile
+                </a>
+            </li>
 
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-              </li>
-            {% elif user.is_authenticated and user.is_staff %}
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'admin_dashboard' %}"><i class="fa-solid fa-gauge"></i> Dashboard</a>
-              </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                   href="{% url 'logout' %}">
+                    Logout
+                </a>
+            </li>
 
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'admin_view_predictions' %}"><i class="fa-solid fa-table"></i> Predictions</a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'admin_users_view' %}"><i class="fa-solid fa-users"></i> Users</a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'admin_change_password' %}"><i class="fa-solid fa-key"></i> Change Password</a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'admin_logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-              </li>
-            {% else %}
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'home' %}"><i class="fa-solid fa-home"></i> Home</a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'signup' %}"><i class="fa-solid fa-user-plus"></i> SignUp</a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'admin_login' %}"><i class="fa-solid fa-lock"></i> Admin</a>
-              </li>
             {% endif %}
-          </ul>
-        </div>
-      </div>
-      </div>
-    </nav>
+
+        </ul>
+
+    </div>
+
+</div>
 
     <main class="container py-4">
       {% block content %}
