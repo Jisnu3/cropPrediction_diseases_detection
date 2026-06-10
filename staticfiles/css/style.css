@@ -54,6 +54,35 @@ main{
     font-size: .95rem;
     opacity:.9;
 }
+.state-value{
+    font-size:1.6rem;
+    font-weight:700;
+    line-height:1;
+}
+
+@media (max-width:768px){
+
+    .hero-gradient{
+        padding:20px;
+        border-radius:20px;
+    }
+
+    .hero-gradient h1{
+    font-size:1.9rem !important;
+        line-height:1.2;
+        margin-bottom:15px;
+    }
+
+    .hero-gradient p{
+        font-size:1.1rem;
+        line-height:1.6;
+    }
+
+    .hero-gradient img{
+        margin-top:20px;
+        border-radius:18px;
+    }
+}
 
 
 
@@ -257,8 +286,13 @@ body{
 
 
 @media(max-width:768px){
+    .hero-buttons{
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+    }
 
-.d-flex .btn{
+    .hero-buttons .btn{
         width:100%;
     }
 
@@ -307,5 +341,40 @@ body{
 
     .dropdown-item:hover{
         background:#e8f5e9;
+    }
+}
+@media(max-width:768px){
+
+    .offcanvas{
+        width:280px;
+        background:#198754;
+    }
+
+    .offcanvas-title{
+        color:white;
+        font-weight:700;
+    }
+
+    .offcanvas .btn-close{
+        filter:invert(1);
+    }
+
+    .offcanvas .nav-link{
+        color:white !important;
+        font-size:18px;
+        padding:12px 0;
+    }
+
+    .offcanvas .dropdown-menu{
+        background:#157347;
+        border:none;
+    }
+
+    .offcanvas .dropdown-item{
+        color:white !important;
+    }
+
+    .offcanvas .dropdown-item:hover{
+        background:#0f5132;
     }
 }
