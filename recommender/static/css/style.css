@@ -55,11 +55,6 @@ main{
     opacity:.9;
 }
 
-.state-value{
-    font-size: 1.6rem;
-    font-weight: 700;
-    line-height: 1;
-}
 
 
 /* Disease Detection */
@@ -275,13 +270,6 @@ body{
         font-size:1.4rem;
     }
 
-    .hero-gradient{
-        padding:25px;
-    }
-
-    .state-value{
-        font-size:1.4rem;
-    }
 }
 
 
@@ -301,9 +289,23 @@ body{
         font-weight:600;
     }
 
-    .dropdown-menu{
+.dropdown-menu{
+        position: static !important;
+        transform:none !important;
+        width:100%;
+        margin-top:8px;
         border:none;
+        border-radius:12px;
         background:#f8f9fa;
-        margin-left:15px;
+    }
+
+    .dropdown-item{
+        color:#198754 !important;
+        padding:12px 20px;
+        font-weight:600;
+    }
+
+    .dropdown-item:hover{
+        background:#e8f5e9;
     }
 }
