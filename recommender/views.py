@@ -347,6 +347,8 @@ MODEL = None
 def get_model():
     global MODEL
 
+    print("get_model() called")
+
     if MODEL is None:
 
         print("Loading model...")
@@ -358,6 +360,9 @@ def get_model():
         )
 
         print("Model loaded successfully")
+
+    else:
+        print("Using cached model")
 
     return MODEL
 
@@ -535,7 +540,11 @@ def disease_detection_view(request):
                 img_array = np.expand_dims(img_array, axis=0)
 
                 # predict
+                print("=== DISEASE DETECTION STARTED ===")
+
                 model = get_model()
+
+                print("MODEL OBJECT:", model)
 
                 if model is None:
                     raise Exception("Model failed to load")
