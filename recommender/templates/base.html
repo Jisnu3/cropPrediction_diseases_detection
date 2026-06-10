@@ -15,7 +15,12 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
 
-<link rel="stylesheet" href="{% static 'css/style.css' %}?v=3">  </head>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=3"> 
+    {% load static %}
+
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <meta name="theme-color" content="#198754"> 
+</head>
   <script>
     function comingSoon() {
       Swal.fire({
@@ -138,5 +143,36 @@ title: "{{m}}"
 
 
     {% endif %}
+    <script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/service-worker.js')
+        .then(() => console.log('Service Worker Registered'));
+}
+</script>
+
+<button id="installBtn" style="display:none;">
+    Install App
+</button>
+
+<script>
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+
+    deferredPrompt = e;
+
+    document.getElementById('installBtn').style.display = 'block';
+});
+
+document.getElementById('installBtn').addEventListener('click', async () => {
+
+    deferredPrompt.prompt();
+
+    await deferredPrompt.userChoice;
+
+    deferredPrompt = null;
+});
+</script>
   </body>
 </html>
