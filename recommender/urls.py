@@ -16,6 +16,7 @@ urlpatterns = [
     path('change_password/',change_password_view,name='change_password'),
     path('admin_login/',admin_login_view,name='admin_login'),
     path('admin_dashboard/',admin_dashboard_view,name='admin_dashboard'),
+    path('admin_profile/',admin_profile_view,name='admin_profile'),
     path('admin_users_view/',admin_users_view,name='admin_users_view'),
     path('admin_user_delete/<int:id>/',admin_user_delete,name='admin_user_delete'),
     path('admin_view_predictions/',admin_view_predictions,name='admin_view_predictions'),

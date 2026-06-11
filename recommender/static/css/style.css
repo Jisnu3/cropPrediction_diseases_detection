@@ -3,18 +3,12 @@ html{
 }
 
 
-main{
-    animation:fadeIn .5s ease;
-}
-
 @keyframes fadeIn{
     from{
         opacity:0;
-        transform:translateY(10px);
     }
     to{
         opacity:1;
-        transform:translateY(0);
     }
 }
 
@@ -195,11 +189,6 @@ body{
     font-family:'Poppins',sans-serif;
 }
 
-.navbar{
-    backdrop-filter: blur(12px);
-    box-shadow:0 4px 20px rgba(0,0,0,.08);
-}
-
 .navbar-brand{
     font-size:1.5rem;
     letter-spacing:.3px;
@@ -213,6 +202,7 @@ body{
 .nav-link:hover{
     transform:translateY(-2px);
 }
+
 
 
 /* Mobile Responsive */
@@ -241,7 +231,6 @@ body{
 }
 
 .card:hover{
-    transform:translateY(-4px);
     box-shadow:0 20px 40px rgba(0,0,0,.12);
 }
 
@@ -393,3 +382,66 @@ body{
 }
 
 
+/* Admin Navbar */
+
+.navbar{
+    position:relative;
+    z-index:9999;
+}
+
+
+.admin-dropdown{
+    min-width:260px;
+    z-index:999999;
+}
+
+
+.prediction-table-wrapper{
+    overflow-x:auto;
+    overflow-y:visible;
+}
+
+.navbar{
+    position: relative;
+    z-index: 9999 !important;
+}
+
+.dropdown-menu{
+    z-index: 10000 !important;
+}
+
+
+
+
+
+.action-buttons{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    width:100%;
+    margin-top:25px;
+}
+
+.action-btn{
+    width:100%;
+    height:55px;
+    border-radius:16px;
+    font-weight:600;
+}
+
+#openCamera{
+    background:linear-gradient(135deg,#0d6efd,#4f8cff);
+    border:none;
+}
+
+#openCamera:hover{
+    transform:translateY(-2px);
+}
+
+.btn-success{
+    border-radius:16px;
+}
+
+.btn-outline-danger{
+    border-radius:16px;
+}

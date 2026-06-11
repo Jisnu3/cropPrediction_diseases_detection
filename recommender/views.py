@@ -245,9 +245,49 @@ def admin_dashboard_view(request):
    } 
    return render(request,"admin_dashboard.html",context)
 
+@user_passes_test(is_staff, login_url='admin_login')
 def admin_users_view(request):
-   users = User.objects.filter(is_staff=False)
-   return render(request,"admin_view_users.html",{"users":users})
+    users = User.objects.filter(is_staff=False)
+    return render(
+        request,
+        "admin_view_users.html",
+        {"users": users}
+    )
+    return render(request,"admin_view_users.html",{"users":users})
+
+
+@user_passes_test(is_staff, login_url='admin_login')
+def admin_profile_view(request):
+
+    profile, created = UserProfile.objects.get_or_create(
+        user=request.user
+    )
+
+    if request.method == "POST":
+
+        name = request.POST.get("name")
+        phone = request.POST.get("phone")
+
+        parts = name.split(" ", 1)
+
+        request.user.first_name = parts[0]
+        request.user.last_name = parts[1] if len(parts) > 1 else ""
+
+        profile.phone = phone
+
+        request.user.save()
+        profile.save()
+
+        messages.success(
+            request,
+            "Profile updated successfully"
+        )
+
+    return render(
+        request,
+        "admin_profile.html",
+        {"profile": profile}
+    )
 
 @user_passes_test(is_staff, login_url='admin_login')
 def admin_user_delete(request,id):

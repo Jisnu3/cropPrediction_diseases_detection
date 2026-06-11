@@ -15,12 +15,12 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=4">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=5" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-    <link rel="manifest" href="{% static 'manifest.json' %}">
-    <meta name="theme-color" content="#198754"> 
-</head>
+    <link rel="manifest" href="{% static 'manifest.json' %}" />
+    <meta name="theme-color" content="#198754" />
+  </head>
   <script>
     function comingSoon() {
       Swal.fire({
@@ -33,169 +33,177 @@
     }
   </script>
 
-  
   <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
-    <div class="container">
-
-        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
-            <i class="fa-solid fa-wheat-awn"></i> Smart Agriculture
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+      <div class="container-fluid px-4 d-flex align-items-center justify-content-between">
+        <a class="navbar-brand fw-bold"
+          href="{% if user.is_staff %}
+            {% url 'admin_dashboard' %}
+          {% else %}
+            {% url 'home' %}
+          {% endif %}">
+          <i class="fa-solid fa-wheat-awn"></i> Smart Agriculture
         </a>
 
+        {% if user.is_authenticated and user.is_staff %}
+          <div class="dropdown ms-auto">
+            <a class="text-white text-decoration-none dropdown-toggle fw-semibold d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-user-shield me-2"></i>
+
+              {% if user.get_full_name %}
+                {{ user.get_full_name }}
+              {% else %}
+                {{ user.username }}
+              {% endif %}
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 admin-dropdown">
+              <li>
+                <a class="dropdown-item py-2" href="{% url 'admin_users_view' %}">
+                  <i class="fa-solid fa-users me-2"></i>
+                  Manage Users
+                </a>
+              </li>
+
+              <li>
+                <a class="dropdown-item py-2" href="{% url 'admin_view_predictions' %}">
+                  <i class="fa-solid fa-seedling me-2"></i>
+                  Predictions
+                </a>
+              </li>
+
+              <li>
+                <a class="dropdown-item py-2" href="{% url 'admin_profile' %}">
+                  <i class="fa-solid fa-user me-2"></i>
+                  Profile
+                </a>
+              </li>
+
+              <li>
+                <a class="dropdown-item py-2" href="{% url 'admin_change_password' %}">
+                  <i class="fa-solid fa-key me-2"></i>
+                  Change Password
+                </a>
+              </li>
+
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+
+              <li>
+                <a class="dropdown-item text-danger py-2" href="{% url 'admin_logout' %}">
+                  <i class="fa-solid fa-right-from-bracket me-2"></i>
+                  Logout
+                </a>
+              </li>
+            </ul>
+          </div>
+        {% endif %}
         <!-- Mobile Hamburger -->
-        <button class="navbar-toggler d-lg-none"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#mobileMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        {% if user.is_authenticated and not user.is_staff %}
+          <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
+        {% endif %}
 
         <!-- Desktop Menu -->
-        <div class="collapse navbar-collapse d-none d-lg-block">
+        {% if user.is_authenticated and not user.is_staff %}
+          <div class="collapse navbar-collapse d-none d-lg-block">
             <ul class="navbar-nav ms-auto">
-
-                {% if user.is_authenticated and not user.is_staff %}
-
+              {% if user.is_authenticated and not user.is_staff %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">
-                        <i class="fa-solid fa-home"></i> Home
-                    </a>
+                  <a class="nav-link" href="{% url 'home' %}"><i class="fa-solid fa-home"></i> Home</a>
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"
-                       href="#"
-                       data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-layer-group"></i> Features
-                    </a>
+                  <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="fa-solid fa-layer-group"></i> Features</a>
 
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item"
-                               href="{% url 'predict' %}">
-                                <i class="fa-solid fa-seedling"></i>
-                                Crop Prediction
-                            </a>
-                        </li>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a class="dropdown-item" href="{% url 'predict' %}">
+                        <i class="fa-solid fa-seedling"></i>
+                        Crop Prediction
+                      </a>
+                    </li>
 
-                        <li>
-                            <a class="dropdown-item"
-                               href="{% url 'disease_detection' %}">
-                                <i class="fa-solid fa-leaf"></i>
-                                Disease Detection
-                            </a>
-                        </li>
-                    </ul>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'disease_detection' %}">
+                        <i class="fa-solid fa-leaf"></i>
+                        Disease Detection
+                      </a>
+                    </li>
+                  </ul>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link"
-                       href="{% url 'user_history' %}">
-                        <i class="fa-solid fa-clock-rotate-left"></i>
-                        History
-                    </a>
+                  <a class="nav-link" href="{% url 'user_history' %}">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    History
+                  </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link"
-                       href="{% url 'profile' %}">
-                        <i class="fa-solid fa-user"></i>
-                        Profile
-                    </a>
+                  <a class="nav-link" href="{% url 'profile' %}">
+                    <i class="fa-solid fa-user"></i>
+                    Profile
+                  </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link"
-                       href="{% url 'logout' %}">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        Logout
-                    </a>
+                  <a class="nav-link" href="{% url 'logout' %}">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Logout
+                  </a>
                 </li>
-
-                {% endif %}
-
+              {% endif %}
             </ul>
+          </div>
+        {% endif %}
+      </div>
+    </nav>
+    {% if not user.is_staff %}
+      <div class="offcanvas offcanvas-end d-lg-none" tabindex="-1" id="mobileMenu">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title">Menu</h5>
+
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
         </div>
 
-    </div>
-</nav>
-<div class="offcanvas offcanvas-end d-lg-none"
-     tabindex="-1"
-     id="mobileMenu">
-
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Menu</h5>
-
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="offcanvas">
-        </button>
-    </div>
-
-    <div class="offcanvas-body">
-
-        <ul class="navbar-nav">
-
+        <div class="offcanvas-body">
+          <ul class="navbar-nav">
             {% if user.is_authenticated and not user.is_staff %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}"><i class="fa-solid fa-home"></i> Home</a>
+              </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">
-                    <i class="fa-solid fa-home"></i> Home
-                </a>
-            </li>
-
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle"
-                   href="#"
-                   data-bs-toggle="dropdown">
-                    <i class="fa-solid fa-layer-group"></i> Features
-                </a>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="fa-solid fa-layer-group"></i> Features</a>
 
                 <ul class="dropdown-menu">
-                    <li>
-                        <a class="dropdown-item"
-                           href="{% url 'predict' %}">
-                            Crop Prediction
-                        </a>
-                    </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'predict' %}">Crop Prediction</a>
+                  </li>
 
-                    <li>
-                        <a class="dropdown-item"
-                           href="{% url 'disease_detection' %}">
-                            Disease Detection
-                        </a>
-                    </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'disease_detection' %}">Disease Detection</a>
+                  </li>
                 </ul>
-            </li>
+              </li>
 
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="{% url 'user_history' %}">
-                    History
-                </a>
-            </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'user_history' %}">History</a>
+              </li>
 
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="{% url 'profile' %}">
-                    Profile
-                </a>
-            </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+              </li>
 
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="{% url 'logout' %}">
-                    Logout
-                </a>
-            </li>
-
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+              </li>
             {% endif %}
-
-        </ul>
-
-    </div>
-
-</div>
+          </ul>
+        </div>
+      </div>
+    {% endif %}
 
     <main class="container py-4">
       {% block content %}
@@ -222,8 +230,6 @@ title: "{{m}}"
 {% endfor %}
 
 </script>
-
-
     {% endif %}
     <script>
 if ('serviceWorker' in navigator) {
@@ -232,14 +238,9 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-<button
-    id="installBtn"
-    class="btn btn-success position-fixed"
-    style="bottom:20px;right:20px;display:none;z-index:9999;">
-    📲 Install App
-</button>
+    <button id="installBtn" class="btn btn-success position-fixed" style="bottom:20px;right:20px;display:none;z-index:9999;">📲 Install App</button>
 
-<script>
+    <script>
 let deferredPrompt;
 const installBtn = document.getElementById('installBtn');
 

@@ -6,6 +6,7 @@
 
 {% block content %}
 
+
 <h3 class="mb-3"><i class="fa-solid fa-gauge"></i> Dashboard</h3>
     <div class="row g-4 mb-4">
         <div class="col-md-6">
@@ -59,7 +60,7 @@
     const cropLabels = {{crop_labels_json|safe}}
     const cropCounts = {{crop_counts_json|safe}}
     const dayLabels = {{day_labels_json|safe}}
-    const dayCounts = {{crop_counts_json|safe}}
+    const dayCounts = {{day_counts_json|safe}}
 
     function makeOrReplaceChart(canvasId,config){
         const existing = Chart.getChart(canvasId);
