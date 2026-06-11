@@ -561,6 +561,14 @@ def disease_detection_view(request):
     if request.method == "POST":
 
         image = request.FILES.get("image")
+        if image and image.size > 5 * 1024 * 1024:
+            messages.error(
+                request,
+                "Image too large. Please use an image smaller than 5MB."
+            )
+            return redirect("disease_detection")
+        print("Image Name:", image.name)
+        print("Image Size:", round(image.size / 1024 / 1024, 2), "MB")
 
         if image:
 
@@ -572,8 +580,13 @@ def disease_detection_view(request):
 
                 # load image
                 img = Image.open(image).convert("RGB")
-                img = img.resize((128, 128))
 
+                # Reduce huge camera images first
+                img.thumbnail((1024, 1024))
+
+                # Then resize to model size
+                img = img.resize((128, 128))
+                
                 # IMPORTANT: NO NORMALIZATION (matches training)
                 img_array = img_to_array(img)
                 img_array = img_array.astype("float32")
