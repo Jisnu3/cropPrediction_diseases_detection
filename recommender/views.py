@@ -1,10 +1,12 @@
-import tensorflow as tf
 from tensorflow.keras.preprocessing.image import img_to_array
 from django.shortcuts import render, redirect
 from .models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from PIL import ImageFile
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 # Create your views here.
@@ -588,10 +590,15 @@ def disease_detection_view(request):
     if request.method == "POST":
 
         image = request.FILES.get("image")
-        if image and image.size > 5 * 1024 * 1024:
+
+        if not image:
+            messages.error(request, "Please select an image.")
+            return redirect("disease_detection")
+
+        if image.size > 5 * 1024 * 1024:
             messages.error(
                 request,
-                "Image too large. Please use an image smaller than 5MB."
+                "Image too large. Please upload an image smaller than 5MB."
             )
             return redirect("disease_detection")
         print("Image Name:", image.name)
@@ -605,13 +612,14 @@ def disease_detection_view(request):
                 image_data = base64.b64encode(image.read()).decode("utf-8")
                 image.seek(0)
 
-                # load image
-                img = Image.open(image).convert("RGB")
+                img = Image.open(image)
 
-                # Reduce huge camera images first
-                img.thumbnail((1024, 1024))
+                # Reduce huge camera photos first
+                img.thumbnail((800, 800))
 
-                # Then resize to model size
+                img = img.convert("RGB")
+
+                # Final model size
                 img = img.resize((128, 128))
 
                 # IMPORTANT: NO NORMALIZATION (matches training)

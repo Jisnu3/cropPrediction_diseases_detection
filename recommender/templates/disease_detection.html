@@ -280,27 +280,41 @@
     })
     
     cameraInput.addEventListener('change', function () {
-      if (this.files.length > 0) {
-        const file = this.files[0]
-    
-        const dt = new DataTransfer()
-    
-        dt.items.add(file)
-    
-        imageInput.files = dt.files
-    
-        const reader = new FileReader()
-    
-        reader.onload = function (e) {
-          previewImage.src = e.target.result
-    
-          previewImage.classList.remove('d-none')
-    
-          uploadContent.classList.add('d-none')
-        }
-    
-        reader.readAsDataURL(file)
-      }
-    })
+
+    const file = this.files[0];
+
+    if (!file) return;
+
+    // 5MB check
+    if (file.size > 5 * 1024 * 1024) {
+
+        alert('Captured image must be smaller than 5MB');
+
+        this.value = '';
+
+        return;
+    }
+
+    const dt = new DataTransfer();
+
+    dt.items.add(file);
+
+    imageInput.files = dt.files;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+
+        previewImage.src = e.target.result;
+
+        previewImage.classList.remove('d-none');
+
+        uploadContent.classList.add('d-none');
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
   </script>
 {% endblock %}
