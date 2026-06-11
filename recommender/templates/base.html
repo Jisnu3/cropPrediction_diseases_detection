@@ -15,7 +15,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=5" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=6" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <link rel="manifest" href="{% static 'manifest.json' %}" />
@@ -69,6 +69,12 @@
                 <a class="dropdown-item py-2" href="{% url 'admin_view_predictions' %}">
                   <i class="fa-solid fa-seedling me-2"></i>
                   Predictions
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item py-2" href="{% url 'admin_disease_history' %}">
+                  <i class="fa-solid fa-leaf me-2"></i>
+                  Disease History
                 </a>
               </li>
 

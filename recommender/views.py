@@ -548,6 +548,33 @@ advice_dict = {
 }
 
 
+
+# detection history
+from collections import defaultdict
+
+@user_passes_test(is_staff, login_url='admin_login')
+def admin_disease_history(request):
+
+    predictions = DiseasePrediction.objects.select_related(
+        'user'
+    ).order_by('-created_at')
+
+    grouped_predictions = defaultdict(list)
+
+    for p in predictions:
+        grouped_predictions[p.user].append(p)
+
+    return render(
+        request,
+        'admin_disease_history.html',
+        {
+            'predictions': predictions,  # Desktop table
+            'grouped_predictions': grouped_predictions.items()  # Mobile cards
+        }
+    )
+
+
+
 # DETECTION VIEW
 @login_required
 def disease_detection_view(request):
@@ -586,7 +613,7 @@ def disease_detection_view(request):
 
                 # Then resize to model size
                 img = img.resize((128, 128))
-                
+
                 # IMPORTANT: NO NORMALIZATION (matches training)
                 img_array = img_to_array(img)
                 img_array = img_array.astype("float32")
