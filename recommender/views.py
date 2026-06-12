@@ -11,10 +11,25 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 # Create your views here.
 
+from .models import Prediction, DiseasePrediction
+
 def home(request):
+
     total_users = User.objects.filter(is_staff=False).count()
+
     total_predictions = Prediction.objects.count()
-    return render(request,"homepage.html",locals())
+
+    total_detections = DiseasePrediction.objects.count()
+
+    return render(
+    request,
+    "homepage.html",
+    {
+        "total_users": total_users,
+        "total_predictions": total_predictions,
+        "total_detections": total_detections,
+    }
+)
 
 def signup_view(request):
     if request.method == "POST":
