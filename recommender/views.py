@@ -250,12 +250,7 @@ def admin_dashboard_view(request):
 @user_passes_test(is_staff, login_url='admin_login')
 def admin_users_view(request):
     users = User.objects.filter(is_staff=False)
-    return render(
-        request,
-        "admin_view_users.html",
-        {"users": users}
-    )
-    return render(request,"admin_view_users.html",{"users":users})
+    return render(request,"admin_view_users.html",{"users": users})
 
 
 @user_passes_test(is_staff, login_url='admin_login')

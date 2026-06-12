@@ -3,7 +3,7 @@
   "short_name": "SmartAgri",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#198754",
+  "background_color": "#d4f7e7",
   "theme_color": "#198754",
   "orientation": "portrait",
   "icons": [
