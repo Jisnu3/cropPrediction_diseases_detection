@@ -6,12 +6,89 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container">
+  <div class="container-fluid">
     <div class="text-center mb-4">
       <h3><i class="fa-solid fa-clock-rotate-left"></i> Prediction History</h3>
     </div>
 
-    <div class="table-responsive rounded-3">
+    <!-- Mobile Cards -->
+<div class="mobile-history d-md-none">
+
+    {% for p in predictions %}
+    <div class="disease-history-card">
+
+        <div class="card-user">
+            <i class="fa-solid fa-seedling"></i>
+            {{ p.predicted_crop|title }}
+        </div>
+
+        <div class="card-disease">
+            <div class="disease-title">
+                Recommended Crop
+            </div>
+
+            <div class="disease-name">
+                {{ p.predicted_crop|title }}
+            </div>
+        </div>
+
+        <div class="row g-2">
+
+            <div class="col-4">
+                <small class="text-muted">N</small>
+                <div>{{ p.N }}</div>
+            </div>
+
+            <div class="col-4">
+                <small class="text-muted">P</small>
+                <div>{{ p.P }}</div>
+            </div>
+
+            <div class="col-4">
+                <small class="text-muted">K</small>
+                <div>{{ p.K }}</div>
+            </div>
+
+            <div class="col-4">
+                <small class="text-muted">Temp</small>
+                <div>{{ p.temperature }}</div>
+            </div>
+
+            <div class="col-4">
+                <small class="text-muted">Humidity</small>
+                <div>{{ p.humidity }}</div>
+            </div>
+
+            <div class="col-4">
+                <small class="text-muted">pH</small>
+                <div>{{ p.ph }}</div>
+            </div>
+
+        </div>
+
+        <div class="card-date mt-3">
+            <i class="fa-solid fa-calendar-days"></i>
+            {{ p.created_at|date:'d M Y h:i A' }}
+        </div>
+
+        <a href="{% url 'user_delete_prediction' p.id %}"
+           class="btn btn-outline-danger btn-sm w-100 mt-2"
+           onclick="return confirm('Delete this record?')">
+            <i class="fa-solid fa-trash"></i>
+            Delete
+        </a>
+
+    </div>
+    {% empty %}
+        <div class="alert alert-light">
+            No prediction history found.
+        </div>
+    {% endfor %}
+
+</div>
+
+<!-- Desktop Table -->
+<div class="table-responsive rounded-3 d-none d-md-block">
       <table class="table table-sm table-striped table-hover text-center align-middle">
         <thead class="table-success">
           <tr>

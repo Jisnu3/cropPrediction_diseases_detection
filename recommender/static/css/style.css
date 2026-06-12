@@ -281,16 +281,18 @@ body {
 
 
 @media(max-width:768px) {
-    .hero-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
+    .hero-buttons{
+        display:flex;
+        flex-direction:row;
+        gap:10px;
+        flex-wrap:nowrap;
     }
 
-    .hero-buttons .btn {
-        width: 100%;
+    .hero-buttons .btn{
+        flex:1;
+        font-size:14px;
+        padding:10px 6px;
     }
-
     .hero-gradient {
         padding: 25px;
     }
@@ -324,6 +326,9 @@ body {
         background: #e8f5e9;
     }
 }
+
+
+
 @media (max-width:768px){
 
 .offcanvas{

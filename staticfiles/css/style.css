@@ -324,6 +324,15 @@ body {
         background: #e8f5e9;
     }
 }
+
+
+.navbar .nav-link,
+.navbar .dropdown-toggle{
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px;
+    white-space: nowrap;
+}
 @media (max-width:768px){
 
 .offcanvas{

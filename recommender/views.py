@@ -78,7 +78,7 @@ def predict_view(request):
 def logout_view(request):
     logout(request)
     messages.success(request,"Successfully Logged Out")
-    return redirect("login")
+    return redirect("home")
 
 def login_view(request):
     if request.method == "POST":
@@ -357,7 +357,7 @@ def admin_delete_prediction(request,id):
 def admin_logout_view(request):
     logout(request)
     messages.success(request,"Successfully Logged Out")
-    return redirect("admin_login")
+    return redirect("home")
 
 @user_passes_test(is_staff, login_url='admin_login')
 def admin_change_password_view(request):
@@ -679,7 +679,10 @@ def disease_detection_view(request):
                 else:
                     confidence = round(confidence, 2)
                     advice = advice_dict.get(result, "No advice available")
-
+                    print("========== SAVING ==========")
+                    print("USER:", request.user.username)
+                    print("DISEASE:", result)
+                    print("CONFIDENCE:", confidence)
                     DiseasePrediction.objects.create(
                         user=request.user if request.user.is_authenticated else None,
                         disease_name=result,
