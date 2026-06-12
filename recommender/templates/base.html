@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v=6" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     <link rel="manifest" href="{% static 'manifest.json' %}" />
     <meta name="theme-color" content="#198754" />
   </head>
@@ -34,6 +34,17 @@
   </script>
 
   <body>
+
+    <div id="loader">
+    <dotlottie-player
+    src="{% static 'animations/loading_logo.lottie' %}"
+    background="transparent"
+    speed="1"
+    style="width:250px;height:250px;"
+    loop
+    autoplay>
+</dotlottie-player>
+</div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
       <div class="container-fluid px-4 d-flex align-items-center justify-content-between">
         <a class="navbar-brand fw-bold"
@@ -304,6 +315,21 @@ installBtn.addEventListener('click', async () => {
     deferredPrompt = null;
 
     installBtn.style.display = 'none';
+});
+
+window.addEventListener("load", function () {
+
+    const loader = document.getElementById("loader");
+
+    setTimeout(() => {
+        loader.style.opacity = "0";
+
+        setTimeout(() => {
+            loader.style.display = "none";
+        }, 500);
+
+    }, 1000);
+
 });
 </script>
   </body>

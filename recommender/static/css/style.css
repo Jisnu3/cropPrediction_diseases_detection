@@ -2,6 +2,21 @@ html {
     scroll-behavior: smooth;
 }
 
+#loader{
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    z-index: 999999;
+    transition: opacity .5s ease;
+}
 
 @keyframes fadeIn {
     from {
