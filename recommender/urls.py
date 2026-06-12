@@ -25,5 +25,6 @@ urlpatterns = [
     path('admin_change_password/',admin_change_password_view,name='admin_change_password'),
     path('forgot-password/', views.forgot_password_view, name='forgot_password'),
     path('disease_detection/',disease_detection_view,name='disease_detection'),
-    path('admin_disease_history/',views.admin_disease_history,name='admin_disease_history')
+    path('admin_disease_history/',views.admin_disease_history,name='admin_disease_history'),
+    path('detection-history/',views.user_disease_history,name='user_disease_history'),
 ]

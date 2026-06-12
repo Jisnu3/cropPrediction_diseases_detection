@@ -286,6 +286,24 @@ def admin_profile_view(request):
         {"profile": profile}
     )
 
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def user_disease_history(request):
+
+    predictions = DiseasePrediction.objects.filter(
+        user=request.user
+    ).order_by('-created_at')
+
+    return render(
+        request,
+        'user_disease_history.html',
+        {
+            'predictions': predictions
+        }
+    )
+
+
 @user_passes_test(is_staff, login_url='admin_login')
 def admin_user_delete(request,id):
     user = get_object_or_404(User, id=id)

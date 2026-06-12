@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Detection History
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-success">
+                    <i class="fa-solid fa-leaf"></i>
+                    Detection History
+                </h2>
+
+                <span class="badge bg-success">
+                    Total: {{ predictions.count }}
+                </span>
+            </div>
+
+            {% if predictions %}
+
+            <div class="mobile-history">
+
+                {% for p in predictions %}
+
+                <div class="disease-history-card">
+
+                    <div class="card-disease">
+                        <div class="disease-title">
+                            🌱 Disease Detected
+                        </div>
+
+                        <div class="disease-name">
+                            {{ p.disease_name }}
+                        </div>
+                    </div>
+
+                    <div class="card-date">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        {{ p.created_at|date:'d M Y h:i A' }}
+                    </div>
+
+                    <div class="confidence-wrapper">
+
+                        {% if p.confidence >= 90 %}
+                            <span class="badge bg-success confidence-badge">
+                                {{ p.confidence }}%
+                            </span>
+
+                        {% elif p.confidence >= 70 %}
+                            <span class="badge bg-warning text-dark confidence-badge">
+                                {{ p.confidence }}%
+                            </span>
+
+                        {% else %}
+                            <span class="badge bg-danger confidence-badge">
+                                {{ p.confidence }}%
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="alert alert-info text-center">
+                No disease detection history found.
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

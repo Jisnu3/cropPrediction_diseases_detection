@@ -139,11 +139,26 @@
                   </ul>
                 </li>
 
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'user_history' %}">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
-                    History
-                  </a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        History
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'user_history' %}">
+                                <i class="fa-solid fa-seedling me-2"></i>
+                            Prediction 
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="{% url 'user_disease_history' %}">
+                                <i class="fa-solid fa-leaf me-2"></i>
+                                Detection 
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="nav-item">
@@ -194,16 +209,35 @@
                 </ul>
               </li>
 
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'user_history' %}"> <i class="fa-solid fa-clock-rotate-left"></i>History</a>
-              </li>
+              <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        History
+    </a>
+
+    <ul class="dropdown-menu">
+        <li>
+            <a class="dropdown-item" href="{% url 'user_history' %}">
+                <i class="fa-solid fa-seedling me-2"></i>
+                Crop Prediction History
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="{% url 'user_disease_history' %}">
+                <i class="fa-solid fa-leaf me-2"></i>
+                Disease Detection History
+            </a>
+        </li>
+    </ul>
+</li>
 
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'profile' %}"><i class="fa-solid fa-user"></i>Profile</a>
               </li>
 
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}"> <i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+                <a class="nav-link" href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
               </li>
             {% endif %}
           </ul>
