@@ -127,12 +127,17 @@
             <ul class="navbar-nav ms-auto">
               {% if user.is_authenticated and not user.is_staff %}
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'home' %}"><i class="fa-solid fa-home"></i> Home</a>
+                  <a class="nav-link d-flex align-items-center gap-2" href="{% url 'home' %}">
+                    <i class="fa-solid fa-home"></i>
+                    <span>Home</span>
+                  </a>                
                 </li>
 
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="fa-solid fa-layer-group"></i> Features</a>
-
+                  <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Features</span>
+                  </a>
                   <ul class="dropdown-menu">
                     <li>
                       <a class="dropdown-item" href="{% url 'predict' %}">
@@ -151,9 +156,9 @@
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-clock-rotate-left"></i>
-                        History
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" data-bs-toggle="dropdown">
+                      <i class="fa-solid fa-clock-rotate-left"></i>
+                      <span>History</span>
                     </a>
 
                     <ul class="dropdown-menu">
@@ -173,16 +178,16 @@
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'profile' %}">
+                  <a class="nav-link d-flex align-items-center gap-2" href="{% url 'profile' %}">
                     <i class="fa-solid fa-user"></i>
-                    Profile
+                    <span>Profile</span>
                   </a>
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'logout' %}">
+                  <a class="nav-link d-flex align-items-center gap-2" href="{% url 'logout' %}">
                     <i class="fa-solid fa-right-from-bracket"></i>
-                    Logout
+                    <span>Logout</span>
                   </a>
                 </li>
               {% endif %}

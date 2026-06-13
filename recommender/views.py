@@ -35,7 +35,7 @@ def signup_view(request):
     if request.method == "POST":
         name = request.POST.get("name")
         phone = request.POST.get("phone")
-        email = request.POST.get("email")
+        email = request.POST.get("email").strip().lower()
         password = request.POST.get("password")
         #basic validations
         if not name or not email or not phone or not password:
@@ -46,7 +46,7 @@ def signup_view(request):
             messages.error(request,"Password should be atleast 6 characters")
             return redirect("signup")
         
-        if User.objects.filter(username=email):
+        if User.objects.filter(username__iexact=email).exists():
             messages.error(request,"Account already exists with this email")
             return redirect("signup")
     
@@ -97,9 +97,22 @@ def logout_view(request):
 
 def login_view(request):
     if request.method == "POST":
-        username = request.POST.get("email")
+        email = request.POST.get("email").strip()
         password = request.POST.get("password")
-        user = authenticate(request,username=username,password=password)
+
+        db_user = User.objects.filter(
+            username__iexact=email
+        ).first()
+
+        if not db_user:
+            messages.error(request, "Invalid login credentials")
+            return redirect("login")
+
+        user = authenticate(
+            request,
+            username=db_user.username,
+            password=password
+        )
         if not user:
             messages.error(request,"Invalid login credentials")
             return redirect("login")
@@ -210,7 +223,7 @@ def forgot_password_view(request):
             return redirect("forgot_password")
 
         # Check user
-        user = User.objects.filter(username=email).first()
+        user = User.objects.filter(username__iexact=email).first()
         if not user:
             messages.error(request, "Email not registered")
             return redirect("forgot_password")
