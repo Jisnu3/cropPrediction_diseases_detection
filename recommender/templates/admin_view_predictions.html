@@ -11,41 +11,17 @@
       <h3><i class="fa-solid fa-seedling"></i> Prediction History</h3>
     </div>
 
-<form method="get"
-      class="card card-body shadow-sm border-0 mb-3">
-              <div class="row g-2">
-            <div class="col-md-4">
-                <label class="form-label">Crop</label>
-                <select name="crop" class="form-select">
-                    <option value="">All</option>
-                    {% for c in crops %}
-                        <option value="{{c}}" {% if c == current_crop %} selected {% endif %}>{{c|title}}</option>
-                    {% endfor %}
-                </select>
-            </div>
+<div class="mb-4">
+    <input
+        type="text"
+        id="searchInput"
+        class="form-control"
+        placeholder="🔍 Search user or crop..."
+    >
+</div>
 
-            <div class="col-md-3">
-                <label class="form-label">Start Date</label>
-                <input type="date" name="start" value="{{start}}" class="form-control">
-            </div>
-
-            <div class="col-md-3">
-                <label class="form-label">End Date</label>
-                <input type="date" name="end" value="{{end}}" class="form-control">
-            </div>
-
-            <div class="col-md-2 d-flex align-items-end gap-2">
-                <button class="btn btn-success w-100" type="submit">
-                    <i class="fa-solid fa-filter"></i> Apply
-                </button>
-                <button type="reset" class="btn btn-outline-secondary w-100">
-                    <i class="fa-solid fa-rotate-left"></i> Clear
-                </button>
-            </div>
-        </div>
-
-    </form>
-    <div class="prediction-table-wrapper">
+<!-- Desktop Table -->
+    <div class="prediction-table-wrapper d-none d-md-block">
       <table class="table table-sm table-striped table-hover text-center align-middle">
         <thead class="table-success">
           <tr>
@@ -63,11 +39,11 @@
           </tr>
         </thead>
 
-        <tbody>
+        <tbody id="historyTable">
                 {% for p in qs %}
                     <tr>
                         <td class="small">{{ p.created_at|date:'d M Y' }}</td>
-                        <td class="small">{{ p.user.username }}</td>
+                        <td class="small">{{ p.user.first_name|default:p.user.username }}</td>
                         <td>
                         <span class="badge bg-success small">{{ p.predicted_crop|title }}</span>
                         </td>
@@ -87,6 +63,169 @@
                 {% endfor %}
         </tbody>
       </table>
+      
     </div>
-  </div>
+    <!-- Mobile Cards -->
+<div class="mobile-history d-md-none">
+
+{% for user, records in grouped_predictions %}
+
+<div class="disease-history-card search-card"
+     data-search="
+     {{ user.username|lower }}
+     {% for p in records %}
+        {{ p.predicted_crop|lower }}
+        {{ p.created_at|date:'d M Y'|lower }}
+     {% endfor %}
+     ">
+    <div class="card-user">
+        <i class="fa-solid fa-user-circle"></i>
+
+        {% if user.first_name %}
+        {{ user.first_name }}
+        {% else %}
+            {{ user.username }}
+        {% endif %}
+    </div>
+
+    <div class="card-disease">
+
+        <div class="disease-title">
+            Latest Prediction
+        </div>
+
+        <div class="disease-name">
+            🌱 {{ records.0.predicted_crop|title }}
+        </div>
+
+        <div class="card-date">
+            {{ records.0.created_at|date:'d M Y h:i A' }}
+        </div>
+
+        <div class="mt-2">
+
+            <strong>N:</strong> {{ records.0.N }}
+
+            &nbsp;
+
+            <strong>P:</strong> {{ records.0.P }}
+
+            &nbsp;
+
+            <strong>K:</strong> {{ records.0.K }}
+
+            <br>
+
+            <strong>T:</strong> {{ records.0.temperature }}
+
+            &nbsp;
+
+            <strong>H:</strong> {{ records.0.humidity }}
+
+            <br>
+
+            <strong>pH:</strong> {{ records.0.ph }}
+
+            &nbsp;
+
+            <strong>R:</strong> {{ records.0.rainfall }}
+
+        </div>
+
+    </div>
+
+    <button
+        class="btn btn-outline-success btn-sm w-100 mt-2"
+        data-bs-toggle="collapse"
+        data-bs-target="#prediction{{ user.id }}">
+
+        View All History ({{ records|length }})
+    </button>
+
+    <div class="collapse mt-3" id="prediction{{ user.id }}">
+
+        {% for p in records|slice:'1:' %}
+
+        <div class="card-disease mb-2">
+
+            <div class="disease-name">
+                🌱 {{ p.predicted_crop|title }}
+            </div>
+
+            <small class="text-muted">
+                {{ p.created_at|date:'d M Y h:i A' }}
+            </small>
+
+            <div class="mt-2">
+
+                N: {{ p.N }}
+
+                P: {{ p.P }}
+
+                K: {{ p.K }}
+
+                <br>
+
+                T: {{ p.temperature }}
+
+                H: {{ p.humidity }}
+
+                <br>
+
+                pH: {{ p.ph }}
+
+                R: {{ p.rainfall }}
+
+            </div>
+
+            <a href="{% url 'admin_delete_prediction' p.id %}"
+               class="btn btn-outline-danger btn-sm mt-2">
+
+                <i class="fa-solid fa-trash"></i>
+                Delete
+
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function () {
+
+    let value = this.value.toLowerCase();
+
+    /* Desktop Table */
+    document.querySelectorAll("#historyTable tr").forEach(row => {
+
+        row.style.display =
+            row.innerText.toLowerCase().includes(value)
+            ? ""
+            : "none";
+
+    });
+
+    /* Mobile Cards */
+    document.querySelectorAll(".search-card").forEach(card => {
+
+        let text = card.getAttribute("data-search").toLowerCase();
+
+        card.style.display =
+            text.includes(value)
+            ? ""
+            : "none";
+
+    });
+
+});
+</script>
 {% endblock %}
+

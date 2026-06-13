@@ -515,11 +515,6 @@ body {
     }
 }
 
-@media (min-width: 992px) {
-    .navbar-nav {
-        gap: 8px !important;
-    }
-}
 
 @media (max-width:768px) {
 
@@ -708,7 +703,7 @@ body {
     .navbar-nav {
         display: flex;
         align-items: center;
-        gap: 30px !important;
+        gap: 20px !important;
     }
 
     .nav-link {
@@ -723,4 +718,119 @@ body {
     .nav-link i {
         margin-right: 4px;
     }
+}
+@media(max-width:768px){
+
+.prediction-history-card{
+    background:#fff;
+    border-radius:18px;
+    margin-bottom:14px;
+    overflow:hidden;
+
+    border-left:4px solid #198754;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.card-header-custom{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:12px 14px;
+}
+
+.user-name{
+    margin:0;
+    font-size:16px;
+    font-weight:700;
+    word-break:break-word;
+}
+
+.crop-badge{
+    display:inline-block;
+    background:#198754;
+    color:#fff;
+    padding:4px 10px;
+    border-radius:10px;
+    margin:5px 0;
+    font-size:12px;
+    font-weight:600;
+}
+
+.date-text{
+    font-size:12px;
+    color:#6c757d;
+}
+
+.delete-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+
+    background:#dc3545;
+    color:#fff !important;
+
+    padding:8px 14px;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-size:13px;
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.delete-btn:hover{
+    background:#bb2d3b;
+    color:#fff !important;
+    transform:translateY(-2px);
+}
+
+.npk-row{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    border-top:1px solid #eee;
+}
+
+.npk-box{
+    padding:10px 4px;
+    text-align:center;
+}
+
+.npk-box span{
+    font-size:14px;
+    color:#6c757d;
+}
+
+.npk-box strong{
+    font-size:15px;
+    color:#198754;
+}
+
+.details-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+}
+
+.detail-box{
+    padding:10px;
+    font-size:12px;
+
+    border-top:1px solid #eee;
+    border-right:1px solid #eee;
+
+    display:flex;
+    text-align:center;
+    flex-direction:column;
+}
+
+.detail-box strong{
+    font-size:16px;
+    margin-top:3px;
+    color:#212529;
+    text-align:center;
+}
+
 }

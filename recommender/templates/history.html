@@ -71,12 +71,7 @@
             {{ p.created_at|date:'d M Y h:i A' }}
         </div>
 
-        <a href="{% url 'user_delete_prediction' p.id %}"
-           class="btn btn-outline-danger btn-sm w-100 mt-2"
-           onclick="return confirm('Delete this record?')">
-            <i class="fa-solid fa-trash"></i>
-            Delete
-        </a>
+
 
     </div>
     {% empty %}
@@ -101,7 +96,6 @@
             <th>H</th>
             <th>pH</th>
             <th>R</th>
-            <th>Action</th>
           </tr>
         </thead>
 
@@ -123,9 +117,6 @@
                 <td class="small">{{ p.ph }}</td>
                 <td class="small">{{ p.rainfall }}</td>
 
-                <td>
-                  <a href="{% url 'user_delete_prediction' p.id %}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this record? This cannot be undone!')"><i class="fa-solid fa-trash"></i></a>
-                </td>
               </tr>
             {% endfor %}
           {% else %}

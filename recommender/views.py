@@ -340,8 +340,11 @@ def admin_user_delete(request,id):
     return redirect("admin_users_view")
 
 from django.utils.dateparse import parse_date
+from collections import defaultdict
+
 @user_passes_test(is_staff, login_url='admin_login')
 def admin_view_predictions(request):
+
     qs = Prediction.objects.select_related('user')
 
     crop = request.GET.get('crop')
@@ -360,19 +363,34 @@ def admin_view_predictions(request):
     if d_end:
         qs = qs.filter(created_at__date__lte=d_end)
 
-    crops = (Prediction.objects
-             .order_by('predicted_crop')
-             .values_list('predicted_crop',flat=True)
-             .distinct())
-    context = {
-       "qs" : qs,
-       "crops" : crops,
-       "current_crop" : crop,
-       "start" : start,
-       "end" : end,
+    qs = qs.order_by('-created_at')
 
-   } 
-    return render(request,"admin_view_predictions.html",context)
+    grouped_predictions = defaultdict(list)
+
+    for p in qs:
+        grouped_predictions[p.user].append(p)
+
+    crops = (
+        Prediction.objects
+        .order_by('predicted_crop')
+        .values_list('predicted_crop', flat=True)
+        .distinct()
+    )
+
+    context = {
+        "qs": qs,
+        "grouped_predictions": grouped_predictions.items(),
+        "crops": crops,
+        "current_crop": crop,
+        "start": start,
+        "end": end,
+    }
+
+    return render(
+        request,
+        "admin_view_predictions.html",
+        context
+    )
 
 @user_passes_test(is_staff, login_url='admin_login')
 def admin_delete_prediction(request,id):

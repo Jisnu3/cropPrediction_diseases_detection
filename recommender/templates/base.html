@@ -124,7 +124,7 @@
         <!-- Desktop Menu -->
         {% if user.is_authenticated and not user.is_staff %}
           <div class="collapse navbar-collapse d-none d-lg-flex justify-content-end">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav">
               {% if user.is_authenticated and not user.is_staff %}
                 <li class="nav-item">
                   <a class="nav-link d-flex align-items-center gap-2" href="{% url 'home' %}">
