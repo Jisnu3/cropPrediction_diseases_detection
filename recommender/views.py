@@ -50,11 +50,6 @@ def signup_view(request):
         password = request.POST.get("password")
         #basic validations
         confirm_password = request.POST.get("confirm_password")
-        print("NAME:", name)
-        print("PHONE:", phone)
-        print("EMAIL:", email)
-        print("PASSWORD:", password)
-        print("CONFIRM:", confirm_password)
 
         if password != confirm_password:
             messages.error(request, "Passwords do not match")
@@ -84,18 +79,10 @@ def signup_view(request):
 
         request.session["signup_password"] = password
 
-        try:
-            send_mail(
-                subject="CropAI Email Verification",
-                message=f"Your OTP is: {otp}",
-                from_email=None,
-                recipient_list=[email],
-                fail_silently=False,
-            )
-        except Exception as e:
-            print("EMAIL ERROR:", str(e))
-            messages.error(request, f"Email Error: {e}")
-            return redirect("signup")
+        print("OTP:", otp)
+        messages.success(request, f"OTP generated: {otp}")
+        return redirect("verify_otp")
+    
         messages.success(
             request,
             "OTP sent to your email."
