@@ -335,14 +335,65 @@ def forgot_password_view(request):
             messages.error(request, "Email not registered")
             return redirect("forgot_password")
 
-        # Update password
-        user.set_password(new_password)
-        user.save()
+        # Generate OTP and store details in session
+        otp = random.randint(100000, 999999)
+        request.session["forgot_otp"] = str(otp)
+        request.session["forgot_email"] = email
+        request.session["forgot_password"] = new_password
 
-        messages.success(request, "Password reset successful. Please login.")
-        return redirect("login")
+        # Send OTP email
+        try:
+            send_mail(
+                subject="CropAI Password Reset OTP",
+                message=f"Your OTP for password reset is: {otp}",
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+            messages.success(request, "OTP sent to your email.")
+            return redirect("verify_forgot_password_otp")
+        except Exception as e:
+            import logging
+            import traceback
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error sending password reset OTP email: {str(e)}\n{traceback.format_exc()}")
+            messages.error(
+                request,
+                f"Failed to send password reset email. Please check your settings. Error: {str(e)}"
+            )
+            return redirect("forgot_password")
 
     return render(request, "forgot_password.html")
+
+
+def verify_forgot_password_otp_view(request):
+    if request.method == "POST":
+        entered_otp = request.POST.get("otp")
+        saved_otp = request.session.get("forgot_otp")
+        email = request.session.get("forgot_email")
+        new_password = request.session.get("forgot_password")
+
+        if entered_otp == saved_otp and email and new_password:
+            user = User.objects.filter(username__iexact=email).first()
+            if user:
+                user.set_password(new_password)
+                user.save()
+                
+                # Clean up session
+                request.session.pop("forgot_otp", None)
+                request.session.pop("forgot_email", None)
+                request.session.pop("forgot_password", None)
+                
+                messages.success(request, "Password reset successful. Please login.")
+                return redirect("login")
+            else:
+                messages.error(request, "User not found")
+                return redirect("forgot_password")
+        else:
+            messages.error(request, "Invalid OTP or session expired")
+            return redirect("verify_forgot_password_otp")
+
+    return render(request, "verify_otp.html")
 
 
 def is_staff(user):

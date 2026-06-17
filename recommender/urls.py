@@ -28,4 +28,5 @@ urlpatterns = [
     path("delete-selected-predictions/",views.delete_selected_predictions,name="delete_selected_predictions"),
     path("delete-selected-detections/",views.delete_selected_detections,name="delete_selected_detections"),
     path("verify-otp/",views.verify_otp_view,name="verify_otp"),
+    path("verify-forgot-password-otp/",views.verify_forgot_password_otp_view,name="verify_forgot_password_otp"),
 ]
