@@ -81,19 +81,29 @@ def signup_view(request):
         request.session["signup_password"] = password
 
 
-        send_mail(
-            subject="CropAI Email Verification",
-            message=f"Your OTP is: {otp}",
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[email],
-            fail_silently=False,
-        )
-        messages.success(
-            request,
-            "OTP sent to your email."
-        )
-
-        return redirect("verify_otp")
+        try:
+            send_mail(
+                subject="CropAI Email Verification",
+                message=f"Your OTP is: {otp}",
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+            messages.success(
+                request,
+                "OTP sent to your email."
+            )
+            return redirect("verify_otp")
+        except Exception as e:
+            import logging
+            import traceback
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error sending OTP email: {str(e)}\n{traceback.format_exc()}")
+            messages.error(
+                request,
+                f"Failed to send verification email. Please check your SMTP settings. Error: {str(e)}"
+            )
+            return redirect("signup")
 
         #return redirect("home")
     return render(request,"signup.html")
