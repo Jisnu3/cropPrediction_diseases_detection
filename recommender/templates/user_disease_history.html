@@ -1,209 +1,116 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Detection History
+  Detection History
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-
+  <div class="container-fluid">
     <div class="card shadow-sm border-0 rounded-4">
-        <div class="card-body p-4">
-            <form method="POST" action="{% url 'delete_selected_detections' %}">
-    {% csrf_token %}
-            <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="card-body p-4">
+        <form method="POST" action="{% url 'delete_selected_detections' %}">
+          {% csrf_token %}
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-success" style="font-size:18px;">
+              <i class="fa-solid fa-leaf"></i>
+              Detection History
+            </h2>
 
-                <h2 class="fw-bold text-success"  style="font-size:18px;">
-                    <i class="fa-solid fa-leaf"></i>
-                    Detection History
-                </h2>
+            <button type="button" id="toggleSelect" class="btn btn-outline-success btn-sm px-3">Select</button>
 
-                <button
-    type="button"
-    id="toggleSelect"
-    class="btn btn-outline-success btn-sm px-3">
-    Select
-</button>
+            <button type="button" id="selectAllBtn" class="btn btn-outline-primary btn-sm px-3 d-none">Select All</button>
+          </div>
 
-<button
-    type="button"
-    id="selectAllBtn"
-    class="btn btn-outline-primary btn-sm px-3 d-none">
-    Select All
-</button>
+          <button id="deleteBtn" type="submit" class="btn btn-danger btn-sm mb-3 d-none">
+            <i class="fa-solid fa-trash"></i>
+            Delete
+          </button>
 
-            </div>
-
-            <button
-                id="deleteBtn"
-                type="submit"
-                class="btn btn-danger btn-sm mb-3 d-none">
-
-                <i class="fa-solid fa-trash"></i>
-                Delete
-
-            </button>
-
-            {% if predictions %}
-
+          {% if predictions %}
             <div class="mobile-history">
-
-                {% for p in predictions %}
-
+              {% for p in predictions %}
                 <div class="disease-history-card">
-                    <div class="form-check mb-2">
-                        <input
-                            type="checkbox"
-                            name="selected_detections"
-                            value="{{ p.id }}"
-                            class="form-check-input detection-checkbox selection-box"
-                            style="display:none;">
-                    </div>
+                  <div class="form-check mb-2">
+                    <input type="checkbox" name="selected_detections" value="{{ p.id }}" class="form-check-input detection-checkbox selection-box" style="display:none;" />
+                  </div>
 
-                    <div class="card-disease">
-                        <div class="disease-title">
-                            🌱 Disease Detected
-                        </div>
+                  <div class="card-disease">
+                    <div class="disease-title">🌱 Disease Detected</div>
 
-                        <div class="disease-name">
-                            {{ p.disease_name }}
-                        </div>
-                    </div>
+                    <div class="disease-name">{{ p.disease_name }}</div>
+                  </div>
 
-                    <div class="card-date">
-                        <i class="fa-solid fa-calendar-days"></i>
-                        {{ p.created_at|date:'d M Y h:i A' }}
-                    </div>
+                  <div class="card-date">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    {{ p.created_at|date:'d M Y h:i A' }}
+                  </div>
 
-                    <div class="confidence-wrapper">
-
-                        {% if p.confidence >= 90 %}
-                            <span class="badge bg-success confidence-badge">
-                                {{ p.confidence }}%
-                            </span>
-
-                        {% elif p.confidence >= 70 %}
-                            <span class="badge bg-warning text-dark confidence-badge">
-                                {{ p.confidence }}%
-                            </span>
-
-                        {% else %}
-                            <span class="badge bg-danger confidence-badge">
-                                {{ p.confidence }}%
-                            </span>
-                        {% endif %}
-
-                    </div>
-
+                  <div class="confidence-wrapper">
+                    {% if p.confidence >= 90 %}
+                      <span class="badge bg-success confidence-badge">{{ p.confidence }}%</span>
+                    {% elif p.confidence >= 70 %}
+                      <span class="badge bg-warning text-dark confidence-badge">{{ p.confidence }}%</span>
+                    {% else %}
+                      <span class="badge bg-danger confidence-badge">{{ p.confidence }}%</span>
+                    {% endif %}
+                  </div>
                 </div>
-
-                {% endfor %}
-
+              {% endfor %}
             </div>
-
-            {% else %}
-
-            <div class="alert alert-info text-center">
-                No disease detection history found.
-            </div>
-
-            {% endif %}
-</form>
-        </div>
+          {% else %}
+            <div class="alert alert-info text-center">No disease detection history found.</div>
+          {% endif %}
+        </form>
+      </div>
     </div>
-
-</div>
-<script>
-
-const toggleBtn =
-document.getElementById("toggleSelect");
-
-const deleteBtn =
-document.getElementById("deleteBtn");
-
-toggleBtn.addEventListener("click", () => {
-
-    document
-    .querySelectorAll(".selection-box")
-    .forEach(box => {
-
-        box.style.display = "block";
-
-    });
-
-    toggleBtn.classList.add("d-none");
-document
-.getElementById("selectAllBtn")
-.classList.remove("d-none");
-
-});
-
-document
-.querySelectorAll(".detection-checkbox")
-.forEach(cb => {
-
-    cb.addEventListener("change", updateDeleteButton);
-
-});
-
-function updateDeleteButton(){
-
-    const checked =
-    document.querySelectorAll(
-        ".detection-checkbox:checked"
-    ).length;
-
-    if(checked > 0){
-
-        deleteBtn.classList.remove("d-none");
-
-    }else{
-
-        deleteBtn.classList.add("d-none");
-        document
-.getElementById("selectAllBtn")
-.classList.add("d-none");
-
-        document
-        .querySelectorAll(".selection-box")
-        .forEach(box => {
-
-            box.style.display = "none";
-            box.checked = false;
-
-        });
-
-        toggleBtn.classList.remove("d-none");
-
+  </div>
+  <script>
+    const toggleBtn = document.getElementById('toggleSelect')
+    
+    const deleteBtn = document.getElementById('deleteBtn')
+    
+    toggleBtn.addEventListener('click', () => {
+      document.querySelectorAll('.selection-box').forEach((box) => {
+        box.style.display = 'block'
+      })
+    
+      toggleBtn.classList.add('d-none')
+      document.getElementById('selectAllBtn').classList.remove('d-none')
+    })
+    
+    document.querySelectorAll('.detection-checkbox').forEach((cb) => {
+      cb.addEventListener('change', updateDeleteButton)
+    })
+    
+    function updateDeleteButton() {
+      const checked = document.querySelectorAll('.detection-checkbox:checked').length
+    
+      if (checked > 0) {
+        deleteBtn.classList.remove('d-none')
+      } else {
+        deleteBtn.classList.add('d-none')
+        document.getElementById('selectAllBtn').classList.add('d-none')
+    
+        document.querySelectorAll('.selection-box').forEach((box) => {
+          box.style.display = 'none'
+          box.checked = false
+        })
+    
+        toggleBtn.classList.remove('d-none')
+      }
     }
-
-}
-const selectAllBtn =
-document.getElementById("selectAllBtn");
-
-selectAllBtn?.addEventListener("click", () => {
-
-    const allChecked =
-    document.querySelectorAll(
-        ".detection-checkbox:checked"
-    ).length ===
-    document.querySelectorAll(
-        ".detection-checkbox"
-    ).length;
-
-    document
-    .querySelectorAll(".detection-checkbox")
-    .forEach(cb => {
-
-        cb.checked = !allChecked;
-
-    });
-
-    selectAllBtn.textContent =
-        allChecked ? "Select All" : "Deselect All";
-
-    updateDeleteButton();
-
-});
-</script>
+    const selectAllBtn = document.getElementById('selectAllBtn')
+    
+    selectAllBtn?.addEventListener('click', () => {
+      const allChecked = document.querySelectorAll('.detection-checkbox:checked').length === document.querySelectorAll('.detection-checkbox').length
+    
+      document.querySelectorAll('.detection-checkbox').forEach((cb) => {
+        cb.checked = !allChecked
+      })
+    
+      selectAllBtn.textContent = allChecked ? 'Select All' : 'Deselect All'
+    
+      updateDeleteButton()
+    })
+  </script>
 {% endblock %}

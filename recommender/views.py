@@ -49,6 +49,12 @@ def signup_view(request):
             return redirect("signup")
         password = request.POST.get("password")
         #basic validations
+        confirm_password = request.POST.get("confirm_password")
+
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match")
+            return redirect("signup")
+        
         if not name or not email or not phone or not password:
             messages.error(request,"Please fill all required fields")
             return redirect("signup")
@@ -229,7 +235,7 @@ def profile_view(request):
     if request.method == "POST":
         name = request.POST.get("name")
         phone = request.POST.get("phone")
-        
+
         if name:
             parts = name.split(" ",1)
             request.user.first_name = parts[0]
