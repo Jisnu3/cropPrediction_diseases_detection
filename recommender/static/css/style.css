@@ -374,7 +374,7 @@ body {
 }
 
 .navbar-brand {
-    font-size: 1.5rem;
+    font-size: 20px;
     letter-spacing: .3px;
 }
 
@@ -682,7 +682,6 @@ body {
     color: #6c757d;
     margin-bottom: 12px;
 }
-
 .confidence-wrapper {
     text-align: right;
 }

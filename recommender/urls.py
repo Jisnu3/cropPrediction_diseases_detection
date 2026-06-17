@@ -26,5 +26,5 @@ urlpatterns = [
     path('disease_detection/',disease_detection_view,name='disease_detection'),
     path('detection-history/',views.user_disease_history,name='user_disease_history'),
     path("delete-selected-predictions/",views.delete_selected_predictions,name="delete_selected_predictions"),
-
+    path("delete-selected-detections/",views.delete_selected_detections,name="delete_selected_detections"),
 ]

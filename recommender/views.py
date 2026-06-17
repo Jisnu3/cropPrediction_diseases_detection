@@ -331,6 +331,22 @@ def user_disease_history(request):
         }
     )
 
+@login_required
+def delete_selected_detections(request):
+
+    if request.method == "POST":
+
+        ids = request.POST.getlist(
+            "selected_detections"
+        )
+
+        DiseasePrediction.objects.filter(
+            id__in=ids,
+            user=request.user
+        ).delete()
+
+    return redirect("user_disease_history")
+
 
 @login_required
 def delete_selected_predictions(request):
