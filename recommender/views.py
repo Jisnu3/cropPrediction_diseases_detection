@@ -5,6 +5,11 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from PIL import ImageFile
+import random
+import re
+
+from django.core.mail import send_mail
+
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -36,6 +41,12 @@ def signup_view(request):
         name = request.POST.get("name")
         phone = request.POST.get("phone")
         email = request.POST.get("email").strip().lower()
+        if not re.match(r'^[6-9]\d{9}$', phone):
+            messages.error(
+                request,
+                "Enter a valid 10-digit mobile number"
+            )
+            return redirect("signup")
         password = request.POST.get("password")
         #basic validations
         if not name or not email or not phone or not password:
@@ -49,19 +60,34 @@ def signup_view(request):
         if User.objects.filter(username__iexact=email).exists():
             messages.error(request,"Account already exists with this email")
             return redirect("signup")
-    
-        user = User.objects.create_user(username=email,password=password)
-        if " " in name:
-            first, last = name.split(" ",1)
-        else:
-            first, last = name, ""
-        user.first_name, user.last_name = first, last
-        user.save()
 
-        UserProfile.objects.create(user=user, phone=phone)
-        login(request,user)
-        messages.success(request,"Account created successfully. Welcome!")
-        return redirect("home")
+
+        otp = random.randint(100000, 999999)
+        request.session["signup_otp"] = str(otp)
+
+        request.session["signup_name"] = name
+
+        request.session["signup_phone"] = phone
+
+        request.session["signup_email"] = email
+
+        request.session["signup_password"] = password
+
+        send_mail(
+            subject="CropAI Email Verification",
+            message=f"Your OTP is: {otp}",
+            from_email=None,
+            recipient_list=[email],
+            fail_silently=False,
+        )
+        messages.success(
+            request,
+            "OTP sent to your email."
+        )
+
+        return redirect("verify_otp")
+
+        #return redirect("home")
     return render(request,"signup.html")
 
 from .MachineLearning.loader import predict_one, load_bundle
@@ -90,6 +116,68 @@ def predict_view(request):
 
     return render(request,"predict.html",locals())
 
+
+
+def verify_otp_view(request):
+
+    if request.method == "POST":
+
+        entered_otp = request.POST.get("otp")
+
+        saved_otp = request.session.get("signup_otp")
+
+        if entered_otp == saved_otp:
+
+            name = request.session.get("signup_name")
+            phone = request.session.get("signup_phone")
+            email = request.session.get("signup_email")
+            password = request.session.get("signup_password")
+
+            user = User.objects.create_user(
+                username=email,
+                email=email,
+                password=password
+            )
+
+            parts = name.split(" ", 1)
+
+            user.first_name = parts[0]
+            user.last_name = parts[1] if len(parts) > 1 else ""
+
+            user.save()
+
+            UserProfile.objects.create(
+                user=user,
+                phone=phone
+            )
+
+            request.session.pop("signup_otp", None)
+            request.session.pop("signup_name", None)
+            request.session.pop("signup_phone", None)
+            request.session.pop("signup_email", None)
+            request.session.pop("signup_password", None)
+            
+
+            login(request, user)
+
+            messages.success(
+                request,
+                "Account created successfully"
+            )
+
+            return redirect("home")
+
+        else:
+
+            messages.error(
+                request,
+                "Invalid OTP"
+            )
+
+    return render(
+        request,
+        "verify_otp.html"
+    )
 def logout_view(request):
     logout(request)
     messages.success(request,"Successfully Logged Out")
@@ -141,6 +229,7 @@ def profile_view(request):
     if request.method == "POST":
         name = request.POST.get("name")
         phone = request.POST.get("phone")
+        
         if name:
             parts = name.split(" ",1)
             request.user.first_name = parts[0]
@@ -290,12 +379,20 @@ def admin_profile_view(request):
 
     if request.method == "POST":
 
-        name = request.POST.get("name")
-        phone = request.POST.get("phone")
+        name = request.POST.get("name", "").strip()
+        phone = request.POST.get("phone", "").strip()
+
+        # Phone validation
+        if not re.match(r'^[6-9]\d{9}$', phone):
+            messages.error(
+                request,
+                "Enter a valid 10-digit mobile number."
+            )
+            return redirect("admin_profile")
 
         parts = name.split(" ", 1)
 
-        request.user.first_name = parts[0]
+        request.user.first_name = parts[0] if parts else ""
         request.user.last_name = parts[1] if len(parts) > 1 else ""
 
         profile.phone = phone
@@ -308,11 +405,14 @@ def admin_profile_view(request):
             "Profile updated successfully"
         )
 
+        return redirect("admin_profile")
+
     return render(
         request,
         "admin_profile.html",
         {"profile": profile}
     )
+
 
 from django.contrib.auth.decorators import login_required
 

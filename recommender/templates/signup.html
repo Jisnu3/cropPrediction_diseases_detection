@@ -14,7 +14,7 @@
                 </div>
                 <div class="position-absolute bottom-0 p-4 text-white">
                     <h4 class="fw-bold mb-2">Create your account</h4>
-                    <p class="mb-3 text-white-51">Predict corps, save history, export CSV, disease detection - all in one place</p>
+                    <p class="mb-3 text-white-51">Predict corps, disease detection, save history - all in one place</p>
                     <ul class="small list-unstyled mb-0">
                         <li class="mb-1"><i class="fa-solid fa-circle-check me-2"></i>Secure & private</li>
                         <li class="mb-1"><i class="fa-solid fa-circle-check me-2"></i>Fast ML predictions</li>
@@ -40,7 +40,14 @@
                                 <label class="form-label">Phone</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
-                                    <input type="number" name="phone" class="form-control" placeholder="Enter Phone no" required/>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        class="form-control"
+                                        maxlength="10"
+                                        pattern="[6-9][0-9]{9}"
+                                        placeholder="Enter Phone no"
+                                        required>
                                 </div>
                             </div>
 
@@ -77,8 +84,12 @@
                             <div class="col-md-12">
 
                                 <div class="form-check">
-                                    <input type="checkbox" id="agree" class="form-check-input"/>
-                                    <label class="form-check-label">I agree to the <a href=""> Terms & Conditions</a></label>
+                                    <input type="checkbox" id="agree" class="form-check-input" required/>
+                                    <label class="form-check-label">I agree to the <a href="#"
+   data-bs-toggle="modal"
+   data-bs-target="#termsModal">
+   Terms & Conditions
+</a></label>
                                 </div>
                             </div>
 
@@ -98,6 +109,62 @@
         </div>
         </div>
     </div>
+</div>
+<div class="modal fade"
+     id="termsModal"
+     tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-scrollable">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Terms & Conditions
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>
+                    By creating an account, you agree to:
+                </p>
+
+                <ul>
+                    <li>Provide accurate information.</li>
+                    <li>Use the platform responsibly.</li>
+                    <li>Not misuse prediction results.</li>
+                    <li>Respect platform policies.</li>
+                    <li>Keep your account credentials secure.</li>
+                </ul>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    data-bs-dismiss="modal">
+
+                    I Understand
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 <script>

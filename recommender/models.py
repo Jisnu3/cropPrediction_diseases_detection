@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone = models.BigIntegerField(max_length=10)
+    phone = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return self.user.get_full_name() or self.user.username

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Admin Profile
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <div class="card shadow-sm border-0 rounded-4">
+
+        <div class="card-body p-4">
+
+            <h2 class="text-success mb-4">
+                <i class="fa-solid fa-user-shield"></i>
+                Admin Profile
+            </h2>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label>Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        class="form-control"
+                        value="{{ request.user.get_full_name }}">
+                </div>
+
+                <div class="mb-3">
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        class="form-control"
+                        value="{{ request.user.username }}"
+                        readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label>Phone</label>
+                    <input
+    type="text"
+    name="phone"
+    class="form-control"
+    value="{{ profile.phone }}"
+    maxlength="10"
+    pattern="[0-9]{10}"
+    required>
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-success">
+
+                    Update Profile
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
