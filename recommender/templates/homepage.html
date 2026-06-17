@@ -10,7 +10,7 @@
   <section class="hero-gradient rounded-4 p-4 mb-5 text-white">
     <div class="row align-items-center">
       <div class="col-lg-7">
-        <h1 class="display-5 fw-bold mb-2">Smart  Agriculture</h1>
+        <h1 class="display-5 fw-bold mb-2">Smart Agriculture</h1>
         <p class="lead text-white-51 mb-3">AI-powered farming assistance for better crop planning, disease identification, and higher agricultural productivity—all in one platform.</p>
 
         <div class="hero-buttons d-flex gap-3">
@@ -41,34 +41,32 @@
     </div>
 
     <div class="row mt-4">
-    <div class="col-12">
+      <div class="col-12">
         <div class="stats-bar">
+          <div class="stat-item">
+            <i class="fa-solid fa-users"></i>
+            <div class="stat-label">Users</div>
+            <div class="stat-number">{{ total_users }}</div>
+          </div>
 
-            <div class="stat-item">
-                <i class="fa-solid fa-users"></i>
-                <div class="stat-label">Users</div>
-                <div class="stat-number">{{ total_users }}</div>
-            </div>
+          <div class="stat-divider"></div>
 
-            <div class="stat-divider"></div>
+          <div class="stat-item">
+            <i class="fa-solid fa-chart-line"></i>
+            <div class="stat-label">Predictions</div>
+            <div class="stat-number">{{ total_predictions }}</div>
+          </div>
 
-            <div class="stat-item">
-                <i class="fa-solid fa-chart-line"></i>
-                <div class="stat-label">Predictions</div>
-                <div class="stat-number">{{ total_predictions }}</div>
-            </div>
+          <div class="stat-divider"></div>
 
-            <div class="stat-divider"></div>
-
-            <div class="stat-item">
-                <i class="fa-solid fa-leaf"></i>
-                <div class="stat-label">Detections</div>
-                <div class="stat-number">{{ total_detections }}</div>
-            </div>
-
+          <div class="stat-item">
+            <i class="fa-solid fa-leaf"></i>
+            <div class="stat-label">Detections</div>
+            <div class="stat-number">{{ total_detections }}</div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
   </section>
 
   <section class="features-section mb-5">
@@ -264,7 +262,7 @@
 
       <hr class="border-light" />
 
-      <div class="text-center pb-3 small">© 2026 Smart Agriculture Project | Developed by Jisnu Hazra From Scratch 🌱</div>
+      <div class="text-center pb-3 small">© 2026 Smart Agriculture Project | Developed by Group: 11 From Scratch 🌱</div>
     </div>
   </footer>
 {% endblock %}

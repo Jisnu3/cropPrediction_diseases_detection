@@ -19,12 +19,12 @@ urlpatterns = [
     path('admin_profile/',admin_profile_view,name='admin_profile'),
     path('admin_users_view/',admin_users_view,name='admin_users_view'),
     path('admin_user_delete/<int:id>/',admin_user_delete,name='admin_user_delete'),
-    path('admin_view_predictions/',admin_view_predictions,name='admin_view_predictions'),
     path('admin_delete_prediction/<int:id>/',admin_delete_prediction,name='admin_delete_prediction'),
     path('admin_logout/',admin_logout_view,name='admin_logout'),
     path('admin_change_password/',admin_change_password_view,name='admin_change_password'),
     path('forgot-password/', views.forgot_password_view, name='forgot_password'),
     path('disease_detection/',disease_detection_view,name='disease_detection'),
-    path('admin_disease_history/',views.admin_disease_history,name='admin_disease_history'),
     path('detection-history/',views.user_disease_history,name='user_disease_history'),
+    path("delete-selected-predictions/",views.delete_selected_predictions,name="delete_selected_predictions"),
+
 ]
