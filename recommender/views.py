@@ -79,10 +79,13 @@ def signup_view(request):
 
         request.session["signup_password"] = password
 
-        print("OTP:", otp)
-        messages.success(request, f"OTP generated: {otp}")
-        return redirect("verify_otp")
-    
+        send_mail(
+            subject="CropAI Email Verification",
+            message=f"Your OTP is: {otp}",
+            from_email=None,
+            recipient_list=[email],
+            fail_silently=False,
+        )
         messages.success(
             request,
             "OTP sent to your email."
