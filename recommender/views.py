@@ -1,6 +1,7 @@
 from tensorflow.keras.preprocessing.image import img_to_array
 from django.shortcuts import render, redirect
 from .models import *
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -79,18 +80,14 @@ def signup_view(request):
 
         request.session["signup_password"] = password
 
-        try:
-            send_mail(
-                subject="CropAI Email Verification",
-                message=f"Your OTP is: {otp}",
-                from_email=EMAIL_HOST_USER,
-                recipient_list=[email],
-                fail_silently=False,
-            )
-        except Exception as e:
-            print("EMAIL ERROR:", e)
-            messages.error(request, f"Email Error: {e}")
-            return redirect("signup")
+
+        send_mail(
+            subject="CropAI Email Verification",
+            message=f"Your OTP is: {otp}",
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[email],
+            fail_silently=False,
+        )
         messages.success(
             request,
             "OTP sent to your email."
