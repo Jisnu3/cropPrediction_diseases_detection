@@ -53,7 +53,6 @@
 
               <!-- INPUT -->
               <input type="file" name="image" id="imageInput" accept="image/*" class="d-none" required />
-              <input type="file" id="cameraInput" accept="image/*" capture="environment" class="d-none" />
 
               <!-- BUTTONS -->
               <div class="d-flex justify-content-center gap-3 mt-4">
@@ -280,51 +279,18 @@ document.querySelector("form").addEventListener("submit", function() {
   </script>
 
   <script>
-    const cameraInput = document.getElementById('cameraInput')
-    const imageInput = document.getElementById('imageInput')
-    const previewImage = document.getElementById('previewImage')
-    const uploadContent = document.getElementById('uploadContent')
-    
-    document.getElementById('openCamera').addEventListener('click', () => {
-      cameraInput.click()
-    })
-    
-    cameraInput.addEventListener('change', function () {
-
-    const file = this.files[0];
-
-    if (!file) return;
-
-    // 5MB check
-    if (file.size > 5 * 1024 * 1024) {
-
-        alert('Captured image must be smaller than 5MB');
-
-        this.value = '';
-
-        return;
-    }
-
-    const dt = new DataTransfer();
-
-    dt.items.add(file);
-
-    imageInput.files = dt.files;
-
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-
-        previewImage.src = e.target.result;
-
-        previewImage.classList.remove('d-none');
-
-        uploadContent.classList.add('d-none');
-
-    };
-
-    reader.readAsDataURL(file);
-
-});
+    ;(function() {
+      const imageInput = document.getElementById('imageInput')
+      const previewImage = document.getElementById('previewImage')
+      const uploadContent = document.getElementById('uploadContent')
+      
+      document.getElementById('openCamera').addEventListener('click', () => {
+        imageInput.setAttribute('capture', 'environment')
+        imageInput.click()
+        setTimeout(() => {
+          imageInput.removeAttribute('capture')
+        }, 1000)
+      })
+    })()
   </script>
 {% endblock %}
