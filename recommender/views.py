@@ -140,7 +140,7 @@ def verify_otp_view(request):
 
     if request.method == "POST":
 
-        entered_otp = request.POST.get("otp")
+        entered_otp = request.POST.get("otp", "").strip()
 
         saved_otp = request.session.get("signup_otp")
 
@@ -368,7 +368,7 @@ def forgot_password_view(request):
 
 def verify_forgot_password_otp_view(request):
     if request.method == "POST":
-        entered_otp = request.POST.get("otp")
+        entered_otp = request.POST.get("otp", "").strip()
         saved_otp = request.session.get("forgot_otp")
         email = request.session.get("forgot_email")
         new_password = request.session.get("forgot_password")
