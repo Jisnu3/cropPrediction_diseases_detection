@@ -279,7 +279,9 @@
         }
 
         const btn = document.getElementById("detectBtn");
-        btn.disabled = true;
+        setTimeout(() => {
+          btn.disabled = true;
+        }, 0);
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Detecting...';
       });
     })()

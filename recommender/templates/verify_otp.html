@@ -40,7 +40,8 @@
                 </a>
                 <button
                     type="submit"
-                    class="btn btn-success w-50">
+                    class="btn btn-success w-50"
+                    id="verifyOtpBtn">
                     Verify OTP
                 </button>
             </div>
@@ -50,5 +51,17 @@
     </div>
 
 </div>
+
+<script>
+document.querySelector("form").addEventListener("submit", function(e) {
+    const btn = document.getElementById("verifyOtpBtn");
+    if (btn) {
+        setTimeout(() => {
+            btn.disabled = true;
+        }, 0);
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying...';
+    }
+});
+</script>
 
 {% endblock %}
