@@ -51,8 +51,9 @@
                 {% endif %}
               </div>
 
-              <!-- INPUT -->
-              <input type="file" name="image" id="imageInput" accept="image/*" class="d-none" required />
+              <!-- INPUTS -->
+              <input type="file" id="imageInput" accept="image/*" class="d-none" />
+              <input type="file" id="cameraInput" accept="image/*" capture="environment" class="d-none" />
 
               <!-- BUTTONS -->
               <div class="d-flex justify-content-center gap-3 mt-4">
@@ -187,27 +188,13 @@
     </div>
   </div>
 <script>
-document.querySelector("form").addEventListener("submit", function() {
-
-    const btn = document.getElementById("detectBtn");
-
-    btn.disabled = true;
-
-    btn.innerHTML =
-        '<i class="fa-solid fa-spinner fa-spin"></i> Detecting...';
-
-});
-</script>
   <script>
     ;(function () {
       const uploadBox = document.getElementById('uploadBox')
-    
       const imageInput = document.getElementById('imageInput')
-    
+      const cameraInput = document.getElementById('cameraInput')
       const previewImage = document.getElementById('previewImage')
-    
       const uploadContent = document.getElementById('uploadContent')
-    
       const btnReset = document.getElementById('btnReset')
     
       // OPEN FILE
@@ -215,21 +202,38 @@ document.querySelector("form").addEventListener("submit", function() {
         imageInput.click()
       })
     
-      // IMAGE PREVIEW
+      // IMAGE PREVIEW FOR FILE SELECT
       imageInput.addEventListener('change', function () {
         const file = this.files[0]
-    
         if (file) {
+          imageInput.name = 'image'
+          cameraInput.name = ''
+          cameraInput.value = ''
+          
           const reader = new FileReader()
-    
           reader.onload = function (e) {
             previewImage.src = e.target.result
-    
             previewImage.classList.remove('d-none')
-    
             uploadContent.classList.add('d-none')
           }
-    
+          reader.readAsDataURL(file)
+        }
+      })
+
+      // IMAGE PREVIEW FOR CAMERA CAPTURE
+      cameraInput.addEventListener('change', function () {
+        const file = this.files[0]
+        if (file) {
+          cameraInput.name = 'image'
+          imageInput.name = ''
+          imageInput.value = ''
+          
+          const reader = new FileReader()
+          reader.onload = function (e) {
+            previewImage.src = e.target.result
+            previewImage.classList.remove('d-none')
+            uploadContent.classList.add('d-none')
+          }
           reader.readAsDataURL(file)
         }
       })
@@ -237,7 +241,6 @@ document.querySelector("form").addEventListener("submit", function() {
       // DRAG OVER
       uploadBox.addEventListener('dragover', function (e) {
         e.preventDefault()
-    
         uploadBox.classList.add('drag-active')
       })
     
@@ -249,24 +252,19 @@ document.querySelector("form").addEventListener("submit", function() {
       // DROP
       uploadBox.addEventListener('drop', function (e) {
         e.preventDefault()
-    
         uploadBox.classList.remove('drag-active')
-    
         const file = e.dataTransfer.files[0]
-    
         imageInput.files = e.dataTransfer.files
-    
         if (file) {
+          imageInput.name = 'image'
+          cameraInput.name = ''
+          cameraInput.value = ''
           const reader = new FileReader()
-    
           reader.onload = function (event) {
             previewImage.src = event.target.result
-    
             previewImage.classList.remove('d-none')
-    
             uploadContent.classList.add('d-none')
           }
-    
           reader.readAsDataURL(file)
         }
       })
@@ -275,22 +273,26 @@ document.querySelector("form").addEventListener("submit", function() {
       btnReset.addEventListener('click', function () {
         window.location.href = window.location.pathname
       })
-    })()
-  </script>
 
-  <script>
-    ;(function() {
-      const imageInput = document.getElementById('imageInput')
-      const previewImage = document.getElementById('previewImage')
-      const uploadContent = document.getElementById('uploadContent')
-      
+      // CAMERA BUTTON CLICK
       document.getElementById('openCamera').addEventListener('click', () => {
-        imageInput.setAttribute('capture', 'environment')
-        imageInput.click()
-        setTimeout(() => {
-          imageInput.removeAttribute('capture')
-        }, 1000)
+        cameraInput.click()
       })
+
+      // SUBMIT VALIDATION & LOADING STATE
+      document.querySelector("form").addEventListener("submit", function(e) {
+        const hasFile = (imageInput.files && imageInput.files.length > 0) || 
+                        (cameraInput.files && cameraInput.files.length > 0);
+        if (!hasFile) {
+          e.preventDefault();
+          alert('Please upload or capture an image first.');
+          return;
+        }
+
+        const btn = document.getElementById("detectBtn");
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Detecting...';
+      });
     })()
   </script>
 {% endblock %}

@@ -137,6 +137,8 @@ def predict_view(request):
 
 
 def verify_otp_view(request):
+    if request.user.is_authenticated:
+        return redirect("home")
 
     if request.method == "POST":
 
