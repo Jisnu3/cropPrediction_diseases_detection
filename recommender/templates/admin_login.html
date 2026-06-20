@@ -3,7 +3,21 @@
 <title>{% block title %} Admin Login {% endblock %}</title>
 
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 80px);">
+<!-- REDUCE MAIN CONTAINER PADDING TO FIT SINGLE PAGE ON MOBILE -->
+<style>
+  main.container {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+  @media (max-width: 576px) {
+    .container {
+      padding-left: 12px !important;
+      padding-right: 12px !important;
+    }
+  }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 100px);">
     <div class="col-lg-10">
         <div class="card shadow-lg border-0 overflow-hidden" style="animation: fadeIn 0.6s ease-in-out;">
         <div class="card shadow-lg border-0 overflow-hidden"></div>
@@ -23,7 +37,7 @@
                 </div>
             </div>
             <div class="col-md-6 bg-white">
-                <div class="p-5">
+                <div class="p-4 p-md-5">
                     <h3 class="mb-3"><i class="fa-solid fa-user-plus"></i>Admin Login</h3>
                     <form method="post" id="loginForm">
                         {% csrf_token %}

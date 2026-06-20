@@ -1,0 +1,155 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}System Reports{% endblock %}
+{% block active_reports %}active{% endblock %}
+{% block page_title %}Reports & Exports{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0" style="animation: fadeIn 0.5s ease-in-out;">
+    
+    <!-- EXPORTS QUICK ACTIONS CARDS -->
+    <div class="row g-3 mb-4">
+        <!-- Users Export -->
+        <div class="col-md-4">
+            <div class="card dashboard-card border-0 h-100">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <h6 class="fw-bold text-slate-800 mb-2"><i class="fa-solid fa-users text-success me-2"></i>Users Database</h6>
+                        <p class="text-muted small">Export register profiles, contact info, status flags, and timestamps.</p>
+                    </div>
+                    <a href="{% url 'export_users_csv' %}" class="btn btn-success rounded-3 mt-3 w-100 d-flex align-items-center justify-content-center gap-2">
+                        <i class="fa-solid fa-file-csv fa-lg"></i> Download CSV Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Predictions Export -->
+        <div class="col-md-4">
+            <div class="card dashboard-card border-0 h-100">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <h6 class="fw-bold text-slate-800 mb-2"><i class="fa-solid fa-seedling text-success me-2"></i>Crop Predictions</h6>
+                        <p class="text-muted small">Export soil NPK ratios, physical conditions, recommendations, and analysis timestamps.</p>
+                    </div>
+                    <a href="{% url 'export_predictions_csv' %}" class="btn btn-success rounded-3 mt-3 w-100 d-flex align-items-center justify-content-center gap-2">
+                        <i class="fa-solid fa-file-csv fa-lg"></i> Download CSV Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detections Export -->
+        <div class="col-md-4">
+            <div class="card dashboard-card border-0 h-100">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <h6 class="fw-bold text-slate-800 mb-2"><i class="fa-solid fa-leaf text-success me-2"></i>Disease Detections</h6>
+                        <p class="text-muted small">Export detected plant leaf pathologies, model confidences, and analysis logs.</p>
+                    </div>
+                    <a href="{% url 'export_detections_csv' %}" class="btn btn-success rounded-3 mt-3 w-100 d-flex align-items-center justify-content-center gap-2">
+                        <i class="fa-solid fa-file-csv fa-lg"></i> Download CSV Report
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PREVIEWS / RECENT ACTIVITY -->
+    <div class="row g-4 mb-4">
+        <!-- Recent Crop Predictions Previews -->
+        <div class="col-lg-6">
+            <div class="card dashboard-card border-0 h-100">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-clock-rotate-left text-success me-2"></i>Recent Crop Predictions</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead class="table-light text-muted small">
+                                <tr>
+                                    <th class="border-0 px-2 py-2">User</th>
+                                    <th class="border-0 py-2 text-center">Crop</th>
+                                    <th class="border-0 px-2 py-2 text-end">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if recent_predictions %}
+                                    {% for p in recent_predictions %}
+                                        <tr>
+                                            <td class="px-2 py-2 small fw-semibold text-slate-700">
+                                                {{ p.user.get_full_name|default:p.user.username }}
+                                            </td>
+                                            <td class="py-2 text-center">
+                                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill" style="font-size: 0.7rem;">
+                                                    {{ p.predicted_crop|title }}
+                                                </span>
+                                            </td>
+                                            <td class="px-2 py-2 text-end text-muted small" style="font-size: 0.7rem;">
+                                                {{ p.created_at|date:"d M H:i" }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted py-4 small">No prediction records.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Disease Detections Previews -->
+        <div class="col-lg-6">
+            <div class="card dashboard-card border-0 h-100">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-clock-rotate-left text-success me-2"></i>Recent Disease Scans</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead class="table-light text-muted small">
+                                <tr>
+                                    <th class="border-0 px-2 py-2">User</th>
+                                    <th class="border-0 py-2 text-center">Pathology</th>
+                                    <th class="border-0 px-2 py-2 text-end">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if recent_detections %}
+                                    {% for d in recent_detections %}
+                                        <tr>
+                                            <td class="px-2 py-2 small fw-semibold text-slate-700">
+                                                {% if d.user %}{{ d.user.get_full_name|default:d.user.username }}{% else %}Anonymous{% endif %}
+                                            </td>
+                                            <td class="py-2 text-center small text-slate-800">
+                                                {{ d.formatted_disease_name }}
+                                            </td>
+                                            <td class="px-2 py-2 text-end text-muted small" style="font-size: 0.7rem;">
+                                                {{ d.created_at|date:"d M H:i" }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted py-4 small">No scanning records.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}

@@ -1,66 +1,118 @@
-{% extends 'base.html' %}
+{% extends 'admin_base.html' %}
+{% load static %}
 
-{% block title %}
-Admin Profile
-{% endblock %}
+{% block title %}Admin Profile{% endblock %}
+{% block active_profile %}active{% endblock %}
+{% block page_title %}Profile Settings{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container-fluid p-0" style="animation: fadeIn 0.5s ease-in-out;">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card dashboard-card border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center" style="width:48px; height:48px;">
+                            <i class="fa-solid fa-user-shield fa-lg"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Admin Profile</h5>
+                            <p class="text-muted small mb-0">Update your account details and settings.</p>
+                        </div>
+                    </div>
 
-    <div class="card shadow-sm border-0 rounded-4">
+                    <form method="POST">
+                        {% csrf_token %}
 
-        <div class="card-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-semibold">Full Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-slate-400 border-end-0"><i class="fa-regular fa-user"></i></span>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    class="form-control border-start-0"
+                                    value="{{ request.user.get_full_name }}"
+                                    placeholder="Admin Name"
+                                    required>
+                            </div>
+                        </div>
 
-            <h2 class="text-success mb-4">
-                <i class="fa-solid fa-user-shield"></i>
-                Admin Profile
-            </h2>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-semibold">Email Address (Read-only)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-slate-400 border-end-0"><i class="fa-regular fa-envelope"></i></span>
+                                <input
+                                    type="email"
+                                    class="form-control border-start-0 bg-light"
+                                    value="{{ request.user.username }}"
+                                    readonly>
+                            </div>
+                            <div class="form-text" style="font-size: 0.75rem;">Your registered email is used for admin login credentials and notifications.</div>
+                        </div>
 
-            <form method="POST">
-                {% csrf_token %}
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-semibold">Phone Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-slate-400 border-end-0"><i class="fa-solid fa-phone"></i></span>
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    class="form-control border-start-0"
+                                    value="{{ profile.phone|default:'' }}"
+                                    maxlength="10"
+                                    pattern="[0-9]{10}"
+                                    placeholder="Enter 10-digit number"
+                                    required>
+                            </div>
+                        </div>
 
-                <div class="mb-3">
-                    <label>Name</label>
-                    <input
-                        type="text"
-                        name="name"
-                        class="form-control"
-                        value="{{ request.user.get_full_name }}">
+                        <div class="d-flex justify-content-end gap-2 border-top pt-4">
+                            <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary px-4 rounded-3">Cancel</a>
+                            <button
+                                type="submit"
+                                class="btn btn-success px-4 rounded-3">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="mb-3">
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        class="form-control"
-                        value="{{ request.user.username }}"
-                        readonly>
-                </div>
-
-                <div class="mb-3">
-                    <label>Phone</label>
-                    <input
-    type="text"
-    name="phone"
-    class="form-control"
-    value="{{ profile.phone }}"
-    maxlength="10"
-    pattern="[0-9]{10}"
-    required>
-                </div>
-
-                <button
-                    type="submit"
-                    class="btn btn-success">
-
-                    Update Profile
-                </button>
-
-            </form>
-
+            </div>
         </div>
-
     </div>
-
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .input-group-text {
+        border-color: #dee2e6;
+        background-color: #f8fafc;
+        color: #198754 !important;
+    }
+    .form-control:focus {
+        border-color: #198754;
+        box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.15);
+    }
+    @media (max-width: 576px) {
+        .dashboard-card {
+            border-radius: 1rem !important;
+        }
+        .card-body {
+            padding: 1.5rem !important;
+        }
+        .d-flex.justify-content-end {
+            flex-direction: column-reverse;
+            gap: 0.5rem !important;
+        }
+        .d-flex.justify-content-end .btn {
+            width: 100%;
+            margin: 0 !important;
+        }
+    }
+</style>
 {% endblock %}

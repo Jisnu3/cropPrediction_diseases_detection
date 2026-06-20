@@ -17,7 +17,7 @@
           {% if user.is_authenticated and user.is_staff %}
             <a href="{% url 'admin_dashboard' %}" class="btn btn-light"><i class="fa-solid fa-gauge"></i>Admin Dashboard</a>
 
-            <a href="admin_view_predictions" class="btn btn-outline-light"><i class="fa-solid fa-table"></i>View Predictions</a>
+            <a href="{% url 'admin_view_predictions' %}" class="btn btn-outline-light"><i class="fa-solid fa-table"></i>View Predictions</a>
           {% elif user.is_authenticated and not user.is_staff %}
             <a href="{% url 'predict' %}" class="btn btn-light"><i class="fa-solid fa-wand-magic-sparkles"></i>Predict Now</a>
 
@@ -68,6 +68,67 @@
       </div>
     </div>
   </section>
+
+  <!-- AGRICULTURAL AI SEARCH ASSISTANT SECTION -->
+  <section class="ai-search-section mb-5">
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-left: 5px solid #10b981 !important;">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <i class="fa-solid fa-sparkles fa-2x text-success" style="filter: drop-shadow(0 2px 8px rgba(25, 135, 84, 0.2));"></i>
+            <div>
+              <span class="badge bg-success bg-opacity-10 text-success px-3 py-1 rounded-pill fw-semibold mb-1" style="font-size: 0.75rem;">AgriAI Search Assistant</span>
+              <h3 class="fw-bold text-success-emphasis mb-0">Ask Anything About Agriculture Problems</h3>
+            </div>
+          </div>
+          <p class="text-muted mb-4" style="font-size: 0.95rem; max-width: 650px;">
+            Have questions about soil nutrients, crop diseases, organic pesticides, seasonal crop planning, or irrigation? 
+            Ask our intelligent AgriAI assistant below for immediate agricultural support and guidance!
+          </p>
+          
+          <div class="search-bar-wrapper position-relative" style="max-width: 600px;">
+            <div class="input-group shadow-sm rounded-pill overflow-hidden border">
+              <span class="input-group-text bg-white border-0 ps-4">
+                <i class="fa-solid fa-magnifying-glass text-muted"></i>
+              </span>
+              <input type="text" id="userQueryInput" class="form-control border-0 py-3 ps-2" placeholder="Ask AI: e.g. how to improve nitrogen, treatment for tomato blight, organic pesticides..." style="outline: none; box-shadow: none; font-size: 0.95rem;">
+              <button class="btn btn-success px-4 fw-medium" type="button" id="searchAIButton">
+                Ask AI <i class="fa-solid fa-arrow-right ms-1"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 d-none d-lg-block text-center">
+          <i class="fa-solid fa-robot fa-8x text-success opacity-10"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI SEARCH ASSISTANT MODAL -->
+  <div class="modal fade" id="searchAssistantModal" tabindex="-1" aria-labelledby="searchAssistantLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 1.5rem; overflow: hidden; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px);">
+        <div class="modal-header bg-success text-white p-4">
+          <h5 class="modal-title fw-bold" id="searchAssistantLabel"><i class="fa-solid fa-robot me-2"></i>AgriAI Assistant</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="mb-3">
+            <span class="text-muted small">YOUR QUESTION:</span>
+            <h6 class="fw-bold text-slate-800" id="aiQuestion" style="font-size:0.95rem; color: #1e293b;">...</h6>
+          </div>
+          <div class="p-3 bg-light rounded-3 border" style="min-height: 120px;">
+            <span class="badge bg-success bg-opacity-10 text-success mb-2 px-2.5 py-1 rounded-pill" style="font-size:0.7rem;"><i class="fa-solid fa-sparkles me-1"></i>AI Answer</span>
+            <div class="mb-0 text-slate-700" id="aiAnswer" style="line-height: 1.6; font-size:0.88rem; color: #334155;">...</div>
+          </div>
+        </div>
+        <div class="modal-footer bg-light p-3 border-0">
+          <button type="button" class="btn btn-success px-4 rounded-pill btn-sm" data-bs-dismiss="modal" style="font-size:0.8rem;">Got it, thanks!</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <section class="features-section mb-5">
     <div class="text-center mb-4">
@@ -138,7 +199,7 @@
     </div>
   </section>
 
-  <section class="features-section mb-5 bg-light rounded-4 p-4">
+  <section class="features-section mb-5">
     <div class="text-center mb-4">
       <h2 class="fw-bold text-success">Why Use Smart Agriculture?</h2>
     </div>
@@ -165,51 +226,49 @@
       </div>
     </div>
   </section>
-  <section class="features-section bg-light rounded-4 p-5 mb-5">
+  <section class="features-section mb-5">
     <div class="text-center mb-4">
-      <h2 class="fw-bold text-success"><i class="fa-solid fa-envelope"></i> Contact Us</h2>
+      <h2 class="fw-bold text-success"><i class="fa-solid fa-envelope text-success me-2"></i>Contact Us</h2>
       <p class="text-muted">Have questions or suggestions about the Smart Agriculture system? Feel free to reach out.</p>
     </div>
 
     <div class="row">
       <div class="col-md-6 mb-4">
-        <h5 class="fw-bold mb-3">Project Information</h5>
-
-        <p>
-          <strong>Project Name:</strong> Smart Agriculture Using Machine Learning
-        </p>
-
-        <p>
-          <strong>Developer:</strong> xxxx xx
-        </p>
-
-        <p>
-          <strong>Email:</strong> group11@gmail.com
-        </p>
-
-        <p>
-          <strong>Location:</strong> West Bengal, India
-        </p>
+        <h5 class="fw-bold mb-3"><i class="fa-solid fa-circle-info text-success me-2"></i>Project Information</h5>
+        <div class="p-4 project-info-card border-0">
+          <p class="mb-3">
+            <strong class="text-success"><i class="fa-solid fa-wheat-awn me-2"></i>Name:</strong> <span class="text-dark fw-medium" style="font-size: 13.5px;">Smart Agriculture Farming</span>
+          </p>
+          <p class="mb-3">
+            <strong class="text-success"><i class="fa-solid fa-code me-2"></i>Developer:</strong> <span class="text-dark fw-medium" style="font-size: 13.5px;">Jisnu Hazra</span>
+          </p>
+          <p class="mb-3">
+            <strong class="text-success"><i class="fa-solid fa-envelope me-2"></i>Email:</strong> <a href="mailto:cropsditection26@gmail.com" class="text-success text-decoration-none fw-medium text-break" style="font-size: 12px;">cropsditection26@gmail.com</a>
+          </p>
+          <p class="mb-0">
+            <strong class="text-success"><i class="fa-solid fa-location-dot me-2"></i>Location:</strong> <span class="text-dark fw-medium" style="font-size: 13.5px;">West Bengal, India</span>
+          </p>
+        </div>
       </div>
 
       <div class="col-md-6">
-        <form>
+        <form class="p-4 bg-white rounded-4 shadow-sm border border-light">
           <div class="mb-3">
-            <label class="form-label">Your Name</label>
-            <input type="text" class="form-control" placeholder="Enter your name" />
+            <label class="form-label fw-semibold text-muted small">Your Name</label>
+            <input type="text" class="form-control custom-input" placeholder="Enter your name" />
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Email Address</label>
-            <input type="email" class="form-control" placeholder="Enter your email" />
+            <label class="form-label fw-semibold text-muted small">Email Address</label>
+            <input type="email" class="form-control custom-input" placeholder="Enter your email" />
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Message</label>
-            <textarea class="form-control" rows="4" placeholder="Write your message"></textarea>
+            <label class="form-label fw-semibold text-muted small">Message</label>
+            <textarea class="form-control custom-input" rows="4" placeholder="Write your message"></textarea>
           </div>
 
-          <button type="submit" class="btn btn-success"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+          <button type="submit" class="btn btn-success px-4 py-2.5 rounded-3 fw-semibold w-100 w-md-auto"><i class="fa-solid fa-paper-plane me-2"></i>Send Message</button>
         </form>
       </div>
     </div>
@@ -219,50 +278,182 @@
   <footer class="bg-success text-white pt-4 mt-5 rounded-4">
     <div class="container">
       <div class="row">
-        <div class="col-md-4 mb-3">
+        <div class="col-12 col-md-4 mb-4 mb-md-0">
           <h5 class="fw-bold"><i class="fa-solid fa-seedling"></i> Smart Agriculture</h5>
-
-          <p class="small">AI powered crop recommendation system that helps farmers choose the most suitable crop based on soil and weather data.</p>
+          <p class="small opacity-75">AI powered crop recommendation system that helps farmers choose the most suitable crop based on soil and weather data.</p>
         </div>
 
-        <div class="col-md-4 mb-3">
-          <h5 class="fw-bold">Quick Links</h5>
+        <div class="col-12 col-md-8">
+          <div class="row">
+            <div class="col-6 mb-3">
+              <h5 class="fw-bold">Quick Links</h5>
+              <ul class="list-unstyled opacity-75">
+                <li class="mb-2">
+                  <a href="{% url 'home' %}" class="text-white text-decoration-none"><i class="fa-solid fa-house me-1"></i> Home</a>
+                </li>
+                <li class="mb-2">
+                  <a href="{% url 'predict' %}" class="text-white text-decoration-none"><i class="fa-solid fa-seedling me-1"style="font-size: 13px;"></i> Crop Prediction</a>
+                </li>
+                <li>
+                  <a href="{% url 'user_history' %}" class="text-white text-decoration-none"><i class="fa-solid fa-clock-rotate-left me-1"></i> History</a>
+                </li>
+              </ul>
+            </div>
 
-          <ul class="list-unstyled">
-            <li>
-              <a href="{% url 'home' %}" class="text-white text-decoration-none"><i class="fa-solid fa-house"></i> Home</a>
-            </li>
-
-            <li>
-              <a href="{% url 'predict' %}" class="text-white text-decoration-none"><i class="fa-solid fa-seedling"></i> Crop Prediction</a>
-            </li>
-
-            <li>
-              <a href="{% url 'user_history' %}" class="text-white text-decoration-none"><i class="fa-solid fa-clock-rotate-left"></i> Prediction History</a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="col-md-4 mb-3">
-          <h5 class="fw-bold">Contact</h5>
-
-          <p class="small mb-1">
-            <i class="fa-solid fa-user"></i> Jisnu Hazra
-          </p>
-
-          <p class="small mb-1">
-            <i class="fa-solid fa-envelope"></i> group11@gmail.com
-          </p>
-
-          <p class="small mb-1">
-            <i class="fa-solid fa-location-dot"></i> West Bengal, India
-          </p>
+            <div class="col-6 mb-3">
+              <h5 class="fw-bold">Contact</h5>
+              <div class="small opacity-75">
+                <p class="mb-2"><i class="fa-solid fa-user me-1"></i> Jisnu Hazra</p>
+                <p class="mb-2 text-break"><i class="fa-solid fa-envelope me-1"></i>cropsditection26@gmail.com</p>
+                <p class="mb-0"><i class="fa-solid fa-location-dot me-1" style="font-size: 12px;"></i> West Bengal, India</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <hr class="border-light" />
-
-      <div class="text-center pb-3 small">© 2026 Smart Agriculture Project | Developed by Group: 11 From Scratch 🌱</div>
+      <div class="text-center pb-3 small opacity-75">© 2026 Smart Agriculture Project | Developed by Group: 11 From Scratch 🌱</div>
     </div>
   </footer>
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchInput = document.getElementById('userQueryInput');
+        const searchButton = document.getElementById('searchAIButton');
+
+        function handleAISearch(query) {
+            if (!query || query.trim() === '') return;
+            const originalQuery = query;
+            query = query.trim();
+
+            const questionEl = document.getElementById('aiQuestion');
+            const answerEl = document.getElementById('aiAnswer');
+            
+            questionEl.innerText = `"${originalQuery}"`;
+            answerEl.innerHTML = `<div class="d-flex align-items-center gap-2"><div class="spinner-border spinner-border-sm text-success" role="status"></div><span>AgriAI is analyzing agricultural databases...</span></div>`;
+
+            // Open the modal
+            const searchModal = new bootstrap.Modal(document.getElementById('searchAssistantModal'));
+            searchModal.show();
+
+            // Clear input
+            searchInput.value = '';
+
+            // Query backend Chatbot API via GET
+            fetch(`/api/chat/?query=${encodeURIComponent(query)}`)
+            .then(res => {
+                if (!res.ok) throw new Error("API call failed");
+                return res.json();
+            })
+            .then(data => {
+                answerEl.innerHTML = data.response;
+            })
+            .catch(err => {
+                console.error("Chatbot API failed, using local fallback...", err);
+                
+                // Fallback to local QA
+                const queryLower = query.toLowerCase();
+                const qaDb = [
+                    {
+                        keys: ['npk', 'nitrogen', 'phosphorus', 'potassium', 'soil', 'fertility', 'ph level', 'ph'],
+                        ans: "<strong>NPK</strong> stands for Nitrogen (N), Phosphorus (P), and Potassium (K) - the primary nutrients essential for plant growth:<br><br>" +
+                             "• <strong>Nitrogen (N)</strong>: Stimulates healthy vegetative growth and leaf greening. Boost naturally with compost or manure.<br><br>" +
+                             "• <strong>Phosphorus (P)</strong>: Vital for strong roots and flower blooming. Boost with bone meal or rock phosphate.<br><br>" +
+                             "• <strong>Potassium (K)</strong>: Regulates water balance and disease resistance. Boost with wood ash or kelp.<br><br>" +
+                             "• <strong>Soil pH level</strong>: Most crops grow best in pH 6.0 to 7.0. Use lime to raise pH, and sulfur to lower it."
+                    },
+                    {
+                        keys: ['crop', 'predict', 'recommend', 'ml', 'machine learning', 'predict crop', 'recommend crop'],
+                        ans: "Our platform's <strong>Crop Recommendation tool</strong> uses a Machine Learning model analyzing Nitrogen, Phosphorus, Potassium, Temperature, Humidity, Soil pH, and Rainfall. Try it out from the <strong>Features > Crop Prediction</strong> menu!"
+                    },
+                    {
+                        keys: ['disease', 'pathology', 'detect', 'leaf', 'scan', 'upload', 'trained_model', 'cnn', 'tensorflow'],
+                        ans: "Our <strong>Plant Disease Detection tool</strong> uses a deep CNN model. Upload a photo of an infected leaf in the <strong>Features > Disease Detection</strong> page to diagnose it and get treatment advice instantly."
+                    },
+                    {
+                        keys: ['pest', 'pesticide', 'bug', 'insect', 'organic pesticide', 'neem oil', 'spider mite', 'aphid', 'beetle', 'caterpillar'],
+                        ans: "Spray diluted <strong>Neem Oil</strong> (2 tsp neem oil + 1 tsp liquid soap in 1 liter of warm water) on leaves to manage common soft-bodied pests organically."
+                    }
+                ];
+
+                let matchedAns = "";
+                let maxMatches = 0;
+                for (const item of qaDb) {
+                    let matchCount = 0;
+                    item.keys.forEach(key => {
+                        if (queryLower.includes(key)) matchCount++;
+                    });
+                    if (matchCount > maxMatches) {
+                        maxMatches = matchCount;
+                        matchedAns = item.ans;
+                    }
+                }
+
+                if (!matchedAns) {
+                    matchedAns = `<strong>AgriAI Assistant (Offline Fallback)</strong><br><br>` +
+                                 `We couldn't connect to our live chatbot model. Here are general agricultural recommendations:<br><br>` +
+                                 `• Maintain balanced soil NPK ratios and a pH between 6.0 and 7.0.<br>` +
+                                 `• Keep crop spacing wide to improve ventilation and prevent fungal diseases.<br>` +
+                                 `• Spray neem oil or garlic-chili spray to deter common chewing pests.`;
+                }
+                
+                answerEl.innerHTML = matchedAns;
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleAISearch(searchInput.value);
+                }
+            });
+        }
+        if (searchButton) {
+            searchButton.addEventListener('click', function() {
+                handleAISearch(searchInput.value);
+            });
+        }
+    });
+  </script>
+
+  <style>
+    @media (max-width: 576px) {
+      .ai-search-section .card {
+        padding: 1.5rem !important;
+        border-radius: 1rem !important;
+      }
+      .ai-search-section .d-flex.align-items-center {
+        align-items: flex-start !important;
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+      }
+      .ai-search-section .input-group {
+        flex-direction: column;
+        border-radius: 1.25rem !important;
+        overflow: visible !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      .ai-search-section .input-group-text {
+        display: none !important;
+      }
+      .ai-search-section #userQueryInput {
+        border-radius: 2rem !important;
+        border: 1px solid #dee2e6 !important;
+        margin-bottom: 0.75rem;
+        padding: 0.9rem 1.25rem !important;
+        width: 100%;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important;
+      }
+      .ai-search-section #searchAIButton {
+        width: 100%;
+        border-radius: 2rem !important;
+        padding: 0.9rem !important;
+        box-shadow: 0 4px 10px rgba(25, 135, 84, 0.2) !important;
+      }
+    }
+  </style>
 {% endblock %}

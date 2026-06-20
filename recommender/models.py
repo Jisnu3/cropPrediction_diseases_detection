@@ -52,3 +52,13 @@ class DiseasePrediction(models.Model):
     def __str__(self):
 
         return f"{self.disease_name} ({self.confidence}%)"
+
+    @property
+    def formatted_disease_name(self):
+        name = self.disease_name
+        if "___" in name:
+            parts = name.split("___")
+            crop = parts[0].replace("_", " ").title()
+            disease = parts[1].replace("_", " ").strip().title()
+            return f"{crop} - {disease}"
+        return name.replace("_", " ").title()

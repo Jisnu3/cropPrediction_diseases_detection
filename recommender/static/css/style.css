@@ -1,5 +1,7 @@
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 #loader {
@@ -55,32 +57,20 @@ html {
 
 
 .features-section {
-    border: 3px solid #198754;
-    border-radius: 30px;
+    border: none !important;
+    border-left: 5px solid #10b981 !important;
+    border-radius: 24px !important;
     padding: 40px 25px;
-    background: #fff;
-    box-shadow: 0 10px 30px rgba(25, 135, 84, .12);
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
     position: relative;
     overflow: hidden;
 }
 
-/* Decorative corners */
+/* Decorative corners hidden for clean look */
 .features-section::before,
 .features-section::after {
-    content: "🌿";
-    position: absolute;
-    font-size: 28px;
-    opacity: .25;
-}
-
-.features-section::before {
-    top: 15px;
-    left: 20px;
-}
-
-.features-section::after {
-    top: 15px;
-    right: 20px;
+    display: none !important;
 }
 
 .features-section h2 {
@@ -371,6 +361,8 @@ html {
 body {
     background: #f6f8fb;
     font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 .navbar-brand {
@@ -832,4 +824,34 @@ body {
     text-align:center;
 }
 
+}
+
+/* Premium input styling for Contact Us and other forms */
+.custom-input {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    background-color: #fdfdfd;
+    transition: all 0.3s ease;
+}
+
+.custom-input:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.15);
+    background-color: #ffffff;
+}
+
+/* Premium Project Information Card */
+.project-info-card {
+    background: #ffffff;
+    border: 1px solid rgba(25, 135, 84, 0.1) !important;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(25, 135, 84, 0.08);
 }

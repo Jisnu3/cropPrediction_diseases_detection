@@ -403,18 +403,38 @@ from django.db.models import Count
 from django.utils import timezone
 import json
 from datetime import timedelta
+def format_disease_name_helper(name):
+    if "___" in name:
+        parts = name.split("___")
+        crop = parts[0].replace("_", " ").title()
+        disease = parts[1].replace("_", " ").strip().title()
+        return f"{crop} - {disease}"
+    return name.replace("_", " ").title()
+
 @user_passes_test(is_staff, login_url='admin_login')
 def admin_dashboard_view(request):
    total_users = User.objects.filter(is_staff=False).count()
    total_predictions = Prediction.objects.count()
+   total_detections = DiseasePrediction.objects.count()
+   active_users = User.objects.filter(is_staff=False, is_active=True).count()
+   blocked_users = User.objects.filter(is_staff=False, is_active=False).count()
 
    crop_qs = (
        Prediction.objects.values('predicted_crop')
        .annotate(c = Count('id'))
-       .order_by('-c')[:10]
+       .order_by('-c')[:5]
    )
    crop_labels = [i['predicted_crop'].title() for i in crop_qs]
    crop_counts = [i['c'] for i in crop_qs]
+
+   # Disease detection distribution
+   disease_qs = (
+       DiseasePrediction.objects.values('disease_name')
+       .annotate(c = Count('id'))
+       .order_by('-c')[:5]
+   )
+   disease_labels = [format_disease_name_helper(i['disease_name']) for i in disease_qs]
+   disease_counts = [i['c'] for i in disease_qs]
 
    today = timezone.localdate() #6,5,4,3,2,1,0
    days = [today - timedelta(days=i) for i in range(6,-1,-1)]
@@ -425,18 +445,47 @@ def admin_dashboard_view(request):
    context = {
        "total_users" : total_users,
        "total_predictions" : total_predictions,
+       "total_detections" : total_detections,
+       "active_users" : active_users,
+       "blocked_users" : blocked_users,
        "crop_labels_json" : json.dumps(crop_labels),
        "crop_counts_json" : json.dumps(crop_counts),
+       "disease_labels_json" : json.dumps(disease_labels),
+       "disease_counts_json" : json.dumps(disease_counts),
        "day_labels_json" : json.dumps(day_labels),
        "day_counts_json" : json.dumps(day_counts),
-
    } 
    return render(request,"admin_dashboard.html",context)
 
 @user_passes_test(is_staff, login_url='admin_login')
 def admin_users_view(request):
-    users = User.objects.filter(is_staff=False)
-    return render(request,"admin_view_users.html",{"users": users})
+    from django.utils import timezone
+    from datetime import timedelta
+    from recommender.models import Prediction
+    
+    one_month_ago = timezone.now() - timedelta(days=30)
+    users = User.objects.filter(is_staff=False).select_related('userprofile')
+    
+    user_list = []
+    for u in users:
+        # Check if they have a prediction in the last month
+        has_pred = Prediction.objects.filter(user=u, created_at__gte=one_month_ago).exists()
+        u.is_active_last_month = has_pred
+        user_list.append(u)
+        
+    return render(request,"admin_view_users.html",{"users": user_list})
+
+@user_passes_test(is_staff, login_url='admin_login')
+def admin_user_toggle_block(request, id):
+    user = get_object_or_404(User, id=id)
+    if user.is_active:
+        user.is_active = False
+        messages.success(request, f"User {user.get_full_name() or user.username} has been blocked.")
+    else:
+        user.is_active = True
+        messages.success(request, f"User {user.get_full_name() or user.username} has been unblocked.")
+    user.save()
+    return redirect('admin_users_view')
 
 
 @user_passes_test(is_staff, login_url='admin_login')
@@ -622,24 +671,24 @@ def admin_change_password_view(request):
         confirm = request.POST.get("confirm_password")
         if not request.user.check_password(current):
             messages.error(request,"Current password is invalid")
-            return redirect("change_password")
+            return redirect("admin_change_password")
         if len(new) < 6:
             messages.error(request,"New password must be atleast 6 characters")
-            return redirect("change_password")
+            return redirect("admin_change_password")
         if new != confirm:
             messages.error(request,"New passwords does not match")
-            return redirect("change_password")
+            return redirect("admin_change_password")
         if new == current:
             messages.error(request,"New password cannot be same as current password")
-            return redirect("change_password")
+            return redirect("admin_change_password")
         request.user.set_password(new)
         request.user.save()
         user = authenticate(request,username=request.user.username,password=new)
         if user:
             login(request,user)
             messages.success(request,"Password Changed Successfully")
-            return redirect("change_password")
-    return render(request,"change_password.html",locals())
+            return redirect("admin_change_password")
+    return render(request,"admin_change_password.html",locals())
 
 
 import tensorflow as tf
@@ -963,3 +1012,235 @@ def disease_detection_view(request):
             "image_data": image_data
         }
     )
+
+# ==========================================
+# ADMIN ANALYTICS & REPORTS
+# ==========================================
+@user_passes_test(is_staff, login_url='admin_login')
+def admin_analytics_view(request):
+   total_users = User.objects.filter(is_staff=False).count()
+   total_predictions = Prediction.objects.count()
+   total_detections = DiseasePrediction.objects.count()
+   
+   crop_qs = Prediction.objects.values('predicted_crop').annotate(c=Count('id')).order_by('-c')
+   crop_labels = [i['predicted_crop'].title() for i in crop_qs]
+   crop_counts = [i['c'] for i in crop_qs]
+   
+   disease_qs = DiseasePrediction.objects.values('disease_name').annotate(c=Count('id')).order_by('-c')
+   disease_labels = [format_disease_name_helper(i['disease_name']) for i in disease_qs]
+   disease_counts = [i['c'] for i in disease_qs]
+   
+   context = {
+       "total_users": total_users,
+       "total_predictions": total_predictions,
+       "total_detections": total_detections,
+       "crop_labels_json": json.dumps(crop_labels),
+       "crop_counts_json": json.dumps(crop_counts),
+       "disease_labels_json": json.dumps(disease_labels),
+       "disease_counts_json": json.dumps(disease_counts),
+   }
+   return render(request, "admin_analytics.html", context)
+
+from django.http import JsonResponse
+from django.utils.timesince import timesince
+
+@user_passes_test(is_staff, login_url='admin_login')
+def admin_notifications_api(request):
+    notifications = []
+    
+    recent_users = User.objects.filter(is_staff=False).order_by('-date_joined')[:3]
+    recent_preds = Prediction.objects.select_related('user').order_by('-created_at')[:3]
+    recent_detections = DiseasePrediction.objects.select_related('user').order_by('-created_at')[:3]
+    
+    for u in recent_users:
+        notifications.append({
+            'type': 'user',
+            'title': 'New User Registered',
+            'desc': f"{u.get_full_name() or u.username} joined.",
+            'time': timesince(u.date_joined) + " ago",
+            'timestamp': u.date_joined
+        })
+        
+    for p in recent_preds:
+        user_display = p.user.get_full_name() or p.user.username
+        notifications.append({
+            'type': 'prediction',
+            'title': 'New Crop Prediction',
+            'desc': f"{user_display} predicted crop: {p.predicted_crop.title()}.",
+            'time': timesince(p.created_at) + " ago",
+            'timestamp': p.created_at
+        })
+        
+    for d in recent_detections:
+        user_display = d.user.get_full_name() or d.user.username if d.user else 'Anonymous'
+        notifications.append({
+            'type': 'detection',
+            'title': 'New Disease Detected',
+            'desc': f"Pathology: {d.formatted_disease_name} ({d.confidence:.1f}%).",
+            'time': timesince(d.created_at) + " ago",
+            'timestamp': d.created_at
+        })
+        
+    notifications.sort(key=lambda x: x['timestamp'], reverse=True)
+    
+    data = notifications[:5]
+    return JsonResponse({
+        'notifications': data,
+        'count': len(data)
+    })
+
+
+@user_passes_test(is_staff, login_url='admin_login')
+def admin_reports_view(request):
+    recent_users = User.objects.filter(is_staff=False).order_by('-date_joined')[:5]
+    recent_predictions = Prediction.objects.select_related('user').order_by('-created_at')[:5]
+    recent_detections = DiseasePrediction.objects.select_related('user').order_by('-created_at')[:5]
+    
+    context = {
+        'recent_users': recent_users,
+        'recent_predictions': recent_predictions,
+        'recent_detections': recent_detections,
+    }
+    return render(request, 'admin_reports.html', context)
+
+
+import csv
+from django.http import HttpResponse
+
+@user_passes_test(is_staff, login_url='admin_login')
+def export_users_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="users_report.csv"'
+    
+    writer = csv.writer(response)
+    writer.writerow(['ID', 'Username/Email', 'First Name', 'Last Name', 'Phone', 'Date Joined', 'Is Active'])
+    
+    users = User.objects.filter(is_staff=False).select_related('userprofile')
+    for u in users:
+        phone = u.userprofile.phone if hasattr(u, 'userprofile') else ''
+        writer.writerow([u.id, u.username, u.first_name, u.last_name, phone, u.date_joined.strftime('%Y-%m-%d %H:%M'), u.is_active])
+        
+    return response
+
+
+@user_passes_test(is_staff, login_url='admin_login')
+def export_predictions_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="crop_predictions_report.csv"'
+    
+    writer = csv.writer(response)
+    writer.writerow(['ID', 'User', 'N', 'P', 'K', 'Temp (C)', 'Humidity (%)', 'pH', 'Rainfall (mm)', 'Predicted Crop', 'Date'])
+    
+    predictions = Prediction.objects.select_related('user')
+    for p in predictions:
+        user_name = p.user.get_full_name() or p.user.username
+        writer.writerow([p.id, user_name, p.N, p.P, p.K, p.temperature, p.humidity, p.ph, p.rainfall, p.predicted_crop, p.created_at.strftime('%Y-%m-%d %H:%M')])
+        
+    return response
+
+
+@user_passes_test(is_staff, login_url='admin_login')
+def export_detections_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="disease_detections_report.csv"'
+    
+    writer = csv.writer(response)
+    writer.writerow(['ID', 'User', 'Disease Name', 'Confidence (%)', 'Date'])
+    
+    detections = DiseasePrediction.objects.select_related('user')
+    for d in detections:
+        user_name = d.user.get_full_name() or d.user.username if d.user else 'Anonymous'
+        writer.writerow([d.id, user_name, d.disease_name, d.confidence, d.created_at.strftime('%Y-%m-%d %H:%M')])
+        
+    return response
+
+
+import json
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+def agri_ai_chat_api(request):
+    query = request.GET.get("query", "").strip()
+    if not query:
+        return JsonResponse({"response": "Please enter a valid query."})
+
+    # Call pollinations AI text API
+    system_prompt = (
+        "You are an expert agricultural AI assistant. Provide extremely helpful, accurate, and practical "
+        "agricultural advice, crop recommendations, pest management tips, and soil improvement techniques. "
+        "Use HTML tags (like <strong>, <br>, <ul>, <li>) for structured and beautiful formatting of your output."
+    )
+    
+    try:
+        payload = {
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": query}
+            ],
+            "model": "openai"
+        }
+        r = requests.post("https://text.pollinations.ai/", json=payload, timeout=8)
+        if r.status_code == 200:
+            ai_text = r.text
+            import re
+            # Simple markdown bold parser **text** -> <strong>text</strong>
+            ai_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', ai_text)
+            # If the response doesn't have HTML break tags, replace newlines with <br>
+            if "<br>" not in ai_text and "<p>" not in ai_text:
+                ai_text = ai_text.replace("\n", "<br>")
+            return JsonResponse({"response": ai_text})
+    except Exception:
+        pass
+
+    # Fallback keyword QA logic
+    query_lower = query.lower()
+    qa_db = [
+        {
+            "keys": ['npk', 'nitrogen', 'phosphorus', 'potassium', 'soil', 'fertility', 'ph level', 'ph'],
+            "ans": "<strong>NPK</strong> stands for Nitrogen (N), Phosphorus (P), and Potassium (K) - the primary nutrients essential for plant growth:<br><br>"
+                   "• <strong>Nitrogen (N)</strong>: Stimulates healthy vegetative growth and leaf greening. To boost naturally, apply composted manure, grow cover crops (like clover), or use blood meal.<br><br>"
+                   "• <strong>Phosphorus (P)</strong>: Vital for strong root system development, flower blooming, and seed creation. To boost, apply bone meal, rock phosphate, or fish emulsion.<br><br>"
+                   "• <strong>Potassium (K)</strong>: Regulates water balance, photosynthesis, and strengthens plant disease resistance. To boost, use potash, wood ash, or compost rich in banana peels.<br><br>"
+                   "• <strong>Soil pH level</strong>: Most crops grow best in slightly acidic to neutral soils (pH 6.0 to 7.0). Use lime to raise pH (decrease acidity) and sulfur to lower pH (increase acidity)."
+        },
+        {
+            "keys": ['crop', 'predict', 'recommend', 'ml', 'machine learning', 'predict crop', 'recommend crop'],
+            "ans": "Our platform's <strong>Crop Recommendation tool</strong> uses a highly accurate Machine Learning model (Random Forest Classifier).<br><br>"
+                   "It analyzes seven parameters: Nitrogen, Phosphorus, Potassium, Temperature, Relative Humidity, Soil pH, and Rainfall.<br><br>"
+                   "Try it out from the <strong>Features > Crop Prediction</strong> menu!"
+        },
+        {
+            "keys": ['disease', 'pathology', 'detect', 'leaf', 'scan', 'upload', 'trained_model', 'cnn', 'tensorflow'],
+            "ans": "Our <strong>Plant Disease Detection tool</strong> uses a deep Convolutional Neural Network (CNN) trained on thousands of plant leaf images.<br><br>"
+                   "1. Navigate to the <strong>Features > Disease Detection</strong> page.<br>"
+                   "2. Upload a clear photograph of an infected leaf (up to 5MB, JPG/PNG format).<br>"
+                   "3. The AI model evaluates spots and chlorosis, identifying the specific pathology with a confidence percentage, and recommends organic and chemical treatment advice."
+        },
+        {
+            "keys": ['pest', 'pesticide', 'bug', 'insect', 'organic pesticide', 'neem oil', 'spider mite', 'aphid', 'beetle', 'caterpillar'],
+            "ans": "Here are highly effective, organic recipes to manage common agricultural pests:<br><br>"
+                   "• <strong>Neem Oil Spray</strong>: Mix 2 teaspoons of pure neem oil, 1 teaspoon of organic liquid dish soap, and 1 liter of warm water. Spray thoroughly on both sides of leaves in the evening.<br><br>"
+                   "• <strong>Garlic-Chili Insecticide</strong>: Blend 2 heads of garlic and 3 hot peppers with 1 liter of water. Strain the mixture, add 1 teaspoon of liquid soap, and spray onto plants.<br><br>"
+                   "• <strong>Cultural practices</strong>: Introduce beneficial insects (like ladybugs), practice companion planting (e.g. marigolds to deter nematodes), and maintain proper plant spacing."
+        }
+    ]
+
+    matched_ans = ""
+    max_matches = 0
+    for item in qa_db:
+        match_count = sum(1 for key in item["keys"] if key in query_lower)
+        if match_count > max_matches:
+            max_matches = match_count
+            matched_ans = item["ans"]
+
+    if not matched_ans:
+        matched_ans = (
+            "<strong>AgriAI Assistant (Offline Fallback)</strong><br><br>"
+            "We could not reach our online AI models at this moment. Here is some general guidance:<br><br>"
+            "• <strong>Soil Health</strong>: Maintain balanced N-P-K ratios and a soil pH of 6.0 to 7.0 for optimal crop growth.<br>"
+            "• <strong>Pests and Disease</strong>: Spray neem oil for pest control and prune diseased leaves to halt infections.<br>"
+            "• <strong>Crop Planning</strong>: Align crop choices with local climate seasons (Kharif for monsoon, Rabi for winter)."
+        )
+
+    return JsonResponse({"response": matched_ans})

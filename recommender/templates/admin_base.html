@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart Agriculture Admin Panel{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+    <!-- Google Fonts Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        
+
+        .admin-card {
+            background-color: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .admin-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #10b981;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+        }
+        .admin-info {
+            flex-grow: 1;
+            margin-left: 0.75rem;
+        }
+        .admin-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0;
+            color: #fff;
+        }
+        .admin-role {
+            font-size: 0.7rem;
+            color: #a7f3d0;
+            margin: 0;
+        }
+        
+
+
+        /* MAIN CONTENT STYLES */
+        .main-content {
+            margin-left: 0;
+            padding: 1.5rem 2rem;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* HEADER BAR */
+        .header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.75rem;
+            background: #198754;
+            border-bottom: 3px solid #157347;
+            margin-bottom: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(25, 135, 84, 0.15);
+            color: #ffffff;
+        }
+        .header-bar h4 {
+            color: #ffffff !important;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+        .date-badge {
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .notification-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.75rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(5px);
+        }
+        .notification-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            color: #ffffff;
+        }
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.65rem;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid #f8fafc;
+        }
+        
+        /* CARD STYLES */
+        .dashboard-card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01), 0 10px 15px -3px rgba(0,0,0,0.03);
+            transition: all 0.3s ease;
+        }
+        .dashboard-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.02);
+            transform: translateY(-2px);
+        }
+        
+        /* MOBILE VIEW TOGGLE */
+        @media (max-width: 991.98px) {
+            .main-content {
+                padding: 1.5rem 1rem;
+            }
+        }
+        @media (max-width: 575.98px) {
+            #adminDrawer {
+                width: 80% !important;
+                border-top-left-radius: 1.5rem !important;
+                border-bottom-left-radius: 1.5rem !important;
+            }
+        }
+        
+        /* PREMIUM ADMIN DRAWER (OFFCANVAS) */
+        #adminDrawer {
+            background: #ffffff !important;
+            color: #1e293b;
+            border-left: 1px solid #e2e8f0;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #adminDrawer .offcanvas-header {
+            border-bottom: 1px solid rgba(25, 135, 84, 0.1);
+            background: #198754 !important;
+        }
+        #adminDrawer .offcanvas-title {
+            font-size: 1.15rem;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+        #adminDrawer .list-group-item-action {
+            background: transparent;
+            color: #475569;
+            border-left: 3px solid transparent;
+            transition: all 0.25s ease;
+            margin-bottom: 0.5rem !important;
+            border-radius: 0.5rem !important;
+        }
+        #adminDrawer .list-group-item-action:hover, 
+        #adminDrawer .list-group-item-action.active {
+            background: rgba(25, 135, 84, 0.08) !important;
+            color: #198754 !important;
+            border-left: 3px solid #198754 !important;
+            transform: translateX(5px);
+        }
+        #adminDrawer .list-group-item-action i {
+            color: #198754 !important;
+            transition: transform 0.2s ease;
+        }
+        #adminDrawer .list-group-item-action:hover i {
+            transform: scale(1.15);
+        }
+        #adminDrawer .admin-avatar {
+            border: 3px solid rgba(25, 135, 84, 0.2);
+            box-shadow: 0 0 20px rgba(25, 135, 84, 0.15);
+        }
+        #adminDrawer .btn-close-white {
+            opacity: 0.8;
+            transition: all 0.2s ease;
+        }
+        #adminDrawer .btn-close-white:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+        
+        /* UTILITY CLASSES */
+        .trend-up {
+            color: #10b981;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .trend-down {
+            color: #ef4444;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- HEADER BAR -->
+        <div class="header-bar">
+            <div class="d-flex align-items-center">
+                <h4 class="fw-bold mb-0">{% block page_title %}Dashboard{% endblock %}</h4>
+            </div>
+            
+            <div class="header-actions">
+                <div class="dropdown">
+                    <div class="notification-btn dropdown-toggle" id="notifDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="notification-badge" id="notifBadge" style="display: none;">0</span>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end p-3 shadow-lg border-0" id="notificationDropdownMenu" style="width: 320px; border-radius: 1rem; z-index: 1050;">
+                        <li class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                            <h6 class="fw-bold mb-0 text-dark">Notifications</h6>
+                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill" id="notifCountBadge">0 New</span>
+                        </li>
+                        <div id="notifListContainer" style="max-height: 250px; overflow-y: auto;">
+                            <li class="text-center py-3 text-muted small">Loading...</li>
+                        </div>
+                    </ul>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2">
+                    <div class="admin-avatar" style="width:38px; height:38px; font-size: 0.85rem; cursor: pointer; border: 2px solid rgba(255,255,255,0.4);" data-bs-toggle="offcanvas" data-bs-target="#adminDrawer">
+                        {% if user.get_full_name %}
+                            {{ user.first_name.0|upper }}{{ user.last_name.0|upper }}
+                        {% else %}
+                            AD
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENT BLOCK -->
+        {% block content %}{% endblock %}
+    </div>
+
+
+
+    <!-- ADMIN PROFILE DRAWER (OFFCANVAS) -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="adminDrawer" aria-labelledby="adminDrawerLabel" style="border-top-left-radius: 1.5rem; border-bottom-left-radius: 1.5rem;">
+        <div class="offcanvas-header bg-success text-white p-4">
+            <h5 class="offcanvas-title fw-bold" id="adminDrawerLabel"><i class="fa-solid fa-user-shield me-2"></i>Admin Console</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-4">
+            <div class="text-center mb-4 pb-3 border-bottom">
+                <div class="admin-avatar mx-auto mb-3" style="width: 70px; height: 70px; font-size: 1.8rem; background-color: #10b981; color: white; font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                    {% if user.get_full_name %}
+                        {{ user.first_name.0|upper }}{{ user.last_name.0|upper }}
+                    {% else %}
+                        AD
+                    {% endif %}
+                </div>
+                <h5 class="fw-bold mb-1 text-slate-800">
+                    {% if user.get_full_name %}
+                        {{ user.get_full_name }}
+                    {% else %}
+                        Admin User
+                    {% endif %}
+                </h5>
+                <span class="badge bg-success bg-opacity-10 text-success px-3 py-1.5 rounded-pill fw-semibold" style="font-size:0.75rem;">Super Admin</span>
+            </div>
+            <div class="list-group list-group-flush mb-4">
+                <a href="{% url 'admin_profile' %}" class="list-group-item list-group-item-action d-flex align-items-center gap-3 border-0 py-3 rounded-3 mb-1">
+                    <i class="fa-solid fa-user-gear text-success fa-lg" style="width: 24px;"></i>
+                    <span class="fw-medium text-slate-700">Profile Settings</span>
+                </a>
+                <a href="{% url 'admin_change_password' %}" class="list-group-item list-group-item-action d-flex align-items-center gap-3 border-0 py-3 rounded-3 mb-1">
+                    <i class="fa-solid fa-key text-success fa-lg" style="width: 24px;"></i>
+                    <span class="fw-medium text-slate-700">Change Password</span>
+                </a>
+                <a href="{% url 'admin_dashboard' %}" class="list-group-item list-group-item-action d-flex align-items-center gap-3 border-0 py-3 rounded-3 mb-1">
+                    <i class="fa-solid fa-gauge text-success fa-lg" style="width: 24px;"></i>
+                    <span class="fw-medium text-slate-700">Dashboard Panel</span>
+                </a>
+                <a href="{% url 'admin_users_view' %}" class="list-group-item list-group-item-action d-flex align-items-center gap-3 border-0 py-3 rounded-3 mb-1">
+                    <i class="fa-solid fa-users text-success fa-lg" style="width: 24px;"></i>
+                    <span class="fw-medium text-slate-700">Manage Users</span>
+                </a>
+                <a href="{% url 'admin_reports' %}" class="list-group-item list-group-item-action d-flex align-items-center gap-3 border-0 py-3 rounded-3 mb-1">
+                    <i class="fa-solid fa-file-invoice text-success fa-lg" style="width: 24px;"></i>
+                    <span class="fw-medium text-slate-700">System Reports</span>
+                </a>
+                <a href="{% url 'admin_analytics' %}" class="list-group-item list-group-item-action d-flex align-items-center gap-3 border-0 py-3 rounded-3 mb-1">
+                    <i class="fa-solid fa-chart-line text-success fa-lg" style="width: 24px;"></i>
+                    <span class="fw-medium text-slate-700">Analytics Overview</span>
+                </a>
+            </div>
+            
+            <a href="{% url 'admin_logout' %}" class="btn btn-danger w-100 py-2.5 rounded-3 d-flex align-items-center justify-content-center gap-2 fw-semibold">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout Session
+            </a>
+        </div>
+    </div>
+
+    <!-- AI Search Assistant Modal removed from admin panel and relocated to homepage -->
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+        // SweetAlert Coming Soon helper
+        function comingSoon() {
+            Swal.fire({
+                title: '🚧 Coming Soon!',
+                text: 'This admin section is under development and will be active in the next release.',
+                icon: 'info',
+                confirmButtonColor: '#057a55'
+            });
+        }
+
+        // Fetch notifications dynamically
+        function loadNotifications() {
+            const notifBadge = document.getElementById('notifBadge');
+            const notifCountBadge = document.getElementById('notifCountBadge');
+            const notifListContainer = document.getElementById('notifListContainer');
+
+            if (notifBadge && notifListContainer) {
+                fetch('/admin_notifications_api/')
+                    .then(res => res.json())
+                    .then(data => {
+                        let newCount = 0;
+                        const lastSeen = localStorage.getItem('lastSeenNotificationTime');
+                        
+                        if (data.notifications && data.notifications.length > 0) {
+                            window.latestNotificationTime = data.notifications[0].timestamp;
+                            
+                            if (!lastSeen) {
+                                newCount = data.notifications.length;
+                            } else {
+                                data.notifications.forEach(n => {
+                                    if (n.timestamp > lastSeen) {
+                                        newCount++;
+                                    }
+                                });
+                            }
+                        }
+
+                        notifBadge.innerText = newCount;
+                        if (notifCountBadge) {
+                            notifCountBadge.innerText = `${newCount} New`;
+                        }
+                        
+                        if (newCount === 0) {
+                            notifBadge.style.display = 'none';
+                        } else {
+                            notifBadge.style.display = 'flex';
+                        }
+
+                        let html = '';
+                        if (data.notifications && data.notifications.length > 0) {
+                            data.notifications.forEach(n => {
+                                let icon = 'fa-bell';
+                                let bgClass = 'bg-secondary';
+                                if (n.type === 'user') { icon = 'fa-user-plus'; bgClass = 'bg-success bg-opacity-10 text-success'; }
+                                else if (n.type === 'prediction') { icon = 'fa-seedling'; bgClass = 'bg-primary bg-opacity-10 text-primary'; }
+                                else if (n.type === 'detection') { icon = 'fa-virus-slash'; bgClass = 'bg-purple bg-opacity-10 text-purple'; }
+                                
+                                html += `
+                                    <li class="mb-3 px-2">
+                                        <div class="d-flex gap-3 align-items-start">
+                                            <div class="rounded-circle p-2 ${bgClass} d-flex align-items-center justify-content-center" style="width:36px; height:36px; flex-shrink: 0;">
+                                                <i class="fa-solid ${icon} fa-sm"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold small text-slate-800" style="line-height: 1.25;">${n.title}</div>
+                                                <div class="text-muted small my-1" style="font-size:0.75rem; line-height: 1.35;">${n.desc}</div>
+                                                <span class="text-muted small" style="font-size:0.7rem;">${n.time}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                `;
+                            });
+                        } else {
+                            html += `<li class="text-center py-4 text-muted small"><i class="fa-regular fa-bell-slash fa-2x mb-2 d-block"></i>No new notifications</li>`;
+                        }
+                        notifListContainer.innerHTML = html;
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        notifListContainer.innerHTML = `<li class="text-center py-3 text-danger small">Failed to load notifications</li>`;
+                    });
+            }
+        }
+        
+        // Initial load and set interval for notifications
+        loadNotifications();
+        setInterval(loadNotifications, 30000); // refresh every 30 seconds
+
+        // Add dropdown open event to clear notifications count
+        const notifDropdown = document.getElementById('notifDropdown');
+        if (notifDropdown) {
+            notifDropdown.addEventListener('click', function() {
+                if (window.latestNotificationTime) {
+                    localStorage.setItem('lastSeenNotificationTime', window.latestNotificationTime);
+                }
+                const notifBadge = document.getElementById('notifBadge');
+                if (notifBadge) notifBadge.style.display = 'none';
+                const notifCountBadge = document.getElementById('notifCountBadge');
+                if (notifCountBadge) notifCountBadge.innerText = '0 New';
+            });
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

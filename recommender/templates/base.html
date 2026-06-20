@@ -143,27 +143,7 @@
                   </ul>
                 </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" data-bs-toggle="dropdown">
-                      <i class="fa-solid fa-clock-rotate-left"></i>
-                      <span>History</span>
-                    </a>
 
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="{% url 'user_history' %}">
-                                <i class="fa-solid fa-seedling me-2"></i>
-                            Prediction 
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" href="{% url 'user_disease_history' %}">
-                                <i class="fa-solid fa-leaf me-2"></i>
-                                Detection 
-                        </li>
-                    </ul>
-                </li>
 
                 <li class="nav-item">
                   <a class="nav-link d-flex align-items-center gap-2" href="{% url 'profile' %}">
@@ -213,28 +193,7 @@
                 </ul>
               </li>
 
-              <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-        <i class="fa-solid fa-clock-rotate-left"></i>
-        History
-    </a>
 
-    <ul class="dropdown-menu">
-        <li>
-            <a class="dropdown-item" href="{% url 'user_history' %}">
-                <i class="fa-solid fa-seedling me-2"></i>
-                Prediction
-            </a>
-        </li>
-
-        <li>
-            <a class="dropdown-item" href="{% url 'user_disease_history' %}">
-                <i class="fa-solid fa-leaf me-2"></i>
-                Detection
-            </a>
-        </li>
-    </ul>
-</li>
 
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'profile' %}"><i class="fa-solid fa-user"></i>Profile</a>
@@ -282,33 +241,73 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-    <button id="installBtn" class="btn btn-success position-fixed" style="bottom:20px;right:20px;display:none;z-index:9999;">📲 Install App</button>
+    <!-- PREMIUM PWA INSTALL BANNER -->
+    <div id="installPrompt" class="position-fixed shadow-lg p-3 bg-white border border-success-subtle rounded-4" style="bottom: 24px; left: 50%; transform: translateX(-50%) translateY(120%); width: 90%; max-width: 420px; z-index: 10000; display: none; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+        <div class="d-flex align-items-center gap-3">
+            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(25, 135, 84, 0.2);">
+                <i class="fa-solid fa-mobile-screen-button fa-lg"></i>
+            </div>
+            <div class="flex-grow-1">
+                <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.95rem;">Smart Agriculture App</h6>
+                <p class="text-muted mb-0 small" style="font-size: 0.78rem;">Install the app on your home screen for quick offline access!</p>
+            </div>
+            <button type="button" class="btn-close ms-2" id="closeInstallPrompt" aria-label="Close" style="font-size: 0.8rem;"></button>
+        </div>
+        <div class="d-flex justify-content-end gap-2 mt-3 pt-2 border-top">
+            <button class="btn btn-success btn-sm px-4 rounded-pill fw-medium" id="installBtn" style="font-size: 0.8rem;">
+                <i class="fa-solid fa-download me-1"></i> Install
+            </button>
+        </div>
+    </div>
 
     <script>
 let deferredPrompt;
+const installPrompt = document.getElementById('installPrompt');
 const installBtn = document.getElementById('installBtn');
+const closeInstallPrompt = document.getElementById('closeInstallPrompt');
 
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
 
-    installBtn.style.display = 'block';
+    // Do not show the prompt if it has been dismissed during this tab session
+    if (sessionStorage.getItem('installPromptDismissed') === 'true') {
+        return;
+    }
+
+    // Show prompt container
+    installPrompt.style.display = 'block';
+    setTimeout(() => {
+        installPrompt.style.transform = 'translateX(-50%) translateY(0)';
+    }, 100);
 });
 
-installBtn.addEventListener('click', async () => {
+if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        console.log('User installation choice:', choice.outcome);
+        deferredPrompt = null;
+        
+        // Hide prompt container
+        installPrompt.style.transform = 'translateX(-50%) translateY(120%)';
+        setTimeout(() => {
+            installPrompt.style.display = 'none';
+        }, 400);
+    });
+}
 
-    if (!deferredPrompt) return;
-
-    deferredPrompt.prompt();
-
-    const choice = await deferredPrompt.userChoice;
-
-    console.log(choice.outcome);
-
-    deferredPrompt = null;
-
-    installBtn.style.display = 'none';
-});
+if (closeInstallPrompt) {
+    closeInstallPrompt.addEventListener('click', () => {
+        // Record dismissal in sessionStorage
+        sessionStorage.setItem('installPromptDismissed', 'true');
+        installPrompt.style.transform = 'translateX(-50%) translateY(120%)';
+        setTimeout(() => {
+            installPrompt.style.display = 'none';
+        }, 400);
+    });
+}
 
 window.addEventListener("load", function () {
 

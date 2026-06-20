@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%-5zbo6@=nd(+(g8_=yy^k!q^)-c97-7(xv0nwh@2$58&28av$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "yes") or not os.getenv("RENDER")
 
-ALLOWED_HOSTS = ["cropprediction-diseases-detection.onrender.com"]
+ALLOWED_HOSTS = ["cropprediction-diseases-detection.onrender.com", ".onrender.com", "127.0.0.1", "localhost"]
 
 # Application definition
 
@@ -47,6 +47,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'recommender.middleware.BlockedUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]

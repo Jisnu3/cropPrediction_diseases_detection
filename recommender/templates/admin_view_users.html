@@ -1,43 +1,178 @@
-{% extends 'base.html' %}
+{% extends 'admin_base.html' %}
 {% load static %}
 
-{% block title %}
-  Manage Users
-{% endblock %}
+{% block title %}Manage Users{% endblock %}
+{% block active_users %}active{% endblock %}
+{% block page_title %}User Management{% endblock %}
 
 {% block content %}
-  <div class="container">
-    <div class="text-center mb-4">
-      <h3 class="mb-3"><i class="fa-solid fa-users"></i> Registered Users</h3>
+<div class="container-fluid p-0" style="animation: fadeIn 0.5s ease-in-out;">
+    <div class="card dashboard-card border-0 mb-4">
+        <div class="card-body p-4">
+            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+                <div>
+                    <h5 class="fw-bold mb-1"><i class="fa-solid fa-users text-success me-2"></i>Registered Users</h5>
+                    <p class="text-muted small mb-0">View, monitor, and manage user profiles on the platform.</p>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill" style="font-size: 0.8rem;">
+                        Total Users: <strong>{{ users|length }}</strong>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Desktop Table View -->
+            <div class="d-none d-md-block table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-muted small uppercase">
+                        <tr>
+                            <th class="border-0 px-4 py-3" style="width: 80px;">#</th>
+                            <th class="border-0 py-3">Full Name</th>
+                            <th class="border-0 py-3">Email Address</th>
+                            <th class="border-0 py-3">Phone Number</th>
+                            <th class="border-0 py-3 text-center">Activity Status</th>
+                            <th class="border-0 px-4 py-3 text-end" style="width: 250px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if users %}
+                            {% for i in users %}
+                                <tr {% if not i.is_active %}class="table-danger bg-danger bg-opacity-10"{% endif %}>
+                                    <td class="px-4 py-3 fw-bold text-slate-500">{{ forloop.counter }}</td>
+                                    <td class="py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="rounded-circle {% if i.is_active %}bg-success bg-opacity-10 text-success{% else %}bg-danger bg-opacity-10 text-danger{% endif %} fw-bold d-flex align-items-center justify-content-center" style="width:36px; height:36px; font-size: 0.85rem;">
+                                                {{ i.first_name.0|upper }}{{ i.last_name.0|upper|default:i.username.0|upper }}
+                                            </div>
+                                            <div>
+                                                <span class="fw-semibold d-block text-slate-800">
+                                                    {% if i.get_full_name %}
+                                                        {{ i.get_full_name }}
+                                                    {% else %}
+                                                        {{ i.username }}
+                                                    {% endif %}
+                                                </span>
+                                                {% if i.is_staff %}
+                                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill" style="font-size:0.65rem;">Staff</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-3 text-slate-600 font-monospace" style="font-size: 0.85rem;">{{ i.username }}</td>
+                                    <td class="py-3 text-slate-600">{{ i.userprofile.phone|default:"N/A" }}</td>
+                                    <td class="py-3 text-center">
+                                        {% if i.is_active_last_month %}
+                                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1.5 fw-semibold" style="font-size: 0.75rem;"><i class="fa-solid fa-circle-check me-1"></i>Active</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-3 py-1.5 fw-semibold" style="font-size: 0.75rem;"><i class="fa-solid fa-clock me-1"></i>Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="px-4 py-3 text-end">
+                                        <div class="d-flex align-items-center justify-content-end gap-2">
+                                            {% if i.is_active %}
+                                                <a href="{% url 'admin_user_toggle_block' i.id %}" class="btn btn-outline-warning btn-sm rounded-3 px-3 d-inline-flex align-items-center gap-1">
+                                                    <i class="fa-solid fa-ban fa-sm"></i> Block
+                                                </a>
+                                            {% else %}
+                                                <a href="{% url 'admin_user_toggle_block' i.id %}" class="btn btn-outline-success btn-sm rounded-3 px-3 d-inline-flex align-items-center gap-1">
+                                                    <i class="fa-solid fa-unlock fa-sm"></i> Unblock
+                                                </a>
+                                            {% endif %}
+                                            <a href="{% url 'admin_user_delete' i.id %}" class="btn btn-outline-danger btn-sm rounded-3 px-3 d-inline-flex align-items-center gap-1" onclick="return confirm('Are you sure you want to delete this user? This cannot be undone!')">
+                                                <i class="fa-solid fa-trash fa-sm"></i> Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <div class="text-muted mb-2">
+                                        <i class="fa-regular fa-folder-open fa-3x mb-3 text-slate-300"></i>
+                                    </div>
+                                    <span class="text-slate-500">No registered users found.</span>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile Card View -->
+            <div class="d-block d-md-none">
+                {% if users %}
+                    {% for i in users %}
+                        <div class="card mb-3 border shadow-sm rounded-4" style="animation: fadeIn 0.3s ease-in-out; {% if not i.is_active %}border-color: #fca5a5 !important; background-color: rgba(239, 68, 68, 0.02);{% endif %}">
+                            <div class="card-body p-3">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="rounded-circle {% if i.is_active %}bg-success bg-opacity-10 text-success{% else %}bg-danger bg-opacity-10 text-danger{% endif %} fw-bold d-flex align-items-center justify-content-center" style="width:36px; height:36px; font-size: 0.85rem;">
+                                            {{ i.first_name.0|upper }}{{ i.last_name.0|upper|default:i.username.0|upper }}
+                                        </div>
+                                        <div>
+                                            <span class="fw-semibold d-block text-slate-800" style="font-size:0.9rem;">
+                                                {% if i.get_full_name %}
+                                                    {{ i.get_full_name }}
+                                                {% else %}
+                                                    {{ i.username }}
+                                                {% endif %}
+                                            </span>
+                                            {% if i.is_staff %}
+                                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill" style="font-size:0.6rem;">Staff</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    {% if i.is_active_last_month %}
+                                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2.5 py-1 fw-semibold" style="font-size: 0.7rem;"><i class="fa-solid fa-circle-check me-1"></i>Active</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-2.5 py-1 fw-semibold" style="font-size: 0.7rem;"><i class="fa-solid fa-clock me-1"></i>Inactive</span>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-2" style="font-size: 0.8rem;">
+                                    <span class="text-muted"><i class="fa-regular fa-envelope me-1"></i>Email:</span> <span class="font-monospace text-slate-700">{{ i.username }}</span>
+                                </div>
+                                <div class="mb-3" style="font-size: 0.8rem;">
+                                    <span class="text-muted"><i class="fa-solid fa-phone me-1"></i>Phone:</span> <span class="text-slate-700">{{ i.userprofile.phone|default:"N/A" }}</span>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    {% if i.is_active %}
+                                        <a href="{% url 'admin_user_toggle_block' i.id %}" class="btn btn-outline-warning btn-sm rounded-3 px-3 py-2 w-50 d-flex align-items-center justify-content-center gap-1" style="font-size: 0.8rem;">
+                                            <i class="fa-solid fa-ban fa-sm"></i> Block
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'admin_user_toggle_block' i.id %}" class="btn btn-outline-success btn-sm rounded-3 px-3 py-2 w-50 d-flex align-items-center justify-content-center gap-1" style="font-size: 0.8rem;">
+                                            <i class="fa-solid fa-unlock fa-sm"></i> Unblock
+                                        </a>
+                                    {% endif %}
+                                    <a href="{% url 'admin_user_delete' i.id %}" class="btn btn-outline-danger btn-sm rounded-3 px-3 py-2 w-50 d-flex align-items-center justify-content-center gap-1" style="font-size: 0.8rem;" onclick="return confirm('Are you sure you want to delete this user? This cannot be undone!')">
+                                        <i class="fa-solid fa-trash fa-sm"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info text-center py-4">No registered users found.</div>
+                {% endif %}
+            </div>
+        </div>
     </div>
+</div>
+{% endblock %}
 
-    <div class="table-responsive">
-      <table class="table table-sm table-striped table-hover text-center align-middle">
-        <thead class="table-success">
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for i in users %}
-            <tr>
-              <td>{{ forloop.counter }}</td>
-
-              <td class="small">{{ i.get_full_name }}</td>
-              <td class="small">{{ i.username }}</td>
-              <td class="small">{{ i.userprofile.phone }}</td>
-
-              <td>
-                <a href="{% url 'admin_user_delete' i.id %}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this user? This cannot be undone!')"><i class="fa-solid fa-trash"></i></a>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
+{% block extra_css %}
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .table td, .table th {
+        vertical-align: middle;
+    }
+    .table > :not(caption) > * > * {
+        padding: 1rem 0.5rem;
+    }
+</style>
 {% endblock %}

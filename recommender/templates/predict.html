@@ -6,59 +6,84 @@
 <div class="row g-4">
     <div class="col-lg-8">
 
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h3><i class="fa-solid fa-flask"></i>Crop Recommendation</h3>
-                    <div class="text-muted small d-none d-md-block">
-                        <i class="fa-solid fa-circle-info"></i>Enter numeric values (Humidity 0-100, pH 0-14)
+        <div class="card shadow-sm border-0 rounded-4" style="background-color: #ffffff;">
+            <div class="card-body p-4 p-md-5">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h3 class="fw-bold mb-0 text-slate-800 d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-flask text-success"></i> Crop Recommendation
+                    </h3>
+                    <div class="text-muted small d-flex align-items-center gap-1">
+                        <i class="fa-solid fa-circle-info text-secondary"></i> Enter numeric values (Humidity 0-100, pH 0-14)
                     </div>
                 </div>
-                <hr>
+                <hr class="my-4">
+                
                 <form method="post" id="predictForm">
                     {% csrf_token %}
-                    <div class="row g-3">
-                        {% for c in feature_order %}
-                            <div class="col-md-4">
-                                <label class="form-label text-uppercase">{{c}}</label>
-                              {% if c == "humidity" %}
-                                <input type="number" step="any" min="0" max="100" name="{{c}}" required class="form-control" placeholder="e.g. 70"/>
-                              {% elif c == "ph" %}
-                                <input type="number" step="any" min="0" max="14" name="{{c}}" required class="form-control" placeholder="e.g. 8.5"/>
-                              {% else %}
-                                <input type="number" min="0" name="{{c}}" step="any" required class="form-control" placeholder="e.g. 90"/>
-                              {% endif %}
-                            </div>
-                        {% endfor %}
+                    <div class="row g-4">
+                        <!-- Row 1: N, P, K (col-4 keeps them side-by-side on mobile) -->
+                        <div class="col-4 col-md-4">
+                            <label class="form-label text-uppercase fw-semibold text-muted small" style="letter-spacing: 0.5px;">N</label>
+                            <input type="number" min="0" name="N" step="any" required class="form-control custom-input" placeholder="e.g. 90"/>
+                        </div>
+                        <div class="col-4 col-md-4">
+                            <label class="form-label text-uppercase fw-semibold text-muted small" style="letter-spacing: 0.5px;">P</label>
+                            <input type="number" min="0" name="P" step="any" required class="form-control custom-input" placeholder="e.g. 90"/>
+                        </div>
+                        <div class="col-4 col-md-4">
+                            <label class="form-label text-uppercase fw-semibold text-muted small" style="letter-spacing: 0.5px;">K</label>
+                            <input type="number" min="0" name="K" step="any" required class="form-control custom-input" placeholder="e.g. 90"/>
+                        </div>
+
+                        <!-- Row 2: Temperature, Humidity, pH (col-4 keeps them side-by-side on mobile) -->
+                        <div class="col-4 col-md-4">
+                            <label class="form-label text-uppercase fw-semibold text-muted small" style="letter-spacing: 0.5px;">Temperature</label>
+                            <input type="number" min="0" name="temperature" step="any" required class="form-control custom-input" placeholder="e.g. 90"/>
+                        </div>
+                        <div class="col-4 col-md-4">
+                            <label class="form-label text-uppercase fw-semibold text-muted small" style="letter-spacing: 0.5px;">Humidity</label>
+                            <input type="number" step="any" min="0" max="100" name="humidity" required class="form-control custom-input" placeholder="e.g. 70"/>
+                        </div>
+                        <div class="col-4 col-md-4">
+                            <label class="form-label text-uppercase fw-semibold text-muted small" style="letter-spacing: 0.5px;">Ph</label>
+                            <input type="number" step="any" min="0" max="14" name="ph" required class="form-control custom-input" placeholder="e.g. 8.5"/>
+                        </div>
+
+                        <!-- Row 3: Rainfall -->
+                        <div class="col-12 col-md-4">
+                            <label class="form-label text-uppercase fw-semibold text-muted small" style="letter-spacing: 0.5px;">Rainfall</label>
+                            <input type="number" min="0" name="rainfall" step="any" required class="form-control custom-input" placeholder="e.g. 90"/>
+                        </div>
                     </div>
 
-                    <div class="d-flex flex-wrap gap-2 mt-3">
-                        <button type="submit" class="btn btn-success">
+                    <div class="d-flex flex-wrap gap-2 mt-4 pt-2 btn-responsive-container">
+                        <button type="submit" class="btn btn-success px-4 py-2.5 rounded-3 fw-semibold d-flex align-items-center gap-2">
                           <i class="fa-solid fa-wand-magic-sparkles"></i> Predict
                         </button>
 
-                        <button type="button" class="btn btn-outline-secondary" id="btnSample">
+                        <button type="button" class="btn btn-outline-success px-4 py-2.5 rounded-3 fw-semibold d-flex align-items-center gap-2" id="btnSample">
                           <i class="fa-solid fa-bolt"></i> Use Sample
                         </button>
 
-                        <button type="reset" class="btn btn-outline-danger">
-                          <i class="fa-solid fa-solid fa-arrows-rotate"></i> Reset
+                        <button type="reset" class="btn btn-outline-danger px-4 py-2.5 rounded-3 fw-semibold d-flex align-items-center gap-2">
+                          <i class="fa-solid fa-arrows-rotate"></i> Reset
                         </button>
                     </div>
                 </form>
 
                 {% if result %}
-                <hr>
-                <div class="alert alert-success">
-                    Recommended Crop: <strong>{{result|title}}</strong>
+                <hr class="my-4">
+                <div class="alert alert-success border-0 bg-success bg-opacity-10 text-success p-3 rounded-3 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-circle-check fa-lg"></i>
+                    <span>Recommended Crop: <strong>{{result|title}}</strong></span>
                 </div>
                 {% endif %}
 
                 {% if last_data %}
-                <div class="small text-muted">
-                    <i class="fa-regular fa-clock"></i> Input used:
+                <div class="small text-muted mt-3 bg-light p-3 rounded-3 border">
+                    <i class="fa-regular fa-clock me-1"></i> Input used:
                     {% for k,v in last_data.items %}
-                    <code>{{k}}={{v}}</code> {% if not forloop.last %} , {% endif %}
+                    <code class="text-success bg-white border px-2 py-0.5 rounded-pill">{{k}}={{v}}</code> {% if not forloop.last %} , {% endif %}
                     {% endfor %}
                 </div>
                 {% endif %}
@@ -68,31 +93,36 @@
     </div>
 
     <div class="col-lg-4">
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-               <h5 class="mb-2"><i class="fa-solid fa-lightbulb"></i> Tips</h5>
-                <ul class="small text-muted mb-0">
-                 <li>Use realistic local values for temperature, humidity & rainfall.</li>
-                 <li>Soil pH valid range 0-14 (most crops prefer ~ 6-7).</li>
-                 <li>Save multiple predictions and compare in your History.</li>
+        <!-- Tips Card -->
+        <div class="card shadow-sm border-0 rounded-4" style="background-color: #ffffff;">
+            <div class="card-body p-4">
+               <h5 class="fw-bold mb-3 d-flex align-items-center gap-2 text-slate-800">
+                   <i class="fa-solid fa-lightbulb text-success"></i> Tips
+               </h5>
+                <ul class="text-muted small mb-0 ps-3" style="line-height: 1.6;">
+                  <li class="mb-2">Use realistic local values for temperature, humidity & rainfall.</li>
+                  <li class="mb-2">Soil pH valid range 0-14 (most crops prefer ~ 6-7).</li>
+                  <li>Save multiple predictions and compare in your History.</li>
                </ul>
            </div>
         </div>
-    <div class="card shadow-sm border-0 mt-3">
-        <div class="card-body">
-            <h6 class="mb-2"><i class="fa-solid fa-circle-question"></i> What is N-P-K?</h6>
-            <p class="small text-muted mb-0">
-              N (Nitrogen), P (Phosphorus), K (Potassium) - key soil nutrients affecting crop growth.
-           </p>
+        
+        <!-- What is NPK Card -->
+        <div class="card shadow-sm border-0 rounded-4 mt-4" style="background-color: #ffffff;">
+            <div class="card-body p-4">
+                <h6 class="fw-bold mb-2 d-flex align-items-center gap-2 text-slate-800">
+                    <i class="fa-solid fa-circle-question text-success"></i> What is N-P-K?
+                </h6>
+                <p class="small text-muted mb-0" style="line-height: 1.6;">
+                  N (Nitrogen), P (Phosphorus), K (Potassium) - key soil nutrients affecting crop growth.
+               </p>
+            </div>
         </div>
     </div>
-</div> <!--Col 2 end-->
-
-
 </div>
 
 <script>
-    (function(){ //IIFE (Immediately Invoked Function Expression)
+    (function(){ 
     const form = document.getElementById('predictForm')
     const inputs = form ? form.querySelectorAll('input[name]') : [];
 
@@ -108,5 +138,49 @@
     })();
 </script>
 
-
+<style>
+    .custom-input {
+        border-radius: 0.75rem !important;
+        border: 1px solid #dee2e6 !important;
+        padding: 0.75rem 1rem !important;
+        transition: all 0.2s ease !important;
+        background-color: #fdfdfd !important;
+    }
+    .custom-input:focus {
+        border-color: #198754 !important;
+        box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.15) !important;
+        background-color: #ffffff !important;
+    }
+    .text-slate-800 {
+        color: #1e293b;
+    }
+    
+    @media (max-width: 576px) {
+        .card-body {
+            padding: 1.25rem !important;
+        }
+        .custom-input {
+            padding: 0.6rem 0.5rem !important;
+            font-size: 0.85rem;
+            border-radius: 0.5rem !important;
+        }
+        .form-label {
+            font-size: 0.72rem !important;
+            margin-bottom: 0.25rem !important;
+        }
+        .row.g-4 {
+            --bs-gutter-x: 0.5rem !important;
+            --bs-gutter-y: 0.75rem !important;
+        }
+        .btn-responsive-container {
+            flex-direction: column !important;
+            gap: 0.5rem !important;
+        }
+        .btn-responsive-container .btn {
+            width: 100% !important;
+            padding: 0.75rem !important;
+            justify-content: center;
+        }
+    }
+</style>
 {% endblock %}
