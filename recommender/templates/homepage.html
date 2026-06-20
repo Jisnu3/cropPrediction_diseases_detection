@@ -295,7 +295,7 @@
                   <a href="{% url 'predict' %}" class="text-white text-decoration-none"><i class="fa-solid fa-seedling me-1"style="font-size: 13px;"></i> Crop Prediction</a>
                 </li>
                 <li>
-                  <a href="{% url 'user_history' %}" class="text-white text-decoration-none"><i class="fa-solid fa-clock-rotate-left me-1"></i> History</a>
+                  <a href="{% url 'user_history' %}" class="text-white text-decoration-none"><i class="fa-solid fa-clock-rotate-left me-1"></i> Prediction History</a>
                 </li>
               </ul>
             </div>
@@ -324,6 +324,23 @@
         const searchButton = document.getElementById('searchAIButton');
 
         function handleAISearch(query) {
+            {% if not user.is_authenticated %}
+            Swal.fire({
+                title: '🔒 Login Required',
+                text: 'Please log in to your account to use the AgriAI Search Assistant.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Login Now',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#198754'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{% url 'login' %}";
+                }
+            });
+            return;
+            {% endif %}
+
             if (!query || query.trim() === '') return;
             const originalQuery = query;
             query = query.trim();

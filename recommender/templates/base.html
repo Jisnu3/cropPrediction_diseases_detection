@@ -143,7 +143,27 @@
                   </ul>
                 </li>
 
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" data-bs-toggle="dropdown">
+                      <i class="fa-solid fa-clock-rotate-left"></i>
+                      <span>History</span>
+                    </a>
 
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'user_history' %}">
+                                <i class="fa-solid fa-seedling me-2"></i>
+                            Prediction 
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="{% url 'user_disease_history' %}">
+                                <i class="fa-solid fa-leaf me-2"></i>
+                                Detection 
+                        </li>
+                    </ul>
+                </li>
 
                 <li class="nav-item">
                   <a class="nav-link d-flex align-items-center gap-2" href="{% url 'profile' %}">
@@ -193,7 +213,28 @@
                 </ul>
               </li>
 
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    History
+                </a>
 
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'user_history' %}">
+                            <i class="fa-solid fa-seedling me-2"></i>
+                            Prediction
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item" href="{% url 'user_disease_history' %}">
+                            <i class="fa-solid fa-leaf me-2"></i>
+                            Detection
+                        </a>
+                    </li>
+                </ul>
+              </li>
 
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'profile' %}"><i class="fa-solid fa-user"></i>Profile</a>
