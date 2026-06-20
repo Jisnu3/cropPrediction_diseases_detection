@@ -1,4 +1,3 @@
-from tensorflow.keras.preprocessing.image import img_to_array
 from django.shortcuts import render, redirect
 from .models import *
 from django.conf import settings
@@ -754,38 +753,47 @@ def admin_change_password_view(request):
     return render(request,"admin_change_password.html",locals())
 
 
-import tensorflow as tf
 import numpy as np
 from PIL import Image
 import base64
 from pathlib import Path
 
+# Conditionally import TFLite to avoid loading full TensorFlow where possible
+try:
+    import tflite_runtime.interpreter as tflite
+except ImportError:
+    try:
+        from tensorflow import lite as tflite
+    except ImportError:
+        import tensorflow.lite as tflite
+
 BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = BASE_DIR / "MachineLearning" / "trained_model.keras"
+MODEL_PATH = BASE_DIR / "MachineLearning" / "trained_model.tflite"
 
-MODEL = None
+INTERPRETER = None
+INPUT_DETAILS = None
+OUTPUT_DETAILS = None
 
-def get_model():
-    global MODEL
+def get_tflite_model():
+    global INTERPRETER, INPUT_DETAILS, OUTPUT_DETAILS
 
-    print("get_model() called")
+    print("get_tflite_model() called")
 
-    if MODEL is None:
-
-        print("Loading model...")
+    if INTERPRETER is None:
+        print("Loading TFLite model...")
         print("MODEL PATH:", MODEL_PATH)
 
-        MODEL = tf.keras.models.load_model(
-            MODEL_PATH,
-            compile=False
-        )
+        INTERPRETER = tflite.Interpreter(model_path=str(MODEL_PATH))
+        INTERPRETER.allocate_tensors()
+        
+        INPUT_DETAILS = INTERPRETER.get_input_details()
+        OUTPUT_DETAILS = INTERPRETER.get_output_details()
 
-        print("Model loaded successfully")
-
+        print("TFLite model loaded successfully")
     else:
-        print("Using cached model")
+        print("Using cached TFLite model")
 
-    return MODEL
+    return INTERPRETER, INPUT_DETAILS, OUTPUT_DETAILS
 
 class_names = [
 
@@ -1002,21 +1010,22 @@ def disease_detection_view(request):
                 img = img.resize((128, 128))
 
                 # IMPORTANT: NO NORMALIZATION (matches training)
-                img_array = img_to_array(img)
-                img_array = img_array.astype("float32")
+                img_array = np.array(img, dtype="float32")
                 img_array = np.expand_dims(img_array, axis=0)
 
                 # predict
                 print("=== DISEASE DETECTION STARTED ===")
 
-                model = get_model()
+                interpreter, input_details, output_details = get_tflite_model()
 
-                print("MODEL OBJECT:", model)
+                print("TFLite Interpreter:", interpreter)
 
-                if model is None:
-                    raise Exception("Model failed to load")
+                if interpreter is None:
+                    raise Exception("TFLite Model failed to load")
 
-                prediction = model.predict(img_array, verbose=0)[0]
+                interpreter.set_tensor(input_details[0]['index'], img_array)
+                interpreter.invoke()
+                prediction = interpreter.get_tensor(output_details[0]['index'])[0]
 
                 result_index = int(np.argmax(prediction))
                 result = class_names[result_index]
