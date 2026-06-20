@@ -145,6 +145,14 @@ def verify_otp_view(request):
         entered_otp = request.POST.get("otp", "").strip()
 
         saved_otp = request.session.get("signup_otp")
+        email = request.session.get("signup_email")
+
+        # Double-submit safety: check if user already exists
+        if email and User.objects.filter(username__iexact=email).exists():
+            user = User.objects.get(username__iexact=email)
+            login(request, user)
+            messages.success(request, "Account verified and logged in successfully.")
+            return redirect("home")
 
         if entered_otp == saved_otp:
 
@@ -374,6 +382,13 @@ def verify_forgot_password_otp_view(request):
         saved_otp = request.session.get("forgot_otp")
         email = request.session.get("forgot_email")
         new_password = request.session.get("forgot_password")
+
+        # Double-submit safety: check if password was already updated
+        if not saved_otp and email:
+            user = User.objects.filter(username__iexact=email).first()
+            if user and user.check_password(new_password):
+                messages.success(request, "Password reset successful. Please login.")
+                return redirect("login")
 
         if entered_otp == saved_otp and email and new_password:
             user = User.objects.filter(username__iexact=email).first()

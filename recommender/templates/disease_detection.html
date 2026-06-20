@@ -51,9 +51,8 @@
                 {% endif %}
               </div>
 
-              <!-- INPUTS -->
-              <input type="file" id="imageInput" accept="image/*" class="d-none" />
-              <input type="file" id="cameraInput" accept="image/*" capture="environment" class="d-none" />
+              <!-- INPUT -->
+              <input type="file" name="image" id="imageInput" accept="image/*" class="d-none" />
 
               <!-- BUTTONS -->
               <div class="d-flex justify-content-center gap-3 mt-4">
@@ -187,12 +186,10 @@
       </div>
     </div>
   </div>
-<script>
   <script>
     ;(function () {
       const uploadBox = document.getElementById('uploadBox')
       const imageInput = document.getElementById('imageInput')
-      const cameraInput = document.getElementById('cameraInput')
       const previewImage = document.getElementById('previewImage')
       const uploadContent = document.getElementById('uploadContent')
       const btnReset = document.getElementById('btnReset')
@@ -202,31 +199,15 @@
         imageInput.click()
       })
     
-      // IMAGE PREVIEW FOR FILE SELECT
+      // IMAGE PREVIEW & VALIDATION
       imageInput.addEventListener('change', function () {
         const file = this.files[0]
         if (file) {
-          imageInput.name = 'image'
-          cameraInput.name = ''
-          cameraInput.value = ''
-          
-          const reader = new FileReader()
-          reader.onload = function (e) {
-            previewImage.src = e.target.result
-            previewImage.classList.remove('d-none')
-            uploadContent.classList.add('d-none')
+          if (file.size > 5 * 1024 * 1024) {
+            alert("Image too large. Please upload an image smaller than 5MB.");
+            this.value = "";
+            return;
           }
-          reader.readAsDataURL(file)
-        }
-      })
-
-      // IMAGE PREVIEW FOR CAMERA CAPTURE
-      cameraInput.addEventListener('change', function () {
-        const file = this.files[0]
-        if (file) {
-          cameraInput.name = 'image'
-          imageInput.name = ''
-          imageInput.value = ''
           
           const reader = new FileReader()
           reader.onload = function (e) {
@@ -254,11 +235,12 @@
         e.preventDefault()
         uploadBox.classList.remove('drag-active')
         const file = e.dataTransfer.files[0]
-        imageInput.files = e.dataTransfer.files
         if (file) {
-          imageInput.name = 'image'
-          cameraInput.name = ''
-          cameraInput.value = ''
+          if (file.size > 5 * 1024 * 1024) {
+            alert("Image too large. Please upload an image smaller than 5MB.");
+            return;
+          }
+          imageInput.files = e.dataTransfer.files
           const reader = new FileReader()
           reader.onload = function (event) {
             previewImage.src = event.target.result
@@ -276,13 +258,20 @@
 
       // CAMERA BUTTON CLICK
       document.getElementById('openCamera').addEventListener('click', () => {
-        cameraInput.click()
+        imageInput.setAttribute('capture', 'environment')
+        imageInput.click()
+      })
+
+      // REMOVE CAPTURE ON WINDOW FOCUS
+      window.addEventListener('focus', () => {
+        setTimeout(() => {
+          imageInput.removeAttribute('capture')
+        }, 500)
       })
 
       // SUBMIT VALIDATION & LOADING STATE
       document.querySelector("form").addEventListener("submit", function(e) {
-        const hasFile = (imageInput.files && imageInput.files.length > 0) || 
-                        (cameraInput.files && cameraInput.files.length > 0);
+        const hasFile = imageInput.files && imageInput.files.length > 0;
         if (!hasFile) {
           e.preventDefault();
           alert('Please upload or capture an image first.');
