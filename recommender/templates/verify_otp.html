@@ -34,13 +34,16 @@
                 placeholder="Enter 6 Digit OTP"
                 required>
 
-            <button
-                type="submit"
-                class="btn btn-success w-100">
-
-                Verify OTP
-
-            </button>
+            <div class="d-flex gap-2">
+                <a href="{% url 'resend_otp' %}" class="btn btn-outline-secondary w-50 d-flex align-items-center justify-content-center">
+                    Resend OTP
+                </a>
+                <button
+                    type="submit"
+                    class="btn btn-success w-50">
+                    Verify OTP
+                </button>
+            </div>
 
         </form>
 

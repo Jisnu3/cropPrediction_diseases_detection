@@ -396,6 +396,52 @@ def verify_forgot_password_otp_view(request):
     return render(request, "verify_otp.html")
 
 
+def resend_otp_view(request):
+    if "signup_email" in request.session:
+        email = request.session.get("signup_email")
+        otp = random.randint(100000, 999999)
+        request.session["signup_otp"] = str(otp)
+        try:
+            send_mail(
+                subject="CropAI Email Verification",
+                message=f"Your OTP is: {otp}",
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+            messages.success(request, "OTP resent to your email.")
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error resending OTP email: {str(e)}")
+            messages.error(request, f"Failed to resend verification email: {str(e)}")
+        return redirect("verify_otp")
+
+    elif "forgot_email" in request.session:
+        email = request.session.get("forgot_email")
+        otp = random.randint(100000, 999999)
+        request.session["forgot_otp"] = str(otp)
+        try:
+            send_mail(
+                subject="CropAI Password Reset OTP",
+                message=f"Your OTP for password reset is: {otp}",
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+            messages.success(request, "OTP resent to your email.")
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error resending reset OTP email: {str(e)}")
+            messages.error(request, f"Failed to resend verification email: {str(e)}")
+        return redirect("verify_forgot_password_otp")
+
+    else:
+        messages.error(request, "Session expired or invalid request.")
+        return redirect("signup")
+
+
 def is_staff(user):
     return user.is_authenticated and user.is_staff
 
