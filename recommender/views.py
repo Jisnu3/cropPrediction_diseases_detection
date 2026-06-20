@@ -760,12 +760,15 @@ from pathlib import Path
 
 # Conditionally import TFLite to avoid loading full TensorFlow where possible
 try:
-    import tflite_runtime.interpreter as tflite
+    import ai_edge_litert.interpreter as tflite
 except ImportError:
     try:
-        from tensorflow import lite as tflite
+        import tflite_runtime.interpreter as tflite
     except ImportError:
-        import tensorflow.lite as tflite
+        try:
+            from tensorflow import lite as tflite
+        except ImportError:
+            import tensorflow.lite as tflite
 
 BASE_DIR = Path(__file__).resolve().parent
 MODEL_PATH = BASE_DIR / "MachineLearning" / "trained_model.tflite"
