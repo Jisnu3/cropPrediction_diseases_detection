@@ -1,0 +1,644 @@
+[
+{
+  "model": "auth.permission",
+  "pk": 1,
+  "fields": {
+    "name": "Can add log entry",
+    "content_type": 1,
+    "codename": "add_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 2,
+  "fields": {
+    "name": "Can change log entry",
+    "content_type": 1,
+    "codename": "change_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 3,
+  "fields": {
+    "name": "Can delete log entry",
+    "content_type": 1,
+    "codename": "delete_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 4,
+  "fields": {
+    "name": "Can view log entry",
+    "content_type": 1,
+    "codename": "view_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 5,
+  "fields": {
+    "name": "Can add permission",
+    "content_type": 3,
+    "codename": "add_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 6,
+  "fields": {
+    "name": "Can change permission",
+    "content_type": 3,
+    "codename": "change_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 7,
+  "fields": {
+    "name": "Can delete permission",
+    "content_type": 3,
+    "codename": "delete_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 8,
+  "fields": {
+    "name": "Can view permission",
+    "content_type": 3,
+    "codename": "view_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 9,
+  "fields": {
+    "name": "Can add group",
+    "content_type": 2,
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 10,
+  "fields": {
+    "name": "Can change group",
+    "content_type": 2,
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 11,
+  "fields": {
+    "name": "Can delete group",
+    "content_type": 2,
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 12,
+  "fields": {
+    "name": "Can view group",
+    "content_type": 2,
+    "codename": "view_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 13,
+  "fields": {
+    "name": "Can add user",
+    "content_type": 4,
+    "codename": "add_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 14,
+  "fields": {
+    "name": "Can change user",
+    "content_type": 4,
+    "codename": "change_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 15,
+  "fields": {
+    "name": "Can delete user",
+    "content_type": 4,
+    "codename": "delete_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 16,
+  "fields": {
+    "name": "Can view user",
+    "content_type": 4,
+    "codename": "view_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 17,
+  "fields": {
+    "name": "Can add content type",
+    "content_type": 5,
+    "codename": "add_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 18,
+  "fields": {
+    "name": "Can change content type",
+    "content_type": 5,
+    "codename": "change_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 19,
+  "fields": {
+    "name": "Can delete content type",
+    "content_type": 5,
+    "codename": "delete_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 20,
+  "fields": {
+    "name": "Can view content type",
+    "content_type": 5,
+    "codename": "view_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 21,
+  "fields": {
+    "name": "Can add session",
+    "content_type": 6,
+    "codename": "add_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 22,
+  "fields": {
+    "name": "Can change session",
+    "content_type": 6,
+    "codename": "change_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 23,
+  "fields": {
+    "name": "Can delete session",
+    "content_type": 6,
+    "codename": "delete_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 24,
+  "fields": {
+    "name": "Can view session",
+    "content_type": 6,
+    "codename": "view_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 25,
+  "fields": {
+    "name": "Can add prediction",
+    "content_type": 7,
+    "codename": "add_prediction"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 26,
+  "fields": {
+    "name": "Can change prediction",
+    "content_type": 7,
+    "codename": "change_prediction"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 27,
+  "fields": {
+    "name": "Can delete prediction",
+    "content_type": 7,
+    "codename": "delete_prediction"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 28,
+  "fields": {
+    "name": "Can view prediction",
+    "content_type": 7,
+    "codename": "view_prediction"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 29,
+  "fields": {
+    "name": "Can add user profile",
+    "content_type": 8,
+    "codename": "add_userprofile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 30,
+  "fields": {
+    "name": "Can change user profile",
+    "content_type": 8,
+    "codename": "change_userprofile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 31,
+  "fields": {
+    "name": "Can delete user profile",
+    "content_type": 8,
+    "codename": "delete_userprofile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 32,
+  "fields": {
+    "name": "Can view user profile",
+    "content_type": 8,
+    "codename": "view_userprofile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 33,
+  "fields": {
+    "name": "Can add disease prediction",
+    "content_type": 9,
+    "codename": "add_diseaseprediction"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 34,
+  "fields": {
+    "name": "Can change disease prediction",
+    "content_type": 9,
+    "codename": "change_diseaseprediction"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 35,
+  "fields": {
+    "name": "Can delete disease prediction",
+    "content_type": 9,
+    "codename": "delete_diseaseprediction"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 36,
+  "fields": {
+    "name": "Can view disease prediction",
+    "content_type": 9,
+    "codename": "view_diseaseprediction"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$dft3qYVRQHSWRlzLcpPR85$ZXz9aW2JlZJCDZDLlAZ9gbftyDI8qcGdP+6iuCVQ6lo=",
+    "last_login": "2026-06-20T16:07:45.380Z",
+    "is_superuser": true,
+    "username": "Aakash",
+    "first_name": "AA",
+    "last_name": "",
+    "email": "ghoshaakash61@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-03-28T18:43:41.484Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$CUva230Za6Q7OICeINLww8$OdK/MuqkrrAfk2RTmaQ0VEDhwfjvPvhdGvVRSM3nDaE=",
+    "last_login": "2026-06-20T16:32:38.042Z",
+    "is_superuser": false,
+    "username": "JISNUHAZRA@GMAIL.COM",
+    "first_name": "Jisnu",
+    "last_name": "Hazra",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-11T12:02:48.685Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 9,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$1uemUJNmXA1KcaXXCBVLkl$XOJhV1k5Ll0DTbYTGYCrMDDc4jHEOyPeIwwVE8W7A34=",
+    "last_login": "2026-06-11T12:04:21.146Z",
+    "is_superuser": false,
+    "username": "test33@gmail.com",
+    "first_name": "Ilon",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-11T12:04:19.630Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 10,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$c2emw4Bwn4Zuyhquy0t6ug$/SOSGeeE2WlhvlJlj+i9kvO+C2oVlB8EGMreznp5uP4=",
+    "last_login": "2026-06-17T10:33:38.069Z",
+    "is_superuser": false,
+    "username": "ilonhazra@gmail.com",
+    "first_name": "Ilon",
+    "last_name": "",
+    "email": "ilonhazra@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-17T10:33:36.934Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 12,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$DTIoRva4IV7y3Q86x7A4Gz$XTD9UhvTkwMexc6o214462YoLKVPdP/2BDh3NVe+C8w=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "Jisnu",
+    "first_name": "",
+    "last_name": "",
+    "email": "jisnuhazra@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-06-20T14:59:26.677Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 1,
+  "fields": {
+    "app_label": "admin",
+    "model": "logentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 2,
+  "fields": {
+    "app_label": "auth",
+    "model": "group"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 3,
+  "fields": {
+    "app_label": "auth",
+    "model": "permission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 4,
+  "fields": {
+    "app_label": "auth",
+    "model": "user"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 5,
+  "fields": {
+    "app_label": "contenttypes",
+    "model": "contenttype"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 6,
+  "fields": {
+    "app_label": "sessions",
+    "model": "session"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 7,
+  "fields": {
+    "app_label": "recommender",
+    "model": "prediction"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 8,
+  "fields": {
+    "app_label": "recommender",
+    "model": "userprofile"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 9,
+  "fields": {
+    "app_label": "recommender",
+    "model": "diseaseprediction"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "1ai99nm01hu9xgmcrhirjpswr698sqr4",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hBKkQ4u3fcMZJgZpGpoUtqV8e7apAvd_vfef6mI21ri1mSJE6uL6tXpd0tID6k74DvW26xprusyJb0r-qBNjzPL83q4fwcFW_nW5IJn7zCzyADgDPpsOmHKLoi1GQNhOmdgNtaaLiWCIQQBDNgzkFXvDw9COQM:1w1qKc:hUUmV0_cJ88LDRm_Phbj4glS6SiaW2ZiONZu2acwQxg",
+    "expire_date": "2026-03-29T18:36:54.640Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "2zls150exsa67wnxuzxw7e6ndjmc5deu",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSED5enSvd9AYAakaiAp7cr479qkC93ec859sRC3tYZt5CXMxM7MsNPvliI-ctsB3WO7dY69rcuc-K7wgw5-7ZSfl8P9O6hx1G8NExmLTmjCOElvJ118skklAgQyhNKBSkKSIgnFafKiSOlRuQLWZsPeH-CkN6c:1wao8D:yNe6etv6-R5kU5BbNH41LhsH-gjg6iI-CmftJ-fqRpQ",
+    "expire_date": "2026-07-04T05:20:37.261Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "7hop3t306chpnakj9vyeiyvteyqr66m7",
+  "fields": {
+    "session_data": ".eJxVjDEOwjAMRe-SGUV2XbU1IztnqOw4IQWUSk07Ie4OlTrA-t97_-VG2dY8bjUu42Tu7Dp3-t1UwiOWHdhdym32YS7rMqnfFX_Q6q-zxeflcP8OstT8rZl1YBMThhhRu0DYA3TIlghaooZ7aBRJLYr2gAEtsSSihINhO7j3B-QTN8Y:1waoF5:4GVBdqYDgDUaj-D8tLu4scnVdsVXn-ab7X-yIyfvEmc",
+    "expire_date": "2026-07-04T05:27:43.173Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "bqno5ih59iyn5795x1pj63u7ocf0iqaj",
+  "fields": {
+    "session_data": ".eJxVjMtuwyAUBf_F68riaUNXVXZd9BusC1xsUhssY5RF1H8vSKnSbGfOmXuXwxzLPqVz7967gTM9iu7tj0bYsOLPNcUn3JcUG9VKinoQjD8dbhDW6q4hx4KuEP4xN9TbtP0rQM63dLg6pIwLOVQ1QTmXqWQ8ptCEemUG7DfGJtwV4pxqMJ5HMH2b9A-b-6_kcL08ti-BBfJS3-PI1CiBKeCCE0295ZSj8sglSiMJYQQZGgNSemB28FRRop1F7Sl3WnY_v6s3Yy8:1waycY:bnouEcYol5qM78GyS9oBmTuEZqbgNP6ZLctM8vrOCCo",
+    "expire_date": "2026-07-04T16:32:38.049Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "budp0s54livdqy3frcx2nq8z92r2pe26",
+  "fields": {
+    "session_data": "e30:1w6YgO:2VB546T9Skz-N7s3sE41B45t-kr-UqFKWnFXOHCMrl0",
+    "expire_date": "2026-04-11T18:46:52.332Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "itmxhf0zbgy885xiqasvfcuk8t6cm6fn",
+  "fields": {
+    "session_data": ".eJxVjDEKwzAMAP-iuZjGRrGdsXvfYGRJ1GmLDXEyhf69BDK0691xOyTa1pK2rkuaBSZAuPyyTPzSegh5Un00w62uy5zNkZjTdnNvou_b2f4NCvUCE6hV8QFdZLTRC4sq2dGJkGUvkWRQQeWrpyADMQdybJ0PAZHGzASfLxhHOVg:1w1y2S:n3Pw3zZ8d-zhv5n_e7HOY5StGCfIOXJxiDQX07h1YKc",
+    "expire_date": "2026-03-30T02:50:40.071Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "uecej3nvnvko41mh4lvfcbnj41uh1wk3",
+  "fields": {
+    "session_data": ".eJxVjDEOAiEQRe9CbQgwjoClvWcgAwyyaiBZdivj3XWTLbT9773_EoHWpYZ18BymLM7CicPvFik9uG0g36nduky9LfMU5abInQ557Zmfl939O6g06re21jiLZBzBEZTXJYEGdoUBGSMqZRQbjpEQC5l0Ktpp5XNiXzRkj-L9AcsgN6I:1wavpy:QtBPcZUwbTn1GZt4tZQVykAt6a6HNGV0iKeF6UfpFm8",
+    "expire_date": "2026-07-04T13:34:18.836Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ulic5zy9duuxcu0cnt0xu6jgnvjgxmyz",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hBKkQ4u3fcMZJgZpGpoUtqV8e7apAvd_vfef6mI21ri1mSJE6uL6tXpd0tID6k74DvW26xprusyJb0r-qBNjzPL83q4fwcFW_nW5IJn7zCzyADgDPpsOmHKLoi1GQNhOmdgNtaaLiWCIQQBDNgzkFXvDw9COQM:1wQmNH:RTP9-0xX-NBfFVdI-25Wr1XLq4GmihS0LcAgvdzqvcY",
+    "expire_date": "2026-06-06T13:26:43.941Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "xqrlzpk1zd60a83e9nu87w1om6lrhn2e",
+  "fields": {
+    "session_data": "e30:1w6Yes:cmtQcapoWuzo2AbHVSwgBV3lvFYWrVbzftXfh8J6R5o",
+    "expire_date": "2026-04-11T18:45:18.121Z"
+  }
+},
+{
+  "model": "recommender.userprofile",
+  "pk": 7,
+  "fields": {
+    "user": 8,
+    "phone": "9474488526"
+  }
+},
+{
+  "model": "recommender.userprofile",
+  "pk": 8,
+  "fields": {
+    "user": 9,
+    "phone": "9474843799"
+  }
+},
+{
+  "model": "recommender.userprofile",
+  "pk": 9,
+  "fields": {
+    "user": 6,
+    "phone": "1111111111"
+  }
+},
+{
+  "model": "recommender.userprofile",
+  "pk": 10,
+  "fields": {
+    "user": 10,
+    "phone": "8977788845"
+  }
+},
+{
+  "model": "recommender.prediction",
+  "pk": 36,
+  "fields": {
+    "user": 8,
+    "N": 90.0,
+    "P": 42.0,
+    "K": 43.0,
+    "temperature": 20.0,
+    "humidity": 82.0,
+    "ph": 6.5,
+    "rainfall": 202.0,
+    "predicted_crop": "rice",
+    "created_at": "2026-06-17T05:23:57.696Z"
+  }
+},
+{
+  "model": "recommender.prediction",
+  "pk": 37,
+  "fields": {
+    "user": 8,
+    "N": 90.0,
+    "P": 42.0,
+    "K": 43.0,
+    "temperature": 20.0,
+    "humidity": 82.0,
+    "ph": 6.5,
+    "rainfall": 202.0,
+    "predicted_crop": "rice",
+    "created_at": "2026-06-17T05:24:02.828Z"
+  }
+},
+{
+  "model": "recommender.diseaseprediction",
+  "pk": 19,
+  "fields": {
+    "user": null,
+    "disease_name": "Corn_(maize)___healthy",
+    "confidence": 100.0,
+    "created_at": "2026-05-30T14:50:21.722Z"
+  }
+},
+{
+  "model": "recommender.diseaseprediction",
+  "pk": 68,
+  "fields": {
+    "user": 8,
+    "disease_name": "Potato___healthy",
+    "confidence": 100.0,
+    "created_at": "2026-06-12T19:39:37.676Z"
+  }
+}
+]
