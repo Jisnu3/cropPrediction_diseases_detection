@@ -112,26 +112,64 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 @login_required
 def predict_view(request):
     feature_order = load_bundle()["feature_collumns"]
+
     result = None
+    predictions = None
     last_data = None
 
     if request.method == "POST":
         data = {}
+
         try:
             for c in feature_order:
                 data[c] = float(request.POST.get(c))
         except ValueError:
-            messages.error(request,"Please enter valid numeric values")
+            messages.error(request, "Please enter valid numeric values")
             return redirect("predict")
-        label = predict_one(data)
 
-        Prediction.objects.create(user=request.user,**data,predicted_crop=label)
-        #**data kwargs/dictionary unpacking
+        bundle = load_bundle()
+        model = bundle["model"]
+
+        X = [[data[c] for c in bundle["feature_collumns"]]]
+
+        probs = model.predict_proba(X)[0]
+
+        import numpy as np
+
+        top_indices = np.argsort(probs)[::-1]
+
+        predictions = []
+
+        for idx in top_indices:
+            confidence = round(probs[idx] * 100, 2)
+
+            if confidence < 1:
+                continue
+
+            crop = model.classes_[idx]
+
+            predictions.append((crop, confidence))
+
+            if len(predictions) == 5:
+                break
+
+        label = predictions[0][0]
+
+        Prediction.objects.create(
+            user=request.user,
+            **data,
+            predicted_crop=label
+        )
+
         result = label
         last_data = data
-        messages.success(request,f"Recommended Crop: {label}")
 
-    return render(request,"predict.html",locals())
+        messages.success(
+            request,
+            f"Top Recommendation: {label}"
+        )
+
+    return render(request, "predict.html", locals())
 
 
 
@@ -1087,6 +1125,11 @@ def disease_detection_view(request):
             "image_data": image_data
         }
     )
+
+
+
+
+
 
 # ==========================================
 # ADMIN ANALYTICS & REPORTS

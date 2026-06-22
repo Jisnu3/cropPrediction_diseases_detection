@@ -71,13 +71,79 @@
                     </div>
                 </form>
 
-                {% if result %}
-                <hr class="my-4">
-                <div class="alert alert-success border-0 bg-success bg-opacity-10 text-success p-3 rounded-3 d-flex align-items-center gap-2">
-                    <i class="fa-solid fa-circle-check fa-lg"></i>
-                    <span>Recommended Crop: <strong>{{result|title}}</strong></span>
-                </div>
-                {% endif %}
+{% if predictions %}
+<hr class="my-4">
+
+<div class="alert alert-success border-0 rounded-4 p-4"
+     style="background:linear-gradient(135deg,#e8f5e9,#dff3e3);">
+    <h4 class="fw-bold mb-2" style="font-size: 14px;">
+        <i class="fa-solid fa-award text-success"></i>
+        Best Recommendation: {{ predictions.0.0|title }}
+    </h4>
+    <p class="mb-0 text-muted" style="text-align: center;">
+        Based on the entered soil nutrients and environmental conditions.
+    </p>
+</div>
+
+<div class="card shadow-sm border-0 rounded-4 mt-4">
+    <div class="card-body p-4">
+
+        <h5 class="fw-bold mb-4">
+            <i class="fa-solid fa-seedling text-success"></i>
+            Recommended Crops
+        </h5>
+
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Crop</th>
+                        <th>Confidence</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for crop, confidence in predictions %}
+                    <tr {% if forloop.first %}class="table-success"{% endif %}>
+                        <td>
+                            <span class="fw-bold">
+                                {{ forloop.counter }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <strong>{{ crop|title }}</strong>
+                        </td>
+
+                        <td style="width:45%;">
+                            <div class="d-flex align-items-center gap-2">
+
+                                <div class="progress flex-grow-1 rounded-pill"
+                                     style="height:14px;">
+
+                                    <div class="progress-bar bg-success rounded-pill"
+                                         style="width:{{ confidence }}%;">
+                                    </div>
+
+                                </div>
+
+                                <span class="fw-bold text-success">
+                                    {{ confidence }}%
+                                </span>
+
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+</div>
+{% endif %}
 
                 {% if last_data %}
                 <div class="small text-muted mt-3 bg-light p-3 rounded-3 border">
@@ -182,5 +248,26 @@
             justify-content: center;
         }
     }
+
+    @media (max-width:576px){
+
+    .table th,
+    .table td{
+        font-size:0.85rem;
+        padding:.75rem .5rem;
+    }
+
+    .alert h4{
+        font-size:1.15rem;
+    }
+
+    .progress{
+        height:10px !important;
+    }
+
+    .fw-bold.text-success{
+        font-size:.85rem;
+    }
+}
 </style>
 {% endblock %}
